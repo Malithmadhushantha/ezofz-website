@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="tech-scroll">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -28,6 +28,7 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Inter:300,400,500,600,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Bootstrap CSS & Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -46,100 +47,486 @@
         --accent-color: #f59e0b;
         --success-color: #10b981;
         --danger-color: #ef4444;
+        --tech-blue: #0066ff;
+        --tech-cyan: #00d9ff;
+        --tech-purple: #8a2be2;
+        --tech-dark: #0a0e17;
+        --tech-darker: #05070c;
+        --tech-gray: #1a1f29;
     }
+
     body {
-        font-family: 'Inter', sans-serif;
+        font-family: 'Rajdhani', 'Inter', sans-serif;
         line-height: 1.6;
+        background-color: var(--tech-dark);
+        color: #e0e0e0;
+        overflow-x: hidden;
+        background-image:
+            radial-gradient(circle at 10% 20%, rgba(0, 214, 255, 0.05) 0%, transparent 20%),
+            radial-gradient(circle at 90% 70%, rgba(138, 43, 226, 0.05) 0%, transparent 20%),
+            linear-gradient(to bottom, var(--tech-darker), var(--tech-dark));
     }
+
+    /* Custom Cursor */
+    #tech-cursor {
+        position: fixed;
+        width: 20px;
+        height: 20px;
+        border: 2px solid var(--tech-cyan);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9999;
+        transition: transform 0.1s ease, width 0.3s ease, height 0.3s ease;
+        mix-blend-mode: difference;
+    }
+
+    #tech-cursor::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 4px;
+        height: 4px;
+        background: var(--tech-cyan);
+        border-radius: 50%;
+    }
+
+    .cursor-dot {
+        position: fixed;
+        width: 6px;
+        height: 6px;
+        background: var(--tech-cyan);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9998;
+        transition: transform 0.2s ease;
+    }
+
+    .cursor-hover {
+        transform: scale(2);
+        background: rgba(0, 217, 255, 0.2);
+        border: 1px solid var(--tech-cyan);
+    }
+
+    .cursor-click {
+        transform: scale(0.8);
+        background: rgba(0, 217, 255, 0.4);
+    }
+
+    /* Navigation Bar - Technical Style */
+    .navbar {
+        background: rgba(10, 14, 23, 0.8) !important;
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(0, 214, 255, 0.2);
+        box-shadow: 0 0 15px rgba(0, 214, 255, 0.1);
+        padding: 0.5rem 0;
+        transition: all 0.3s ease;
+    }
+
+    .navbar.scrolled {
+        background: rgba(5, 7, 12, 0.95) !important;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    }
+
     .navbar-brand {
         font-weight: 700;
         font-size: 1.5rem;
+        font-family: 'Orbitron', sans-serif;
+        text-shadow: 0 0 10px var(--tech-cyan);
+        position: relative;
+        color: var(--tech-cyan) !important;
     }
-    .hero-section {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
+
+    .navbar-brand::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, var(--tech-cyan), transparent);
+        transform: scaleX(0);
+        transform-origin: center;
+        transition: transform 0.5s ease;
     }
-    .tool-card {
+
+    .navbar-brand:hover::after {
+        transform: scaleX(1);
+    }
+
+    .nav-link {
+        font-weight: 500;
+        position: relative;
+        margin: 0 0.2rem;
+        padding: 0.5rem 1rem !important;
+        border-radius: 4px;
         transition: all 0.3s ease;
-        border: none;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        font-family: 'Rajdhani', sans-serif;
+        color: #e0e0e0 !important; /* Default visible color */
     }
-    .tool-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-    }
-    .admin-sidebar {
-        background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
-        min-height: 100vh;
-    }
-    .admin-sidebar .nav-link {
-        color: #d1d5db;
+
+    .nav-link::before {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background: var(--tech-cyan);
         transition: all 0.3s ease;
+        transform: translateX(-50%);
     }
-    .admin-sidebar .nav-link:hover {
-        color: #fff;
-        background-color: rgba(59, 130, 246, 0.1);
+
+    .nav-link:hover::before,
+    .nav-link.active::before {
+        width: 80%;
     }
-    .admin-sidebar .nav-link.active {
-        background-color: #3b82f6;
-        color: #fff;
+
+    .nav-link:hover,
+    .nav-link.active {
+        color: var(--tech-cyan) !important;
+        text-shadow: 0 0 8px rgba(0, 217, 255, 0.5);
+        background: rgba(0, 214, 255, 0.05);
     }
-    .btn-primary {
-        background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-        border: none;
-        transition: all 0.3s ease;
+
+    .dropdown-menu {
+        background: rgba(15, 20, 30, 0.95);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(0, 214, 255, 0.2);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        border-radius: 8px;
+        overflow: hidden;
+        transform: translateY(-10px);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s linear 0.3s;
     }
-    .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.4);
+
+    .dropdown-menu.show {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+        transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s linear;
+        animation: digitalFadeIn 0.3s ease forwards;
     }
-    .form-control:focus {
-        border-color: #3b82f6;
-        box-shadow: 0 0 0 0.25rem rgba(59, 130, 246, 0.25);
+
+    .dropdown-menu:not(.show) {
+        animation: glitchFadeOut 0.2s ease forwards;
     }
-    .navbar-nav .dropdown-menu {
-        border: none;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        border-radius: 0.5rem;
-    }
-    .footer {
-        background: #1f2937;
-        color: #d1d5db;
-    }
-    @keyframes fadeInUp {
-        from {
+
+    @keyframes digitalFadeIn {
+        0% {
             opacity: 0;
-            transform: translateY(30px);
+            transform: translateY(-10px);
+            box-shadow: 0 0 0 rgba(0, 214, 255, 0);
         }
-        to {
+        50% {
+            opacity: 0.5;
+            box-shadow: 0 0 10px rgba(0, 214, 255, 0.3);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+    }
+
+    @keyframes glitchFadeOut {
+        0% {
             opacity: 1;
             transform: translateY(0);
         }
-    }
-    .fade-in-up {
-        animation: fadeInUp 0.8s ease-out;
-    }
-    @media (max-width: 768px) {
-        .hero-section h1 {
-            font-size: 2rem;
+        20% {
+            transform: translateX(2px);
         }
-        .admin-sidebar {
-            min-height: auto;
+        40% {
+            transform: translateX(-2px);
+        }
+        60% {
+            transform: translateX(1px);
+        }
+        80% {
+            transform: translateX(-1px);
+        }
+        100% {
+            opacity: 0;
+            transform: translateY(-10px);
+            visibility: hidden;
+        }
+    }
+
+    .dropdown-item {
+        color: #e0e0e0;
+        transition: all 0.2s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .dropdown-item::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(0, 214, 255, 0.1), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .dropdown-item:hover::before {
+        left: 100%;
+    }
+
+    .dropdown-item:hover {
+        background: rgba(0, 214, 255, 0.05);
+        color: var(--tech-cyan);
+        padding-left: 1.5rem;
+    }
+
+    .navbar-toggler {
+        border: 1px solid rgba(0, 214, 255, 0.3);
+        padding: 0.25rem 0.5rem;
+    }
+
+    .navbar-toggler:focus {
+        box-shadow: 0 0 0 2px rgba(0, 214, 255, 0.25);
+    }
+
+    .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(0, 214, 255, 0.8)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    }
+
+    /* Button Styles */
+    .btn {
+        border-radius: 4px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+        font-family: 'Rajdhani', sans-serif;
+    }
+
+    .btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.7s ease;
+        z-index: -1;
+    }
+
+    .btn:hover::before {
+        left: 100%;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--tech-blue), var(--tech-purple));
+        border: none;
+        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(59, 130, 246, 0.5);
+    }
+
+    .btn-outline-primary {
+        border: 1px solid var(--tech-blue);
+        color: var(--tech-blue);
+        background: transparent;
+    }
+
+    .btn-outline-primary:hover {
+        background: rgba(59, 130, 246, 0.1);
+        box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+    }
+
+    /* Grid Animation Background */
+    .grid-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: -1;
+        opacity: 0.1;
+    }
+
+    .grid-line {
+        position: absolute;
+        background: rgba(0, 214, 255, 0.1);
+    }
+
+    .grid-line.vertical {
+        width: 1px;
+        height: 100%;
+        top: 0;
+    }
+
+    .grid-line.horizontal {
+        height: 1px;
+        width: 100%;
+        left: 0;
+    }
+
+    /* Pulse Animation */
+    @keyframes pulse {
+        0% {
+            box-shadow: 0 0 0 0 rgba(0, 214, 255, 0.4);
+        }
+        70% {
+            box-shadow: 0 0 0 10px rgba(0, 214, 255, 0);
+        }
+        100% {
+            box-shadow: 0 0 0 0 rgba(0, 214, 255, 0);
+        }
+    }
+
+    .pulse {
+        animation: pulse 2s infinite;
+    }
+
+    /* Glitch Effect */
+    @keyframes glitch {
+        0% {
+            transform: translate(0);
+        }
+        20% {
+            transform: translate(-2px, 2px);
+        }
+        40% {
+            transform: translate(-2px, -2px);
+        }
+        60% {
+            transform: translate(2px, 2px);
+        }
+        80% {
+            transform: translate(2px, -2px);
+        }
+        100% {
+            transform: translate(0);
+        }
+    }
+
+    .glitch:hover {
+        animation: glitch 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+        text-shadow: 2px 0 rgba(255, 0, 0, 0.5), -2px 0 rgba(0, 255, 0, 0.5);
+    }
+
+    /* Scanline Effect */
+    .scanline {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .scanline::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(to right, transparent, var(--tech-cyan), transparent);
+        animation: scan 3s linear infinite;
+        opacity: 0.7;
+    }
+
+    @keyframes scan {
+        0% {
+            top: 0;
+        }
+        100% {
+            top: 100%;
+        }
+    }
+
+    /* Main Content */
+    main {
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Footer */
+    .footer {
+        background: var(--tech-darker);
+        color: #d1d5db;
+        border-top: 1px solid rgba(0, 214, 255, 0.2);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .footer::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--tech-cyan), transparent);
+    }
+
+    .footer h6 {
+        font-family: 'Orbitron', sans-serif;
+        font-weight: 600;
+        border-bottom: 1px solid rgba(0, 214, 255, 0.3);
+        padding-bottom: 0.5rem;
+        margin-bottom: 1rem;
+        display: inline-block;
+    }
+
+    .footer a {
+        transition: all 0.3s ease;
+    }
+
+    .footer a:hover {
+        color: var(--tech-cyan) !important;
+        text-shadow: 0 0 8px rgba(0, 217, 255, 0.5);
+        padding-left: 5px;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+        .navbar-nav {
+            background: rgba(15, 20, 30, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 214, 255, 0.2);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .nav-link {
+            margin: 0.2rem 0;
+        }
+
+        .dropdown-menu {
+            background: rgba(20, 25, 35, 0.95);
+            margin-left: 1rem;
         }
     }
     </style>
     @stack('styles')
 </head>
 <body>
+    <!-- Custom Cursor -->
+    <div id="tech-cursor"></div>
+    <div class="cursor-dot"></div>
+
+    <!-- Grid Background -->
+    <div class="grid-bg" id="gridBackground"></div>
+
     <div id="app">
         <!-- Navigation -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+        <nav class="navbar navbar-expand-lg navbar-light sticky-top" id="mainNav">
             <div class="container">
-                <a class="navbar-brand d-flex align-items-center" href="{{ route('home') }}">
-                    <img src="{{ asset('images/logo.png') }}" alt="EZofz.lk" height="40" class="me-2">
+                <a class="navbar-brand d-flex align-items-center glitch" href="{{ route('home') }}">
+                    <img src="{{ asset('images/logo.png') }}" alt="EZofz.lk" height="40" class="me-2 pulse">
                     <span class="text-primary">EZofz.lk</span>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -218,7 +605,7 @@
         </main>
 
         <!-- Footer -->
-        <footer class="footer mt-5">
+        <footer class="footer mt-5 scanline">
             <div class="container py-5">
                 <div class="row">
                     <div class="col-lg-4 mb-4">
@@ -282,13 +669,144 @@
     </div>
 
     <!-- Bootstrap JS Bundle (with Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
     <!-- AOS Animation JS -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
     <script>
+        // Initialize AOS
         AOS.init({
             duration: 1000,
             once: true,
             offset: 100
+        });
+
+        // Custom cursor implementation
+        const cursor = document.getElementById('tech-cursor');
+        const cursorDot = document.querySelector('.cursor-dot');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+
+            setTimeout(() => {
+                cursorDot.style.left = e.clientX + 'px';
+                cursorDot.style.top = e.clientY + 'px';
+            }, 100);
+        });
+
+        // Cursor effects on interactive elements
+        const interactiveElements = document.querySelectorAll('a, button, .nav-link, .dropdown-item, .btn, [role="button"]');
+
+        interactiveElements.forEach(element => {
+            element.addEventListener('mouseenter', () => {
+                cursor.classList.add('cursor-hover');
+            });
+
+            element.addEventListener('mouseleave', () => {
+                cursor.classList.remove('cursor-hover');
+            });
+
+            element.addEventListener('mousedown', () => {
+                cursor.classList.add('cursor-click');
+            });
+
+            element.addEventListener('mouseup', () => {
+                cursor.classList.remove('cursor-click');
+            });
+        });
+
+        // Navbar scroll effect
+        const navbar = document.getElementById('mainNav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Create grid background
+        function createGrid() {
+            const gridBg = document.getElementById('gridBackground');
+            const gridSize = 50;
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+
+            // Clear previous grid
+            gridBg.innerHTML = '';
+
+            // Create vertical lines
+            for (let x = 0; x < width; x += gridSize) {
+                const line = document.createElement('div');
+                line.classList.add('grid-line', 'vertical');
+                line.style.left = x + 'px';
+                gridBg.appendChild(line);
+            }
+
+            // Create horizontal lines
+            for (let y = 0; y < height; y += gridSize) {
+                const line = document.createElement('div');
+                line.classList.add('grid-line', 'horizontal');
+                line.style.top = y + 'px';
+                gridBg.appendChild(line);
+            }
+        }
+
+        // Initialize grid and update on resize
+        createGrid();
+        window.addEventListener('resize', createGrid);
+
+        // Add subtle animation to grid lines
+        const gridLines = document.querySelectorAll('.grid-line');
+        gridLines.forEach((line, index) => {
+            line.style.opacity = 0.1 + Math.random() * 0.1;
+            line.style.transition = 'opacity 2s ease-in-out';
+
+            setInterval(() => {
+                line.style.opacity = 0.1 + Math.random() * 0.1;
+            }, 2000 + Math.random() * 2000);
+        });
+
+        // Initialize Bootstrap dropdowns and navbar collapse
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize navbar collapse
+            const toggler = document.querySelector('.navbar-toggler');
+            const collapse = document.querySelector('#navbarNav');
+            if (toggler && collapse) {
+                toggler.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevent event bubbling
+                    collapse.classList.toggle('show');
+                });
+            }
+
+            // Initialize dropdowns
+            const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+            dropdownToggles.forEach(toggle => {
+                const dropdownMenu = toggle.nextElementSibling;
+                if (dropdownMenu && dropdownMenu.classList.contains('dropdown-menu')) {
+                    toggle.addEventListener('click', (e) => {
+                        e.preventDefault(); // Prevent default link behavior
+                        e.stopPropagation(); // Prevent event bubbling
+                        dropdownMenu.classList.toggle('show');
+                        toggle.setAttribute('aria-expanded', dropdownMenu.classList.contains('show'));
+                    });
+                }
+            });
+
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', (e) => {
+                dropdownToggles.forEach(toggle => {
+                    const dropdownMenu = toggle.nextElementSibling;
+                    if (dropdownMenu && dropdownMenu.classList.contains('show')) {
+                        if (!toggle.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                            dropdownMenu.classList.remove('show');
+                            toggle.setAttribute('aria-expanded', 'false');
+                        }
+                    }
+                });
+            });
         });
     </script>
     @stack('scripts')
