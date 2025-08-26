@@ -42,7 +42,9 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between">
                     <div>
-                        <h4 class="mb-0">{{ App\Models\Document::where('category', 'law')->count() }}</h4>
+                        <h4 class="mb-0">
+                            {{ App\Models\Category::where('name', 'law')->first()?->documents()->count() ?? 0 }}
+                        </h4>
                         <p class="mb-0">Law Documents</p>
                     </div>
                     <div>
@@ -58,7 +60,9 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between">
                     <div>
-                        <h4 class="mb-0">{{ App\Models\Document::where('category', 'police')->count() }}</h4>
+                        <h4 class="mb-0">
+                            {{ App\Models\Category::where('name', 'police')->first()?->documents()->count() ?? 0 }}
+                        </h4>
                         <p class="mb-0">Police Documents</p>
                     </div>
                     <div>
@@ -93,8 +97,8 @@
                                     <tr>
                                         <td>{{ $document->title }}</td>
                                         <td>
-                                            <span class="badge bg-{{ $document->category == 'law' ? 'warning' : 'info' }}">
-                                                {{ ucfirst($document->category) }}
+                                            <span class="badge bg-secondary">
+                                                {{ optional($document->category)->name }}
                                             </span>
                                         </td>
                                         <td>{{ $document->created_at->diffForHumans() }}</td>

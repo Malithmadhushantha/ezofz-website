@@ -13,6 +13,11 @@ class Document extends Model
         'title',
         'description',
         'file_path',
-        'category'
+        'category_id'
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(\App\Models\Category::class);
+    }
 }

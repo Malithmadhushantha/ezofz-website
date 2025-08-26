@@ -4,6 +4,11 @@
 @section('page-title', 'Document Management')
 
 @section('content')
+<div class="mb-4">
+    <a href="{{ route('admin.categories') }}" class="btn btn-outline-primary mb-3">
+        <i class="bi bi-tags"></i> Manage Categories
+    </a>
+</div>
 <div class="row mb-4">
     <div class="col-lg-8">
         <div class="card">
@@ -24,14 +29,17 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label for="category" class="form-label">Category *</label>
-                            <select class="form-select @error('category') is-invalid @enderror"
-                                    id="category" name="category" required>
+                            <label for="category_id" class="form-label">Category *</label>
+                            <select class="form-select @error('category_id') is-invalid @enderror"
+                                    id="category_id" name="category_id" required>
                                 <option value="">Select Category</option>
-                                <option value="law" {{ old('category') == 'law' ? 'selected' : '' }}>Law Documents</option>
-                                <option value="police" {{ old('category') == 'police' ? 'selected' : '' }}>Police Documents</option>
+                                @foreach(\App\Models\Category::orderBy('name')->get() as $category)
+                                    <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                        {{ $category->name }}
+                                    </option>
+                                @endforeach
                             </select>
-                            @error('category')
+                            @error('category_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
@@ -78,11 +86,19 @@
                 </div>
                 <div class="d-flex justify-content-between mb-2">
                     <span>Law Documents:</span>
-                    <span class="fw-bold text-warning">{{ App\Models\Document::where('category', 'law')->count() }}</span>
+                    <span class="fw-bold text-warning">
+                        {{
+                            \App\Models\Category::where('name', 'law')->first()?->documents()->count() ?? 0
+                        }}
+                    </span>
                 </div>
                 <div class="d-flex justify-content-between mb-2">
                     <span>Police Documents:</span>
-                    <span class="fw-bold text-info">{{ App\Models\Document::where('category', 'police')->count() }}</span>
+                    <span class="fw-bold text-info">
+                        {{
+                            \App\Models\Category::where('name', 'police')->first()?->documents()->count() ?? 0
+                        }}
+                    </span>
                 </div>
                 <hr>
                 <p class="text-muted mb-0">Keep your document library organized and up-to-date.</p>
@@ -129,8 +145,8 @@
                                     <span class="text-muted">{{ Str::limit($document->description, 50) ?: 'No description' }}</span>
                                 </td>
                                 <td>
-                                    <span class="badge bg-{{ $document->category == 'law' ? 'warning' : 'info' }}">
-                                        {{ ucfirst($document->category) }}
+                                    <span class="badge bg-secondary">
+                                        {{ optional($document->category)->name }}
                                     </span>
                                 </td>
                                 <td>
@@ -147,13 +163,8 @@
                                 </td>
                                 <td>
                                     <div class="btn-group btn-group-sm">
-                                        <a href="{{ Storage::url($document->file_path) }}"
-                                           class="btn btn-outline-primary" target="_blank" title="View">
-                                            <i class="bi bi-eye"></i>
-                                        </a>
-                                        <a href="{{ Storage::url($document->file_path) }}"
-                                           class="btn btn-outline-success" download title="Download">
-                                            <i class="bi bi-download"></i>
+                                        <a href="{{ route('documents.edit', $document) }}" class="btn btn-outline-warning" title="Edit">
+                                            <i class="bi bi-pencil"></i>
                                         </a>
                                         <form action="{{ route('documents.destroy', $document) }}" method="POST" class="d-inline">
                                             @csrf

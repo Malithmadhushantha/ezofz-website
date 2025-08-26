@@ -10,16 +10,18 @@ return new class extends Migration
     {
         Schema::create('documents', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('category_id')->nullable();
             $table->string('title');
             $table->text('description')->nullable();
             $table->string('file_path');
-            $table->string('category'); // 'law' or 'police'
             $table->timestamps();
+
+            $table->foreign('category_id')->references('id')->on('categories')->nullOnDelete();
         });
     }
 
     public function down()
     {
-        Schema::drop('documents');
+        Schema::dropIfExists('documents');
     }
 };

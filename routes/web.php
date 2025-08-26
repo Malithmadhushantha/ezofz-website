@@ -30,7 +30,12 @@ Route::middleware([App\Http\Middleware\AdminMiddleware::class])->prefix('admin')
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/documents', [AdminController::class, 'documents'])->name('admin.documents');
     Route::post('/documents', [DocumentController::class, 'store'])->name('documents.store');
+    Route::get('/documents/{document}/edit', [DocumentController::class, 'edit'])->name('documents.edit');
+    Route::put('/documents/{document}', [DocumentController::class, 'update'])->name('documents.update');
     Route::delete('/documents/{document}', [DocumentController::class, 'destroy'])->name('documents.destroy');
+    // Category management
+    Route::get('/categories', [DocumentController::class, 'categories'])->name('admin.categories');
+    Route::post('/categories', [DocumentController::class, 'storeCategory'])->name('admin.categories.store');
 });
 
 // Public Police Documents page

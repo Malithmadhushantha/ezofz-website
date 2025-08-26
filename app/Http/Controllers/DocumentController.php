@@ -3,17 +3,33 @@
 namespace App\Http\Controllers;
 
 use App\Models\Document;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class DocumentController extends Controller
 {
+    public function categories()
+    {
+        $categories = Category::orderBy('name')->get();
+        return view('admin.categories', compact('categories'));
+    }
+
+    public function storeCategory(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255|unique:categories,name'
+        ]);
+        Category::create(['name' => $request->name]);
+        return redirect()->back()->with('success', 'Category added successfully!');
+    }
+
     public function store(Request $request)
     {
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'category' => 'required|in:law,police',
+            'category_id' => 'required|exists:categories,id',
             'file' => 'required|file|mimes:pdf,doc,docx|max:2048'
         ]);
 
@@ -23,7 +39,7 @@ class DocumentController extends Controller
         Document::create([
             'title' => $request->title,
             'description' => $request->description,
-            'category' => $request->category,
+            'category_id' => $request->category_id,
             'file_path' => $path
         ]);
 
@@ -41,9 +57,10 @@ class DocumentController extends Controller
     public function policeDocuments()
     {
         try {
-            $documents = Document::where('category', 'police')
-                ->orderByDesc('created_at')
-                ->paginate(10);
+            $category = \App\Models\Category::where('name', 'police')->first();
+            $documents = $category
+                ? Document::where('category_id', $category->id)->orderByDesc('created_at')->paginate(10)
+                : new \Illuminate\Pagination\LengthAwarePaginator([], 0, 10);
         } catch (\Exception $e) {
             $documents = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 10);
         }
@@ -60,9 +77,10 @@ class DocumentController extends Controller
     public function lawDocuments()
     {
         try {
-            $documents = Document::where('category', 'law')
-                ->orderByDesc('created_at')
-                ->paginate(10);
+            $category = \App\Models\Category::where('name', 'law')->first();
+            $documents = $category
+                ? Document::where('category_id', $category->id)->orderByDesc('created_at')->paginate(10)
+                : new \Illuminate\Pagination\LengthAwarePaginator([], 0, 10);
         } catch (\Exception $e) {
             $documents = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 10);
         }
@@ -79,5 +97,34 @@ class DocumentController extends Controller
         $extension = pathinfo($filePath, PATHINFO_EXTENSION);
         $filename = $document->title . '.' . $extension;
         return Storage::disk('public')->download($filePath, $filename);
+    }
+
+    // Show form to edit a document
+    public function edit(Document $document)
+    {
+        $categories = Category::orderBy('name')->get();
+        return view('admin.edit_document', compact('document', 'categories'));
+    }
+
+    // Update a document
+    public function update(Request $request, Document $document)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'category_id' => 'required|exists:categories,id',
+            'file' => 'nullable|file|mimes:pdf,doc,docx|max:2048'
+        ]);
+
+        $data = $request->only(['title', 'description', 'category_id']);
+
+        if ($request->hasFile('file')) {
+            Storage::disk('public')->delete($document->file_path);
+            $data['file_path'] = $request->file('file')->store('documents', 'public');
+        }
+
+        $document->update($data);
+
+        return redirect()->route('admin.documents')->with('success', 'Document updated successfully!');
     }
 }
