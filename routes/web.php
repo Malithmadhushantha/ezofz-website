@@ -36,6 +36,14 @@ Route::middleware([App\Http\Middleware\AdminMiddleware::class])->prefix('admin')
     // Category management
     Route::get('/categories', [DocumentController::class, 'categories'])->name('admin.categories');
     Route::post('/categories', [DocumentController::class, 'storeCategory'])->name('admin.categories.store');
+    // User management
+    Route::get('/users', [App\Http\Controllers\AdminController::class, 'users'])->name('admin.users');
+    Route::get('/users/create', [App\Http\Controllers\AdminController::class, 'createUser'])->name('admin.users.create');
+    Route::post('/users', [App\Http\Controllers\AdminController::class, 'storeUser'])->name('admin.users.store');
+    Route::get('/users/{user}/edit', [App\Http\Controllers\AdminController::class, 'editUser'])->name('admin.users.edit');
+    Route::put('/users/{user}', [App\Http\Controllers\AdminController::class, 'updateUser'])->name('admin.users.update');
+    Route::delete('/users/{user}', [App\Http\Controllers\AdminController::class, 'destroyUser'])->name('admin.users.destroy');
+    Route::put('/users/{user}/password', [App\Http\Controllers\AdminController::class, 'updateUserPassword'])->name('admin.users.password');
 });
 
 // Public Police Documents page
@@ -49,3 +57,6 @@ Route::get('/documents', [DocumentController::class, 'index'])->name('documents.
 
 // Public law documents page
 Route::get('/documents/law', [DocumentController::class, 'lawDocuments'])->name('documents.law');
+
+// Public documents by category (except law/police)
+Route::get('/documents/category/{id}', [DocumentController::class, 'categoryDocuments'])->name('documents.category');

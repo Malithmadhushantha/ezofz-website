@@ -9,10 +9,10 @@ use Illuminate\Support\Facades\Auth;
 class AdminMiddleware {
     public function handle(Request $request, Closure $next): Response {
         $user = Auth::user();
-        // Check for 'role' or 'is_admin'
-        if ($user && ((isset($user->role) && $user->role === 'admin') || (isset($user->is_admin) && $user->is_admin))) {
+        if ($user && $user->isAdmin()) {
             return $next($request);
         }
         abort(403, 'Unauthorized');
     }
 }
+

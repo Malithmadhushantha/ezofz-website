@@ -610,7 +610,7 @@
                     </div>
                     <h4>Document Downloads</h4>
                     <p>Access law documents, police forms, and other essential documents for your office needs instantly.</p>
-                    <a href="#" class="tool-btn warning">
+                    <a href="{{ route('documents.index') }}" class="tool-btn warning">
                         <i class="bi bi-arrow-right me-2"></i>Browse Downloads
                     </a>
                 </div>

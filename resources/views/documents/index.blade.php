@@ -20,30 +20,41 @@
         </script>
     </div>
 
-    <div class="card shadow-lg">
-        <div class="card-header bg-primary text-white">
-            <h3 class="mb-0"><i class="bi bi-folder2-open me-2"></i>Downloads</h3>
-        </div>
-        <div class="card-body">
-            <ul class="nav nav-tabs mb-4" id="docTabs" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link {{ request()->routeIs('documents.law') ? 'active' : '' }}"
-                       href="{{ route('documents.law') }}" role="tab">
-                        <i class="bi bi-file-text me-1"></i>Law Documents
-                    </a>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link {{ request()->routeIs('documents.police') ? 'active' : '' }}"
-                       href="{{ route('documents.police') }}" role="tab">
-                        <i class="bi bi-shield me-1"></i>Police Documents
-                    </a>
-                </li>
-            </ul>
-            <div class="text-center py-5">
-                <h4 class="mb-3">Select a category to browse documents</h4>
-                <p class="text-muted">Choose from Law Documents or Police Documents to view and download files.</p>
+    <div class="row g-4 mb-5">
+        @php
+            $categories = \App\Models\Category::orderBy('name')->take(4)->get();
+        @endphp
+        @foreach($categories as $category)
+            <div class="col-md-3">
+                <div class="card h-100 shadow-sm text-center border-0">
+                    <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                        <div class="mb-3">
+                            @if($category->name === 'law')
+                                <i class="bi bi-file-text display-4 text-warning"></i>
+                            @elseif($category->name === 'police')
+                                <i class="bi bi-shield display-4 text-info"></i>
+                            @else
+                                <i class="bi bi-folder display-4 text-primary"></i>
+                            @endif
+                        </div>
+                        <h5 class="card-title mb-2">{{ ucfirst($category->name) }}</h5>
+                        <p class="text-muted mb-3">{{ $category->documents()->count() }} documents</p>
+                        @if($category->name === 'law')
+                            <a href="{{ route('documents.law') }}" class="btn btn-warning w-100">View Law Documents</a>
+                        @elseif($category->name === 'police')
+                            <a href="{{ route('documents.police') }}" class="btn btn-info w-100 text-white">View Police Documents</a>
+                        @else
+                            <a href="{{ route('documents.category', $category->id) }}" class="btn btn-primary w-100">View Documents</a>
+                        @endif
+                    </div>
+                </div>
             </div>
-        </div>
+        @endforeach
+    </div>
+
+    <div class="text-center py-5">
+        <h4 class="mb-3">Select a category to browse documents</h4>
+        <p class="text-muted">Choose from Law Documents, Police Documents, or other categories to view and download files.</p>
     </div>
 
     <!-- Adsense Ad (bottom) -->

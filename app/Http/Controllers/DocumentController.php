@@ -127,4 +127,22 @@ class DocumentController extends Controller
 
         return redirect()->route('admin.documents')->with('success', 'Document updated successfully!');
     }
+
+    // Show documents for a given category (except law/police, which have their own pages)
+    public function categoryDocuments($id)
+    {
+        $category = Category::findOrFail($id);
+
+        // Redirect to law/police pages if needed
+        if ($category->name === 'law') {
+            return redirect()->route('documents.law');
+        }
+        if ($category->name === 'police') {
+            return redirect()->route('documents.police');
+        }
+
+        $documents = Document::where('category_id', $category->id)->orderByDesc('created_at')->paginate(10);
+
+        return view('documents.category', compact('category', 'documents'));
+    }
 }

@@ -24,6 +24,9 @@ class AuthenticatedSessionController extends Controller
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
 
+            // Update last login timestamp
+            Auth::user()->forceFill(['last_login_at' => now()])->save();
+
             // Redirect based on role
             return $this->authenticated($request, Auth::user());
         }
