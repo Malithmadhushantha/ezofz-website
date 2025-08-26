@@ -538,7 +538,7 @@
             <div class="row align-items-center mb-5">
                 <div class="col-lg-6" data-aos="fade-right">
                     <div class="mission-vision-card floating">
-                        <img src="https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80" alt="Our Mission" class="img-fluid" style="width: 100%; height: 300px; object-fit: cover;">
+                           <img src="{{ asset('images/mission.png') }}" alt="Mission Image" class="hero-image img-fluid rounded-3 floating">
                         <div class="card-content">
                             <div class="text-center">
                                 <i class="bi bi-bullseye text-primary fs-2 mb-3"></i>

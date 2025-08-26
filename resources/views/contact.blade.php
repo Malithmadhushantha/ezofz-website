@@ -513,7 +513,7 @@
         <div class="row align-items-center">
             <div class="col-lg-4 text-center mb-4 mb-lg-0">
                 <div class="profile-image mx-auto pulse-glow">
-                    <i class="bi bi-person-fill"></i>
+                    <img src="{{ asset('images/malith_madhushantha.jpg') }}" alt="Malith Madhushantha Profile" class="w-100 h-100 object-fit-cover rounded-circle">
                 </div>
             </div>
             <div class="col-lg-8">
