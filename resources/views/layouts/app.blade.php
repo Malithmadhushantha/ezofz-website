@@ -40,7 +40,7 @@
     <!-- Styles -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 
-    <style>
+<style>
     :root {
         --primary-color: #3b82f6;
         --secondary-color: #64748b;
@@ -551,8 +551,8 @@
                                 Downloads
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="downloadsDropdown">
-                                <li><a class="dropdown-item" href="#"><i class="bi bi-file-text me-2"></i>Law Documents</a></li>
-                                <li><a class="dropdown-item" href="#"><i class="bi bi-shield me-2"></i>Police Documents</a></li>
+                                <li><a class="dropdown-item" href="{{ route('documents.law') }}"><i class="bi bi-file-text me-2"></i>Law Documents</a></li>
+                                <li><a class="dropdown-item" href="{{ route('documents.police') }}"><i class="bi bi-shield me-2"></i>Police Documents</a></li>
                             </ul>
                         </li>
                         <li class="nav-item">

@@ -59,7 +59,7 @@
                     </div>
                     <h4 class="card-title mb-3">Downloads</h4>
                     <p class="card-text text-muted mb-4">Access documents, forms, and templates.</p>
-                    <a href="#" class="btn btn-warning btn-lg w-100">
+                    <a href="{{ route('documents.index') }}" class="btn btn-warning btn-lg w-100">
                         <i class="bi bi-arrow-right me-2"></i>Browse Downloads
                     </a>
                 </div>

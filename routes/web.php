@@ -32,3 +32,15 @@ Route::middleware([App\Http\Middleware\AdminMiddleware::class])->prefix('admin')
     Route::post('/documents', [DocumentController::class, 'store'])->name('documents.store');
     Route::delete('/documents/{document}', [DocumentController::class, 'destroy'])->name('documents.destroy');
 });
+
+// Public Police Documents page
+Route::get('/documents/police', [DocumentController::class, 'policeDocuments'])->name('documents.police');
+
+// Public document download route
+Route::get('/documents/{document}/download', [DocumentController::class, 'download'])->name('documents.download');
+
+// Public documents index page
+Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');
+
+// Public law documents page
+Route::get('/documents/law', [DocumentController::class, 'lawDocuments'])->name('documents.law');
