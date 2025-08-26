@@ -58,8 +58,6 @@ protected $routeMiddleware = [
     'signed' => \App\Http\Middleware\ValidateSignature::class,
     'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
     'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-
-    // ✅ මෙහෙම add කරන්න
     'admin' => \App\Http\Middleware\AdminMiddleware::class,
 ];
 
