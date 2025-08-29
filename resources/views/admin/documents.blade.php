@@ -44,6 +44,18 @@
                             @enderror
                         </div>
 
+                        <div class="col-md-6">
+                            <label for="subcategory_id" class="form-label">Subcategory</label>
+                            <select class="form-select @error('subcategory_id') is-invalid @enderror"
+                                    id="subcategory_id" name="subcategory_id">
+                                <option value="">Select Subcategory</option>
+                                {{-- Subcategories will be loaded dynamically --}}
+                            </select>
+                            @error('subcategory_id')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
                         <div class="col-12">
                             <label for="description" class="form-label">Description</label>
                             <textarea class="form-control @error('description') is-invalid @enderror"
@@ -56,8 +68,8 @@
                         <div class="col-12">
                             <label for="file" class="form-label">Document File *</label>
                             <input type="file" class="form-control @error('file') is-invalid @enderror"
-                                   id="file" name="file" accept=".pdf,.doc,.docx" required>
-                            <div class="form-text">Allowed formats: PDF, DOC, DOCX. Max size: 2MB</div>
+                                   id="file" name="file" accept=".pdf,.doc,.docx,.xls,.xlsx" required>
+                            <div class="form-text">Allowed formats: PDF, DOC, DOCX, XLS, XLSX. Max size: 2MB</div>
                             @error('file')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -111,10 +123,14 @@
     <div class="card-header d-flex justify-content-between align-items-center">
         <h5 class="mb-0"><i class="bi bi-folder me-2"></i>All Documents</h5>
         <div class="d-flex gap-2">
-            <select class="form-select form-select-sm" style="width: auto;">
+            <select class="form-select form-select-sm" id="categoryFilter" style="width: auto;">
                 <option value="">All Categories</option>
-                <option value="law">Law Documents</option>
-                <option value="police">Police Documents</option>
+                @foreach(\App\Models\Category::orderBy('name')->get() as $category)
+                    <option value="category-{{ $category->id }}">{{ $category->name }}</option>
+                    @foreach($category->subcategories as $sub)
+                        <option value="subcategory-{{ $sub->id }}">&nbsp;&nbsp;{{ $sub->name }}</option>
+                    @endforeach
+                @endforeach
             </select>
         </div>
     </div>
@@ -127,6 +143,7 @@
                             <th>Title</th>
                             <th>Description</th>
                             <th>Category</th>
+                            <th>Subcategory</th>
                             <th>Uploaded</th>
                             <th>File Size</th>
                             <th>Actions</th>
@@ -134,7 +151,8 @@
                     </thead>
                     <tbody>
                         @foreach($documents as $document)
-                            <tr>
+                            <tr data-category="{{ optional($document->category)->id ? 'category-' . optional($document->category)->id : '' }}"
+                                data-subcategory="{{ optional($document->subcategory)->id ? 'subcategory-' . optional($document->subcategory)->id : '' }}">
                                 <td>
                                     <div class="d-flex align-items-center">
                                         <i class="bi bi-file-text me-2 text-primary"></i>
@@ -147,6 +165,11 @@
                                 <td>
                                     <span class="badge bg-secondary">
                                         {{ optional($document->category)->name }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-info text-dark">
+                                        {{ optional($document->subcategory)->name ?: '-' }}
                                     </span>
                                 </td>
                                 <td>
@@ -204,22 +227,53 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Category filter functionality
-    const categoryFilter = document.querySelector('select[style*="width: auto"]');
+    const categoryFilter = document.getElementById('categoryFilter');
     if (categoryFilter) {
         categoryFilter.addEventListener('change', function() {
-            const selectedCategory = this.value;
+            const selected = this.value;
             const rows = document.querySelectorAll('tbody tr');
-
             rows.forEach(row => {
-                if (!selectedCategory) {
+                if (!selected) {
                     row.style.display = '';
+                } else if (selected.startsWith('category-')) {
+                    row.style.display = row.getAttribute('data-category') === selected ? '' : 'none';
+                } else if (selected.startsWith('subcategory-')) {
+                    row.style.display = row.getAttribute('data-subcategory') === selected ? '' : 'none';
                 } else {
-                    const categoryBadge = row.querySelector('.badge');
-                    const categoryText = categoryBadge ? categoryBadge.textContent.toLowerCase() : '';
-                    row.style.display = categoryText.includes(selectedCategory) ? '' : 'none';
+                    row.style.display = '';
                 }
             });
         });
+    }
+
+    // Subcategory dropdown population
+    const categorySelect = document.getElementById('category_id');
+    const subcategorySelect = document.getElementById('subcategory_id');
+    const allSubcategories = @json(\App\Models\Subcategory::with('category')->get()->groupBy('category_id'));
+
+    function populateSubcategories(categoryId) {
+        subcategorySelect.innerHTML = '<option value="">Select Subcategory</option>';
+        if (categoryId && allSubcategories[categoryId]) {
+            allSubcategories[categoryId].forEach(function(sub) {
+                const option = document.createElement('option');
+                option.value = sub.id;
+                option.textContent = sub.name;
+                subcategorySelect.appendChild(option);
+            });
+        }
+    }
+
+    if (categorySelect && subcategorySelect) {
+        categorySelect.addEventListener('change', function() {
+            populateSubcategories(this.value);
+        });
+        // On page load, populate if old value exists
+        @if(old('category_id'))
+            populateSubcategories({{ old('category_id') }});
+            @if(old('subcategory_id'))
+                subcategorySelect.value = "{{ old('subcategory_id') }}";
+            @endif
+        @endif
     }
 });
 </script>

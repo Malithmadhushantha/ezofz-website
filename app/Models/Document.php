@@ -9,15 +9,22 @@ class Document extends Model
 {
     use HasFactory;
 
+
     protected $fillable = [
         'title',
         'description',
         'file_path',
-        'category_id'
+        'category_id',
+        'subcategory_id',
     ];
 
     public function category()
     {
         return $this->belongsTo(\App\Models\Category::class);
+    }
+
+    public function subcategory()
+    {
+        return $this->belongsTo(\App\Models\Subcategory::class);
     }
 }

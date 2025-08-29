@@ -36,6 +36,7 @@ Route::middleware([App\Http\Middleware\AdminMiddleware::class])->prefix('admin')
     // Category management
     Route::get('/categories', [DocumentController::class, 'categories'])->name('admin.categories');
     Route::post('/categories', [DocumentController::class, 'storeCategory'])->name('admin.categories.store');
+    Route::post('/subcategories', [\App\Http\Controllers\SubcategoryController::class, 'store'])->name('admin.subcategories.store');
     // User management
     Route::get('/users', [App\Http\Controllers\AdminController::class, 'users'])->name('admin.users');
     Route::get('/users/create', [App\Http\Controllers\AdminController::class, 'createUser'])->name('admin.users.create');
@@ -57,6 +58,3 @@ Route::get('/documents', [DocumentController::class, 'index'])->name('documents.
 
 // Public law documents page
 Route::get('/documents/law', [DocumentController::class, 'lawDocuments'])->name('documents.law');
-
-// Public documents by category (except law/police)
-Route::get('/documents/category/{id}', [DocumentController::class, 'categoryDocuments'])->name('documents.category');

@@ -30,7 +30,8 @@ class DocumentController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'category_id' => 'required|exists:categories,id',
-            'file' => 'required|file|mimes:pdf,doc,docx|max:2048'
+            'subcategory_id' => 'nullable|exists:subcategories,id',
+            'file' => 'required|file|mimes:pdf,doc,docx,xls,xlsx|max:2048'
         ]);
 
         $file = $request->file('file');
@@ -40,6 +41,7 @@ class DocumentController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'category_id' => $request->category_id,
+            'subcategory_id' => $request->subcategory_id,
             'file_path' => $path
         ]);
 
@@ -70,8 +72,10 @@ class DocumentController extends Controller
 
     public function index()
     {
-        // For SEO and ads, you can pass meta data as needed
-        return view('documents.index');
+        $categories = Category::with(['subcategories.documents', 'documents'])
+            ->orderBy('name')
+            ->get();
+        return view('documents.index', compact('categories'));
     }
 
     public function lawDocuments()
