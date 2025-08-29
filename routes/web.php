@@ -16,12 +16,45 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about', [HomeController::class, 'about'])->name('about');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 
+// Public Penal Code route
+Route::get('/penal-code/public', [App\Http\Controllers\PenalCodeController::class, 'publicIndex'])->name('penal-code.public');
+
+// Tools Routes
+Route::get('/tools/unicode-typing', function () {
+    return view('tools.unicode-typing');
+})->name('tools.unicode-typing');
+
+Route::get('/tools/name-converter', function () {
+    return view('tools.name-converter');
+})->name('tools.name-converter');
+
 // Authentication routes
 Auth::routes();
 
-// User dashboard
+// Admin Penal Code routes
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/penal-code', [App\Http\Controllers\Admin\PenalCodeController::class, 'index'])->name('penal-code.index');
+    Route::get('/penal-code/create', [App\Http\Controllers\Admin\PenalCodeController::class, 'create'])->name('penal-code.create');
+    Route::post('/penal-code', [App\Http\Controllers\Admin\PenalCodeController::class, 'store'])->name('penal-code.store');
+    Route::get('/penal-code/{section}/edit', [App\Http\Controllers\Admin\PenalCodeController::class, 'edit'])->name('penal-code.edit');
+    Route::put('/penal-code/{section}', [App\Http\Controllers\Admin\PenalCodeController::class, 'update'])->name('penal-code.update');
+    Route::delete('/penal-code/{section}', [App\Http\Controllers\Admin\PenalCodeController::class, 'destroy'])->name('penal-code.destroy');
+    Route::get('/penal-code/{section}/amendments', [App\Http\Controllers\Admin\PenalCodeController::class, 'showAmendments'])->name('penal-code.amendments');
+    Route::get('/penal-code/{section}/amendments/create', [App\Http\Controllers\Admin\PenalCodeController::class, 'createAmendment'])->name('penal-code.amendments.create');
+    Route::post('/penal-code/{section}/amendments', [App\Http\Controllers\Admin\PenalCodeController::class, 'storeAmendment'])->name('penal-code.amendments.store');
+});
+
+// User dashboard and Penal Code routes
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
+
+        // Penal Code routes for users
+    Route::get('/penal-code', [App\Http\Controllers\PenalCodeController::class, 'index'])->name('penal-code.index');
+    Route::get('/penal-code/{section}', [App\Http\Controllers\PenalCodeController::class, 'show'])->name('penal-code.show');
+    Route::post('/penal-code/{section}/note', [App\Http\Controllers\PenalCodeController::class, 'saveNote'])->name('penal-code.note.save');
+    Route::delete('/penal-code/{section}/note', [App\Http\Controllers\PenalCodeController::class, 'deleteNote'])->name('penal-code.note.delete');
+    Route::post('/penal-code/{section}/star', [App\Http\Controllers\PenalCodeController::class, 'toggleStar'])->name('penal-code.star.toggle');
+    Route::post('/penal-code/{section}/like', [App\Http\Controllers\PenalCodeController::class, 'toggleLike'])->name('penal-code.like.toggle');
 });
 
 // Admin routes with middleware

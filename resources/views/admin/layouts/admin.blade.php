@@ -40,6 +40,11 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.penal-code.*') ? 'active' : '' }}" href="{{ route('admin.penal-code.index') }}">
+                                <i class="bi bi-book me-2"></i>Penal Code
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="#">
                                 <i class="bi bi-gear me-2"></i>Settings
                             </a>

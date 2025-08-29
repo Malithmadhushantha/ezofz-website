@@ -521,9 +521,9 @@
     <!-- Grid Background -->
     <div class="grid-bg" id="gridBackground"></div>
 
-    <div id="app">
+    <div id="app" class="d-flex flex-column min-vh-100">
         <!-- Navigation -->
-        <nav class="navbar navbar-expand-lg navbar-light sticky-top" id="mainNav">
+        <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
             <div class="container">
                 <a class="navbar-brand d-flex align-items-center glitch" href="{{ route('home') }}">
                     <img src="{{ asset('images/logo.png') }}" alt="EZofz.lk" height="40" class="me-2 pulse">
@@ -538,12 +538,24 @@
                             <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Home</a>
                         </li>
                         <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="databasesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Databases
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="databasesDropdown">
+                                @auth
+                                    <li><a class="dropdown-item" href="{{ route('penal-code.index') }}"><i class="bi bi-journal-text me-2"></i>Penal Code Database</a></li>
+                                @else
+                                    <li><a class="dropdown-item" href="{{ route('penal-code.public') }}"><i class="bi bi-journal-text me-2"></i>Penal Code Database</a></li>
+                                @endauth
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="toolsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Tools
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="toolsDropdown">
-                                <li><a class="dropdown-item" href="#"><i class="bi bi-keyboard me-2"></i>Sinhala Unicode Typing</a></li>
-                                <li><a class="dropdown-item" href="#"><i class="bi bi-person-badge me-2"></i>Full Name to Initial Converter</a></li>
+                                <li><a class="dropdown-item" href="{{ route('tools.unicode-typing') }}"><i class="bi bi-keyboard me-2"></i>Sinhala Unicode Typing</a></li>
+                                <li><a class="dropdown-item" href="{{ route('tools.name-converter') }}"><i class="bi bi-person-badge me-2"></i>Full Name to Initial Converter</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
@@ -600,7 +612,7 @@
         </nav>
 
         <!-- Main Content -->
-        <main>
+        <main class="flex-grow-1 mt-5 pt-4">
             @yield('content')
         </main>
 
