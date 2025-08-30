@@ -19,6 +19,14 @@ Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 // Public Penal Code route
 Route::get('/penal-code/public', [App\Http\Controllers\PenalCodeController::class, 'publicIndex'])->name('penal-code.public');
 
+// Criminal Procedure Code routes
+Route::get('/criminal-procedure-code', [App\Http\Controllers\CriminalProcedureCodeController::class, 'index'])->name('criminal-procedure-code.index');
+Route::get('/criminal-procedure-code/{section}', [App\Http\Controllers\CriminalProcedureCodeController::class, 'show'])->name('criminal-procedure-code.show');
+Route::post('/criminal-procedure-code/{section}/note', [App\Http\Controllers\CriminalProcedureCodeController::class, 'saveNote'])->name('criminal-procedure-code.note.save')->middleware('auth');
+Route::delete('/criminal-procedure-code/{section}/note', [App\Http\Controllers\CriminalProcedureCodeController::class, 'deleteNote'])->name('criminal-procedure-code.note.delete')->middleware('auth');
+Route::post('/criminal-procedure-code/{section}/star', [App\Http\Controllers\CriminalProcedureCodeController::class, 'toggleStar'])->name('criminal-procedure-code.star.toggle')->middleware('auth');
+Route::post('/criminal-procedure-code/{section}/like', [App\Http\Controllers\CriminalProcedureCodeController::class, 'toggleLike'])->name('criminal-procedure-code.like.toggle')->middleware('auth');
+Route::get('/criminal-procedure-code/public', [App\Http\Controllers\CriminalProcedureCodeController::class, 'publicIndex'])->name('criminal-procedure-code.public');
 // Tools Routes
 Route::get('/tools/unicode-typing', function () {
     return view('tools.unicode-typing');
@@ -31,7 +39,7 @@ Route::get('/tools/name-converter', function () {
 // Authentication routes
 Auth::routes();
 
-// Admin Penal Code routes
+    // Admin Penal Code routes
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/penal-code', [App\Http\Controllers\Admin\PenalCodeController::class, 'index'])->name('penal-code.index');
     Route::get('/penal-code/create', [App\Http\Controllers\Admin\PenalCodeController::class, 'create'])->name('penal-code.create');
@@ -42,9 +50,18 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/penal-code/{section}/amendments', [App\Http\Controllers\Admin\PenalCodeController::class, 'showAmendments'])->name('penal-code.amendments');
     Route::get('/penal-code/{section}/amendments/create', [App\Http\Controllers\Admin\PenalCodeController::class, 'createAmendment'])->name('penal-code.amendments.create');
     Route::post('/penal-code/{section}/amendments', [App\Http\Controllers\Admin\PenalCodeController::class, 'storeAmendment'])->name('penal-code.amendments.store');
-});
 
-// User dashboard and Penal Code routes
+    // Criminal Procedure Code routes
+    Route::get('/criminal-procedure-code', [App\Http\Controllers\Admin\CriminalProcedureCodeController::class, 'index'])->name('criminal-procedure-code.index');
+    Route::get('/criminal-procedure-code/create', [App\Http\Controllers\Admin\CriminalProcedureCodeController::class, 'create'])->name('criminal-procedure-code.create');
+    Route::post('/criminal-procedure-code', [App\Http\Controllers\Admin\CriminalProcedureCodeController::class, 'store'])->name('criminal-procedure-code.store');
+    Route::get('/criminal-procedure-code/{section}/edit', [App\Http\Controllers\Admin\CriminalProcedureCodeController::class, 'edit'])->name('criminal-procedure-code.edit');
+    Route::put('/criminal-procedure-code/{section}', [App\Http\Controllers\Admin\CriminalProcedureCodeController::class, 'update'])->name('criminal-procedure-code.update');
+    Route::delete('/criminal-procedure-code/{section}', [App\Http\Controllers\Admin\CriminalProcedureCodeController::class, 'destroy'])->name('criminal-procedure-code.destroy');
+    Route::get('/criminal-procedure-code/{section}/amendments', [App\Http\Controllers\Admin\CriminalProcedureCodeController::class, 'showAmendments'])->name('criminal-procedure-code.amendments');
+    Route::get('/criminal-procedure-code/{section}/amendments/create', [App\Http\Controllers\Admin\CriminalProcedureCodeController::class, 'createAmendment'])->name('criminal-procedure-code.amendments.create');
+    Route::post('/criminal-procedure-code/{section}/amendments', [App\Http\Controllers\Admin\CriminalProcedureCodeController::class, 'storeAmendment'])->name('criminal-procedure-code.amendments.store');
+});// User dashboard and Penal Code routes
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
 

@@ -547,6 +547,11 @@
                                 @else
                                     <li><a class="dropdown-item" href="{{ route('penal-code.public') }}"><i class="bi bi-journal-text me-2"></i>Penal Code Database</a></li>
                                 @endauth
+                                @auth
+                                    <li><a class="dropdown-item" href="{{ route('criminal-procedure-code.index') }}"><i class="bi bi-journal-text me-2"></i>Criminal Procedure Code Database</a></li>
+                                @else
+                                    <li><a class="dropdown-item" href="{{ route('criminal-procedure-code.public') }}"><i class="bi bi-journal-text me-2"></i>Criminal Procedure Code Database</a></li>
+                                @endauth
                             </ul>
                         </li>
                         <li class="nav-item dropdown">

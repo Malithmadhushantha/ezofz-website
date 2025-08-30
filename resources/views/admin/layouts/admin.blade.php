@@ -45,6 +45,11 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.criminal-procedure-code.*') ? 'active' : '' }}" href="{{ route('admin.criminal-procedure-code.index') }}">
+                                <i class="bi bi-journal-text me-2"></i>Criminal Procedure Code
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="#">
                                 <i class="bi bi-gear me-2"></i>Settings
                             </a>
