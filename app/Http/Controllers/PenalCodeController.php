@@ -134,19 +134,30 @@ class PenalCodeController extends Controller
 
     public function saveNote(Request $request, PenalCodeSection $section)
     {
-        $request->validate([
-            'note' => 'required|string|max:1000'
-        ]);
+        try {
+            $request->validate([
+                'note' => 'required|string|max:1000'
+            ]);
 
-        UserNote::updateOrCreate(
-            [
+            UserNote::updateOrCreate(
+                [
+                    'user_id' => auth()->id(),
+                    'section_id' => $section->id,
+                    'type' => 'penal-code'
+                ],
+                ['note' => $request->note]
+            );
+
+            return response()->json(['message' => 'Note saved successfully']);
+        } catch (\Exception $e) {
+            \Log::error('PenalCodeController saveNote error: ' . $e->getMessage(), [
                 'user_id' => auth()->id(),
-                'section_id' => $section->id
-            ],
-            ['note' => $request->note]
-        );
-
-        return response()->json(['message' => 'Note saved successfully']);
+                'section_id' => $section->id,
+                'note' => $request->note,
+                'exception' => $e
+            ]);
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
     }
 
     public function toggleStar(PenalCodeSection $section)

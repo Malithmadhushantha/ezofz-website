@@ -301,7 +301,14 @@ function saveNote(sectionId) {
         },
         body: JSON.stringify({ note })
     })
-    .then(response => response.json())
+    .then(async response => {
+        let data;
+        try { data = await response.json(); } catch { data = {}; }
+        if (!response.ok) {
+            throw new Error(data.message || 'Error saving note');
+        }
+        return data;
+    })
     .then(data => {
         // Update the display
         const noteDisplay = document.getElementById('note-display');
@@ -330,7 +337,7 @@ function saveNote(sectionId) {
         showNotification('Note saved successfully', 'success');
     })
     .catch(error => {
-        showNotification('Error saving note', 'error');
+        showNotification(error.message || 'Error saving note', 'error');
     });
 }
 

@@ -165,13 +165,13 @@
                 <div class="card-body">
                     <div class="note-editor">
                         <div id="note-display" class="mb-3 p-3 bg-light rounded{{ !$userNote ? ' d-none' : '' }}">
-                            <p class="mb-0">{{ $userNote }}</p>
+                            <p class="mb-0">{{ is_object($userNote) ? $userNote->note : $userNote }}</p>
                         </div>
                         <div id="note-form" class="{{ $userNote ? 'd-none' : '' }}">
                             <textarea class="form-control mb-2"
                                       id="note-{{ $section->id }}"
                                       rows="4"
-                                      placeholder="Add your notes here...">{{ $userNote }}</textarea>
+                                      placeholder="Add your notes here...">{{ is_object($userNote) ? $userNote->note : $userNote }}</textarea>
                             <div class="d-flex gap-2">
                                 <button class="btn btn-primary flex-grow-1" onclick="saveNote({{ $section->id }})">
                                     <i class="bi bi-save me-1"></i>Save Note
@@ -299,7 +299,14 @@ function saveNote(sectionId) {
         },
         body: JSON.stringify({ note })
     })
-    .then(response => response.json())
+    .then(async response => {
+        let data;
+        try { data = await response.json(); } catch { data = {}; }
+        if (!response.ok) {
+            throw new Error(data.message || 'Error saving note');
+        }
+        return data;
+    })
     .then(data => {
         // Update the display
         const noteDisplay = document.getElementById('note-display');
@@ -328,7 +335,7 @@ function saveNote(sectionId) {
         showNotification('Note saved successfully', 'success');
     })
     .catch(error => {
-        showNotification('Error saving note', 'error');
+        showNotification(error.message || 'Error saving note', 'error');
     });
 }
 

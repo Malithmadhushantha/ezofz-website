@@ -84,51 +84,78 @@ class CriminalProcedureCodeController extends Controller
 
     public function toggleStar(CriminalProcedureCode $section)
     {
-        $starred = StarredSection::where('user_id', Auth::id())
-                                ->where('criminal_procedure_codes_section_id', $section->id)
-                                ->first();
+        $starred = CriminalProcedureCodeStarredSection::where('user_id', Auth::id())
+            ->where('criminal_procedure_codes_section_id', $section->id)
+            ->first();
 
         if ($starred) {
             $starred->delete();
+            $isStarred = false;
+            $message = 'Section removed from starred';
         } else {
-            StarredSection::create([
+            CriminalProcedureCodeStarredSection::create([
                 'user_id' => Auth::id(),
-                'type' => 'criminal-procedure-code',
-                'section_id' => $section->id
+                'criminal_procedure_codes_section_id' => $section->id
             ]);
+            $isStarred = true;
+            $message = 'Section added to starred';
         }
 
-        return back();
+        return response()->json([
+            'message' => $message,
+            'isStarred' => $isStarred
+        ]);
     }
 
     public function toggleLike(CriminalProcedureCode $section)
     {
         $liked = CriminalProcedureCodeLikedSection::where('user_id', Auth::id())
-                            ->where('criminal_procedure_codes_section_id', $section->id)
-                            ->first();
+            ->where('criminal_procedure_codes_section_id', $section->id)
+            ->first();
 
         if ($liked) {
             $liked->delete();
+            $isLiked = false;
+            $message = 'Like removed';
         } else {
             CriminalProcedureCodeLikedSection::create([
                 'user_id' => Auth::id(),
                 'criminal_procedure_codes_section_id' => $section->id
             ]);
+            $isLiked = true;
+            $message = 'Section liked';
         }
 
-        return back();
+        return response()->json([
+            'message' => $message,
+            'isLiked' => $isLiked
+        ]);
     }
 
     public function saveNote(Request $request, CriminalProcedureCode $section)
     {
-        $note = CriminalProcedureCodeNote::updateOrCreate(
-            [
-                'user_id' => Auth::id(),
-                'criminal_procedure_codes_section_id' => $section->id
-            ],
-            ['note' => $request->note]
-        );
+        try {
+            $request->validate([
+                'note' => 'required|string|max:1000'
+            ]);
 
-        return back()->with('success', 'Note saved successfully');
+            CriminalProcedureCodeNote::updateOrCreate(
+                [
+                    'user_id' => Auth::id(),
+                    'criminal_procedure_codes_section_id' => $section->id
+                ],
+                ['note' => $request->note]
+            );
+
+            return response()->json(['message' => 'Note saved successfully']);
+        } catch (\Exception $e) {
+            \Log::error('CriminalProcedureCodeController saveNote error: ' . $e->getMessage(), [
+                'user_id' => Auth::id(),
+                'section_id' => $section->id,
+                'note' => $request->note,
+                'exception' => $e
+            ]);
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
     }
 }

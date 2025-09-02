@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserNote extends Model
 {
-    protected $fillable = ['user_id', 'section_id', 'note'];
+    protected $fillable = ['user_id', 'section_id', 'note', 'type'];
 
     public function user()
     {
