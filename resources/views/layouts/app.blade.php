@@ -676,6 +676,7 @@
                 <div class="row align-items-center">
                     <div class="col-md-6">
                         <p class="mb-0 text-light">&copy; 2024 EZofz.lk. All rights reserved.</p>
+                        <p class="mb-0 text-light">Developed by <a href="#" class="text-light text-decoration-none">Malith Madhushantha</a></p>
                     </div>
                     <div class="col-md-6 text-md-end">
                         <p class="mb-0 text-light">Made with <i class="bi bi-heart-fill text-danger"></i> in Sri Lanka</p>
