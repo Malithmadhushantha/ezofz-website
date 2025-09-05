@@ -36,7 +36,7 @@ class CriminalProcedureCodeController extends Controller
 
     public function publicShow(CriminalProcedureCode $section)
     {
-        return view('criminal-procedure-code.public', compact('section'));
+        return view('criminal-procedure-code.public-show', compact('section'));
     }
 
     public function index(Request $request)
@@ -156,6 +156,28 @@ class CriminalProcedureCodeController extends Controller
                 'exception' => $e
             ]);
             return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
+
+    public function deleteNote(CriminalProcedureCode $section)
+    {
+        try {
+            $deleted = CriminalProcedureCodeNote::where('user_id', Auth::id())
+                ->where('criminal_procedure_codes_section_id', $section->id)
+                ->delete();
+
+            if ($deleted) {
+                return response()->json(['message' => 'Note deleted successfully']);
+            } else {
+                return response()->json(['message' => 'Note not found'], 404);
+            }
+        } catch (\Exception $e) {
+            \Log::error('CriminalProcedureCodeController deleteNote error: ' . $e->getMessage(), [
+                'user_id' => Auth::id(),
+                'section_id' => $section->id,
+                'exception' => $e
+            ]);
+            return response()->json(['message' => 'Error deleting note: ' . $e->getMessage()], 500);
         }
     }
 }

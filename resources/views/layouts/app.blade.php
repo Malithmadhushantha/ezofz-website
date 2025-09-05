@@ -209,10 +209,22 @@
         visibility: visible;
         transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s linear;
         animation: digitalFadeIn 0.3s ease forwards;
+        display: block !important;
     }
 
     .dropdown-menu:not(.show) {
         animation: glitchFadeOut 0.2s ease forwards;
+        display: none !important;
+    }
+
+    /* Fallback for dropdown hover on mobile/touch devices */
+    @media (hover: none) {
+        .nav-item.dropdown:hover > .dropdown-menu {
+            display: block !important;
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
     }
 
     @keyframes digitalFadeIn {
@@ -687,10 +699,25 @@
     </div>
 
     <!-- Bootstrap JS Bundle (with Popper) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 
     <!-- AOS Animation JS -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <!-- Ensure Bootstrap is loaded -->
+    <script>
+        // Check if Bootstrap is loaded
+        window.addEventListener('DOMContentLoaded', function() {
+            if (typeof bootstrap === 'undefined') {
+                console.error('Bootstrap JavaScript is not loaded. Attempting to reload...');
+                var bootstrapScript = document.createElement('script');
+                bootstrapScript.src = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js';
+                bootstrapScript.integrity = 'sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL';
+                bootstrapScript.crossOrigin = 'anonymous';
+                document.head.appendChild(bootstrapScript);
+            }
+        });
+    </script>
 
     <script>
         // Initialize AOS
@@ -787,46 +814,138 @@
             }, 2000 + Math.random() * 2000);
         });
 
-        // Initialize Bootstrap dropdowns and navbar collapse
-        document.addEventListener('DOMContentLoaded', () => {
-            // Initialize navbar collapse
-            const toggler = document.querySelector('.navbar-toggler');
-            const collapse = document.querySelector('#navbarNav');
-            if (toggler && collapse) {
-                toggler.addEventListener('click', (e) => {
-                    e.stopPropagation(); // Prevent event bubbling
-                    collapse.classList.toggle('show');
+        // Initialize Bootstrap components properly
+        document.addEventListener('DOMContentLoaded', function() {
+            // First, make sure Bootstrap JavaScript is properly loaded
+            if (typeof bootstrap === 'undefined') {
+                console.error('Bootstrap JavaScript is not loaded properly.');
+
+                // Fallback dropdown implementation
+                setupFallbackDropdowns();
+            } else {
+                // Initialize all dropdowns using Bootstrap's native API
+                var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
+                var dropdownList = dropdownElementList.map(function(dropdownToggleEl) {
+                    return new bootstrap.Dropdown(dropdownToggleEl, {
+                        offset: [0, 10],
+                        popperConfig: function(defaultConfig) {
+                            return {...defaultConfig, placement: 'bottom-start'};
+                        }
+                    });
+                });
+
+                // Initialize all tooltips and popovers
+                var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+                var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+                    return new bootstrap.Tooltip(tooltipTriggerEl);
                 });
             }
 
-            // Initialize dropdowns
+            // Setup navbar collapse behavior
+            var navbarToggler = document.querySelector('.navbar-toggler');
+            var navbarContent = document.querySelector('#navbarNav');
+            if (navbarToggler && navbarContent) {
+                var navbarCollapse = new bootstrap.Collapse(navbarContent, {
+                    toggle: false
+                });
+
+                navbarToggler.addEventListener('click', function() {
+                    navbarCollapse.toggle();
+                });
+            }
+        });
+
+        // Fallback dropdown function if Bootstrap JS is not loaded properly
+        function setupFallbackDropdowns() {
+            console.log('Using fallback dropdown implementation');
+
             const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+
+            // Remove existing event listeners (if any)
             dropdownToggles.forEach(toggle => {
-                const dropdownMenu = toggle.nextElementSibling;
-                if (dropdownMenu && dropdownMenu.classList.contains('dropdown-menu')) {
-                    toggle.addEventListener('click', (e) => {
-                        e.preventDefault(); // Prevent default link behavior
-                        e.stopPropagation(); // Prevent event bubbling
-                        dropdownMenu.classList.toggle('show');
-                        toggle.setAttribute('aria-expanded', dropdownMenu.classList.contains('show'));
+                const newToggle = toggle.cloneNode(true);
+                toggle.parentNode.replaceChild(newToggle, toggle);
+            });
+
+            // Add click event listeners
+            document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
+                toggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    // Close all other open dropdowns
+                    document.querySelectorAll('.dropdown-menu.show').forEach(menu => {
+                        if (menu !== this.nextElementSibling) {
+                            menu.classList.remove('show');
+                            menu.previousElementSibling.setAttribute('aria-expanded', 'false');
+                        }
                     });
-                }
+
+                    // Toggle this dropdown
+                    const dropdownMenu = this.nextElementSibling;
+                    dropdownMenu.classList.toggle('show');
+                    this.setAttribute('aria-expanded', dropdownMenu.classList.contains('show') ? 'true' : 'false');
+                });
             });
 
             // Close dropdowns when clicking outside
-            document.addEventListener('click', (e) => {
-                dropdownToggles.forEach(toggle => {
-                    const dropdownMenu = toggle.nextElementSibling;
-                    if (dropdownMenu && dropdownMenu.classList.contains('show')) {
-                        if (!toggle.contains(e.target) && !dropdownMenu.contains(e.target)) {
-                            dropdownMenu.classList.remove('show');
-                            toggle.setAttribute('aria-expanded', 'false');
-                        }
-                    }
-                });
+            document.addEventListener('click', function(e) {
+                if (!e.target.matches('.dropdown-toggle') && !e.target.closest('.dropdown-menu')) {
+                    document.querySelectorAll('.dropdown-menu.show').forEach(menu => {
+                        menu.classList.remove('show');
+                        menu.previousElementSibling.setAttribute('aria-expanded', 'false');
+                    });
+                }
             });
-        });
+        }
     </script>
     @stack('scripts')
+
+    <!-- Final bootstrap dropdown initialization fallback -->
+    <script>
+        // This will run after everything else has loaded
+        window.addEventListener('load', function() {
+            // Double-check if Bootstrap dropdowns are working
+            setTimeout(function() {
+                const dropdownTest = document.querySelector('.dropdown-toggle');
+                if (dropdownTest && !dropdownTest.hasAttribute('data-bs-initialized')) {
+                    console.log('Adding fallback dropdown handlers');
+
+                    // Add manual click handlers for dropdowns
+                    document.querySelectorAll('.dropdown-toggle').forEach(function(dropdownToggle) {
+                        dropdownToggle.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            e.stopPropagation();
+
+                            const dropdownMenu = this.nextElementSibling;
+                            if (dropdownMenu && dropdownMenu.classList.contains('dropdown-menu')) {
+                                // Close all other open dropdowns
+                                document.querySelectorAll('.dropdown-menu.show').forEach(function(openMenu) {
+                                    if (openMenu !== dropdownMenu) {
+                                        openMenu.classList.remove('show');
+                                    }
+                                });
+
+                                // Toggle current dropdown
+                                dropdownMenu.classList.toggle('show');
+                            }
+                        });
+
+                        // Mark as manually initialized
+                        dropdownToggle.setAttribute('data-bs-initialized', 'true');
+                    });
+
+                    // Close dropdowns when clicking outside
+                    document.addEventListener('click', function(e) {
+                        if (!e.target.closest('.dropdown')) {
+                            document.querySelectorAll('.dropdown-menu.show').forEach(function(menu) {
+                                menu.classList.remove('show');
+                            });
+                        }
+                    });
+                }
+            }, 1000); // Wait 1 second to make sure Bootstrap had a chance to initialize
+        });
+    </script>
 </body>
 </html>

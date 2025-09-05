@@ -96,34 +96,23 @@
                                     <td>{{ $section->name_of_the_section }}</td>
                                     <td>
                                         <div class="access-section">
-                                            <button class="btn btn-sm btn-primary show-access-message" title="View Details">
-                                                <i class="bi bi-eye"></i> View
-                                            </button>
-                                            <div class="access-message collapse">
-                                                <div class="card mt-2 border-warning">
-                                                    <div class="card-body p-3">
-                                                        <div class="d-flex align-items-center text-warning mb-2">
-                                                            <i class="bi bi-lock-fill me-2"></i>
-                                                            <strong>Access Required</strong>
-                                                        </div>
-                                                        <p class="mb-2 small">Registration required to view content.</p>
-                                                        <div class="btn-group btn-group-sm">
-                                                            <a href="{{ route('login') }}" class="btn btn-outline-primary">
-                                                                <i class="bi bi-box-arrow-in-right"></i> Login
-                                                            </a>
-                                                            <a href="{{ route('register') }}" class="btn btn-primary">
-                                                                <i class="bi bi-person-plus"></i> Register
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <a href="{{ route('criminal-procedure-code.public.show', $section) }}" class="btn btn-sm btn-primary" title="View Details">
+                                                <i class="bi bi-eye"></i> Preview
+                                            </a>
+                                            <a href="{{ route('login') }}" class="btn btn-sm btn-outline-success ms-1" title="Full Access">
+                                                <i class="bi bi-shield-lock"></i> Full Access
+                                            </a>
                                         </div>
                                     </td>
                                 </tr>
                                 @endforeach
                             </tbody>
                         </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="mt-4 d-flex justify-content-center">
+                        {{ $sections->links() }}
                     </div>
                 </div>
             </div>
@@ -134,31 +123,7 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize buttons to show access message
-    const viewButtons = document.querySelectorAll('.show-access-message');
-    const allMessages = document.querySelectorAll('.access-message');
-
-    viewButtons.forEach(button => {
-        button.addEventListener('click', function(e) {
-            // Hide all other messages first
-            allMessages.forEach(msg => {
-                if (msg !== this.nextElementSibling) {
-                    msg.classList.remove('show');
-                }
-            });
-
-            // Toggle this message
-            const message = this.closest('.access-section').querySelector('.access-message');
-            message.classList.toggle('show');
-        });
-    });
-
-    // Hide messages when clicking outside
-    document.addEventListener('click', function(e) {
-        if (!e.target.closest('.access-section')) {
-            allMessages.forEach(msg => msg.classList.remove('show'));
-        }
-    });
+    // Additional functionality can be added here if needed
 });
 </script>
 @endpush
@@ -176,44 +141,13 @@ document.addEventListener('DOMContentLoaded', function() {
 }
 
 .access-section {
-    position: relative;
+    display: flex;
+    align-items: center;
 }
 
-.access-message {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    width: 250px;
-    z-index: 1000;
-    margin-top: 5px;
-}
-
-.access-message .card {
-    margin: 0;
-    background: #fff;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-
-.access-message.collapse:not(.show) {
-    display: none;
-}
-
-.access-message.collapse.show {
-    display: block;
-}
-
-.access-message .btn-group {
-    width: 100%;
-}
-
-.access-message .btn {
-    flex: 1;
+.access-section .btn {
     white-space: nowrap;
-    font-size: 0.8rem;
-}
-
-.access-message .btn i {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
 }
 </style>
 @endpush

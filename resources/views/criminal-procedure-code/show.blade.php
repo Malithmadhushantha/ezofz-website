@@ -339,40 +339,7 @@ function saveNote(sectionId) {
     });
 }
 
-function confirmDeleteNote(sectionId) {
-    if (confirm('Are you sure you want to delete this note?')) {
-        deleteNote(sectionId);
-    }
-}
-
-function deleteNote(sectionId) {
-    fetch(`/criminal-procedure-code/${sectionId}/note`, {
-        method: 'DELETE',
-        headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        // Clear the textarea
-        document.getElementById(`note-${sectionId}`).value = '';
-
-        // Hide the display and buttons
-        document.getElementById('note-display').classList.add('d-none');
-        document.getElementById('note-form').classList.remove('d-none');
-
-        // Remove the edit/delete buttons
-        const btnGroup = document.querySelector('.card-header .btn-group');
-        if (btnGroup) {
-            btnGroup.remove();
-        }
-
-        showNotification('Note deleted successfully', 'success');
-    })
-    .catch(error => {
-        showNotification('Error deleting note', 'error');
-    });
-}
+// Functions moved to avoid duplication
 
 function toggleStar(sectionId) {
     fetch(`/criminal-procedure-code/${sectionId}/star`, {
@@ -448,6 +415,11 @@ function showNotification(message, type = 'success') {
     notification.style.zIndex = '9999';
     notification.textContent = message;
 
+    // Log messages to console for debugging
+    if (type !== 'success') {
+        console.log(`Notification (${type}):`, message);
+    }
+
     document.body.appendChild(notification);
 
     setTimeout(() => {
@@ -468,7 +440,14 @@ function deleteNote(sectionId) {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
         }
     })
-    .then(response => response.json())
+    .then(async response => {
+        // First check if the response is ok
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || 'Error deleting note');
+        }
+        return response.json();
+    })
     .then(data => {
         // Clear the note display and form
         document.querySelector('#note-display').classList.add('d-none');
@@ -485,7 +464,8 @@ function deleteNote(sectionId) {
         showNotification(data.message, 'success');
     })
     .catch(error => {
-        showNotification('Error deleting note', 'error');
+        console.error('Delete note error:', error);
+        showNotification(error.message || 'Error deleting note', 'danger');
     });
 }
 </script>

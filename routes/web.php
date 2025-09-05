@@ -20,13 +20,17 @@ Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 Route::get('/penal-code/public', [App\Http\Controllers\PenalCodeController::class, 'publicIndex'])->name('penal-code.public');
 
 // Criminal Procedure Code routes
-Route::get('/criminal-procedure-code', [App\Http\Controllers\CriminalProcedureCodeController::class, 'index'])->name('criminal-procedure-code.index');
+// Public Criminal Procedure Code routes (must come first)
+Route::get('/criminal-procedure-code', [App\Http\Controllers\CriminalProcedureCodeController::class, 'publicIndex'])->name('criminal-procedure-code.public');
+Route::get('/criminal-procedure-code/public/{section}', [App\Http\Controllers\CriminalProcedureCodeController::class, 'publicShow'])->name('criminal-procedure-code.public.show');
+
+// Authenticated Criminal Procedure Code routes
+Route::get('/criminal-procedure-code/auth', [App\Http\Controllers\CriminalProcedureCodeController::class, 'index'])->name('criminal-procedure-code.index')->middleware('auth');
 Route::get('/criminal-procedure-code/{section}', [App\Http\Controllers\CriminalProcedureCodeController::class, 'show'])->name('criminal-procedure-code.show');
 Route::post('/criminal-procedure-code/{section}/note', [App\Http\Controllers\CriminalProcedureCodeController::class, 'saveNote'])->name('criminal-procedure-code.note.save')->middleware('auth');
 Route::delete('/criminal-procedure-code/{section}/note', [App\Http\Controllers\CriminalProcedureCodeController::class, 'deleteNote'])->name('criminal-procedure-code.note.delete')->middleware('auth');
 Route::post('/criminal-procedure-code/{section}/star', [App\Http\Controllers\CriminalProcedureCodeController::class, 'toggleStar'])->name('criminal-procedure-code.star.toggle')->middleware('auth');
 Route::post('/criminal-procedure-code/{section}/like', [App\Http\Controllers\CriminalProcedureCodeController::class, 'toggleLike'])->name('criminal-procedure-code.like.toggle')->middleware('auth');
-Route::get('/criminal-procedure-code/public', [App\Http\Controllers\CriminalProcedureCodeController::class, 'publicIndex'])->name('criminal-procedure-code.public');
 // Tools Routes
 Route::get('/tools/unicode-typing', function () {
     return view('tools.unicode-typing');
