@@ -10,6 +10,11 @@
     <meta name="keywords" content="@yield('keywords', 'Sri Lanka, office tools, government, private sector, unicode typing, document conversion, office automation')">
     <meta name="author" content="EZofz.lk">
 
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579653610544842" crossorigin="anonymous"></script>
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://ezofz.web.lk/" />
+
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="@yield('title', 'EZofz.lk - Office Tools & Services')">
     <meta property="og:description" content="@yield('description', 'Advanced tools and services for Sri Lankan officers')">

@@ -14,6 +14,8 @@
         --card-bg: rgba(255, 255, 255, 0.95);
         --text-light: #8892b0;
         --border-color: rgba(255, 255, 255, 0.1);
+        --tech-blue: #667eea;
+        --tech-purple: #764ba2;
     }
 
     body {
@@ -74,6 +76,7 @@
         bottom: 0;
         background: rgba(0, 0, 0, 0.3);
         backdrop-filter: blur(5px);
+        pointer-events: none; /* Allow clicks to pass through */
     }
 
     .hero-section::after {
@@ -90,6 +93,7 @@
         background-repeat: no-repeat;
         animation: heroTechLines 5s ease-in-out infinite;
         z-index: 1;
+        pointer-events: none; /* Allow clicks to pass through */
     }
 
     @keyframes heroTechLines {
@@ -105,7 +109,7 @@
 
     .hero-content {
         position: relative;
-        z-index: 2;
+        z-index: 10; /* Increased z-index for better stacking */
         text-align: center;
         color: white;
     }
@@ -191,14 +195,14 @@
     .tool-card {
         background: rgba(15, 25, 40, 0.9);
         border: none;
-        border-radius: 20px;
-        padding: 2rem;
+        border-radius: 15px;
+        padding: 1.5rem;
         height: 100%;
         position: relative;
         overflow: hidden;
         backdrop-filter: blur(20px);
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         border: 1px solid rgba(102, 126, 234, 0.2);
     }
 
@@ -208,10 +212,10 @@
         top: 0;
         left: 0;
         right: 0;
-        height: 4px;
+        height: 3px;
         background: var(--primary-gradient);
         transform: scaleX(0);
-        transition: transform 0.4s ease;
+        transition: transform 0.3s ease;
     }
 
     .tool-card:hover::before {
@@ -219,22 +223,22 @@
     }
 
     .tool-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
         border-color: rgba(102, 126, 234, 0.6);
     }
 
     .tool-icon {
-        width: 100px;
-        height: 100px;
+        width: 70px;
+        height: 70px;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        margin: 0 auto 2rem;
+        margin: 0 auto 1.5rem;
         position: relative;
         overflow: hidden;
-        transition: all 0.4s ease;
+        transition: all 0.3s ease;
     }
 
     .tool-icon::before {
@@ -250,7 +254,7 @@
     }
 
     .tool-card:hover .tool-icon {
-        transform: scale(1.1) rotate(5deg);
+        transform: scale(1.05) rotate(3deg);
     }
 
     .tool-icon.primary { background: var(--primary-gradient); }
@@ -260,18 +264,21 @@
     .tool-card h4 {
         font-weight: 600;
         color: #ffffff;
-        margin-bottom: 1rem;
-        font-size: 1.4rem;
+        margin-bottom: 0.8rem;
+        font-size: 1.2rem;
+        text-align: center;
     }
 
     .tool-card p {
         color: #cbd5e0;
-        line-height: 1.6;
-        margin-bottom: 2rem;
+        line-height: 1.5;
+        margin-bottom: 1.5rem;
+        font-size: 0.95rem;
+        text-align: center;
     }
 
     .tool-btn {
-        padding: 12px 30px;
+        padding: 10px 20px;
         border-radius: 50px;
         border: none;
         font-weight: 600;
@@ -283,6 +290,7 @@
         position: relative;
         overflow: hidden;
         width: 100%;
+        font-size: 0.95rem;
     }
 
     .tool-btn::before {
@@ -454,6 +462,8 @@
         transition: all 0.3s ease;
         position: relative;
         overflow: hidden;
+        z-index: 15; /* Ensure it's above other elements */
+        cursor: pointer;
     }
 
     .cta-btn:hover {
@@ -509,6 +519,172 @@
         animation: pulse-glow 2s ease-in-out infinite;
     }
 
+    /* Important Links Section Styles */
+    .important-links-section {
+        padding: 100px 0;
+        background: rgba(15, 25, 40, 0.8);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .important-links-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background:
+            radial-gradient(circle at 10% 20%, rgba(102, 126, 234, 0.05) 0%, transparent 50%),
+            radial-gradient(circle at 90% 80%, rgba(138, 43, 226, 0.05) 0%, transparent 50%);
+        pointer-events: none;
+    }
+
+    .sl-flag {
+        display: inline-block;
+        position: relative;
+    }
+
+    .flag-icon {
+        font-size: 3rem;
+        animation: flagWave 3s ease-in-out infinite;
+        display: inline-block;
+        filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+    }
+
+    @keyframes flagWave {
+        0%, 100% { transform: rotate(-5deg); }
+        50% { transform: rotate(5deg); }
+    }
+
+    .links-tab-container {
+        background: rgba(15, 20, 30, 0.6);
+        padding: 10px;
+        border-radius: 50px;
+        display: inline-flex;
+        margin: 0 auto 2rem;
+    }
+
+    .links-tab-container .nav-link {
+        color: #e0e0e0;
+        border-radius: 50px;
+        padding: 10px 20px;
+        margin: 0 5px;
+        transition: all 0.3s ease;
+        font-weight: 500;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .links-tab-container .nav-link::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .links-tab-container .nav-link:hover::before {
+        left: 100%;
+    }
+
+    .links-tab-container .nav-link.active {
+        background: linear-gradient(135deg, var(--tech-blue), var(--tech-purple));
+        color: white;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .link-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 1.2rem 0.8rem;
+        background: rgba(20, 30, 50, 0.8);
+        border-radius: 12px;
+        height: 100%;
+        text-decoration: none;
+        color: white;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(102, 126, 234, 0.2);
+        position: relative;
+        overflow: hidden;
+        max-width: 100%;
+    }
+
+    .link-card::before {
+        content: '';
+        position: absolute;
+        top: -100%;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to bottom, rgba(102, 126, 234, 0.1), transparent);
+        transition: all 0.5s ease;
+    }
+
+    .link-card:hover {
+        transform: translateY(-5px);
+        border-color: rgba(102, 126, 234, 0.6);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        color: white;
+    }
+
+    .link-card:hover::before {
+        top: 0;
+    }
+
+    .link-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 0.8rem;
+        transition: all 0.3s ease;
+        font-size: 1.4rem;
+        color: white;
+    }    .link-card:hover .link-icon {
+        transform: scale(1.05);
+    }
+
+    .forces-icon {
+        background: linear-gradient(135deg, #1a237e, #283593);
+        box-shadow: 0 3px 8px rgba(26, 35, 126, 0.5);
+    }
+
+    .police-icon {
+        background: linear-gradient(135deg, #004d40, #00695c);
+        box-shadow: 0 3px 8px rgba(0, 77, 64, 0.5);
+    }
+
+    .govt-icon {
+        background: linear-gradient(135deg, #e65100, #f57c00);
+        box-shadow: 0 3px 8px rgba(230, 81, 0, 0.5);
+    }
+
+    .law-icon {
+        background: linear-gradient(135deg, #4a148c, #6a1b9a);
+        box-shadow: 0 3px 8px rgba(74, 20, 140, 0.5);
+    }
+
+    .link-card h5 {
+        text-align: center;
+        margin-bottom: 0.3rem;
+        font-weight: 600;
+        color: white;
+        font-size: 0.95rem;
+    }
+
+    .link-url {
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.6);
+        margin-top: auto;
+    }
+
     /* Responsive Design */
     @media (max-width: 768px) {
         .hero-title {
@@ -525,6 +701,8 @@
 
         .hero-image {
             transform: none;
+            max-width: 80%;
+            margin: 2rem auto 0;
         }
 
         .feature-item {
@@ -535,6 +713,60 @@
         .feature-icon {
             margin: 0 auto 1rem;
         }
+
+        .tool-card {
+            padding: 1.2rem 1rem;
+        }
+
+        .tool-icon {
+            width: 55px;
+            height: 55px;
+            margin-bottom: 1rem;
+        }
+
+        .tool-card h4 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .tool-card p {
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+
+        .tool-btn {
+            padding: 8px 15px;
+            font-size: 0.85rem;
+        }
+
+        .links-tab-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            border-radius: 10px;
+            padding: 3px;
+        }
+
+        .links-tab-container .nav-link {
+            margin: 3px;
+            font-size: 0.8rem;
+            padding: 6px 12px;
+        }
+
+        .link-card {
+            padding: 0.8rem 0.5rem;
+        }
+
+        .link-icon {
+            width: 40px;
+            height: 40px;
+            font-size: 1.2rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .link-card h5 {
+            font-size: 0.85rem;
+        }
     }
 </style>
 @endpush
@@ -542,18 +774,18 @@
 @section('content')
 <!-- Hero Section -->
 <section class="hero-section">
-    <div class="container">
+    <div class="container position-relative"> <!-- Added position-relative for proper stacking context -->
         <div class="row align-items-center min-vh-100">
             <div class="col-lg-6" data-aos="fade-right">
                 <div class="hero-content">
                     <h1 class="hero-title">Advanced Office Tools</h1>
                     <p class="hero-subtitle">Streamline your office work with cutting-edge tools designed specifically for Sri Lankan officers</p>
                     @guest
-                        <a href="{{ route('register') }}" class="btn btn-light btn-lg cta-btn glow-pulse">
+                        <a href="{{ route('register') }}" class="btn btn-light btn-lg cta-btn glow-pulse position-relative"> <!-- Added position-relative -->
                             <i class="bi bi-rocket-takeoff me-2"></i>Start Your Journey
                         </a>
                     @else
-                        <a href="{{ Auth::user()->isAdmin() ? route('admin.dashboard') : route('dashboard') }}" class="btn btn-light btn-lg cta-btn glow-pulse">
+                        <a href="{{ Auth::user()->isAdmin() ? route('admin.dashboard') : route('dashboard') }}" class="btn btn-light btn-lg cta-btn glow-pulse position-relative"> <!-- Added position-relative -->
                             <i class="bi bi-speedometer2 me-2"></i>Access Dashboard
                         </a>
                     @endguest
@@ -576,42 +808,55 @@
             <p class="section-subtitle">Enhance your productivity with our professionally crafted tools</p>
         </div>
 
-        <div class="row g-4">
-            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+        <div class="row g-3">
+            <div class="col-lg-3 col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="100">
                 <div class="tool-card">
                     <div class="tool-icon primary">
-                        <i class="bi bi-keyboard fs-1 text-white"></i>
+                        <i class="bi bi-keyboard fs-2 text-white"></i>
                     </div>
                     <h4>Sinhala Unicode Typing</h4>
-                    <p>Type in Sinhala using advanced unicode converter with intelligent prediction and auto-correction capabilities.</p>
-                    <a href="#" class="tool-btn primary">
+                    <p>Type in Sinhala with intelligent prediction and auto-correction capabilities.</p>
+                    <a href="{{ route('tools.unicode-typing') }}" class="tool-btn primary" aria-label="Try Sinhala Unicode Typing Tool">
                         <i class="bi bi-arrow-right me-2"></i>Try Now
                     </a>
                 </div>
             </div>
 
-            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+            <div class="col-lg-3 col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="200">
                 <div class="tool-card">
                     <div class="tool-icon success">
-                        <i class="bi bi-person-badge fs-1 text-white"></i>
+                        <i class="bi bi-person-badge fs-2 text-white"></i>
                     </div>
                     <h4>Name Converter</h4>
-                    <p>Convert full names to initials format commonly used in Sri Lankan official documents with precision.</p>
-                    <a href="#" class="tool-btn success">
+                    <p>Convert full names to initials format for Sri Lankan official documents.</p>
+                    <a href="{{ route('tools.name-converter') }}" class="tool-btn success" aria-label="Try Name Converter Tool">
                         <i class="bi bi-arrow-right me-2"></i>Convert Now
                     </a>
                 </div>
             </div>
 
-            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+            <div class="col-lg-3 col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="300">
                 <div class="tool-card">
                     <div class="tool-icon warning">
-                        <i class="bi bi-download fs-1 text-white"></i>
+                        <i class="bi bi-download fs-2 text-white"></i>
                     </div>
                     <h4>Document Downloads</h4>
-                    <p>Access law documents, police forms, and other essential documents for your office needs instantly.</p>
-                    <a href="{{ route('documents.index') }}" class="tool-btn warning">
+                    <p>Access law documents, police forms, and other essential documents.</p>
+                    <a href="{{ route('documents.index') }}" class="tool-btn warning" aria-label="Browse Document Downloads">
                         <i class="bi bi-arrow-right me-2"></i>Browse Downloads
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="400">
+                <div class="tool-card">
+                    <div class="tool-icon primary">
+                        <i class="bi bi-calendar-check fs-2 text-white"></i>
+                    </div>
+                    <h4>Easy Forms</h4>
+                    <p>Fill and download essential government forms with guided instructions.</p>
+                    <a href="{{ route('documents.index') }}" class="tool-btn primary" aria-label="Access Easy Forms Tool">
+                        <i class="bi bi-arrow-right me-2"></i>Open Forms
                     </a>
                 </div>
             </div>
@@ -695,6 +940,313 @@
     </div>
 </section>
 
+<!-- Important Links Section -->
+<section id="important-links" class="important-links-section">
+    <div class="container">
+        <div class="section-header text-center mb-5" data-aos="fade-up">
+            <h2 class="section-title">Important Government Links</h2>
+            <p class="section-subtitle">Quick access to essential Sri Lankan government websites and resources</p>
+            <div class="sl-flag mb-3">
+                <span class="flag-icon">🇱🇰</span>
+            </div>
+        </div>
+
+        <!-- Tabs for categories -->
+        <ul class="nav nav-pills mb-4 justify-content-center links-tab-container" id="govLinksTab" role="tablist" data-aos="fade-up">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="forces-tab" data-bs-toggle="pill" data-bs-target="#forces" type="button" role="tab" aria-controls="forces" aria-selected="true">
+                    <i class="bi bi-shield me-2"></i>Forces
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="police-tab" data-bs-toggle="pill" data-bs-target="#police" type="button" role="tab" aria-controls="police" aria-selected="false">
+                    <i class="bi bi-shield-lock me-2"></i>Police
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="govt-tab" data-bs-toggle="pill" data-bs-target="#govt" type="button" role="tab" aria-controls="govt" aria-selected="false">
+                    <i class="bi bi-building me-2"></i>Government
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="law-tab" data-bs-toggle="pill" data-bs-target="#law" type="button" role="tab" aria-controls="law" aria-selected="false">
+                    <i class="bi bi-bank me-2"></i>Law & Parliament
+                </button>
+            </li>
+        </ul>
+
+        <!-- Tab content -->
+        <div class="tab-content" id="govLinksTabContent">
+            <!-- Forces Links -->
+            <div class="tab-pane fade show active" id="forces" role="tabpanel" aria-labelledby="forces-tab">
+                <div class="row g-3">
+                    <div class="col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="100">
+                        <a href="https://www.navy.lk/" target="_blank" class="link-card">
+                            <div class="link-icon forces-icon">
+                                <i class="bi bi-water"></i>
+                            </div>
+                            <h5>Sri Lanka Navy</h5>
+                            <span class="link-url">www.navy.lk</span>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="200">
+                        <a href="https://www.army.lk/" target="_blank" class="link-card">
+                            <div class="link-icon forces-icon">
+                                <i class="bi bi-truck"></i>
+                            </div>
+                            <h5>Sri Lanka Army</h5>
+                            <span class="link-url">www.army.lk</span>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="300">
+                        <a href="https://www.airforce.lk/" target="_blank" class="link-card">
+                            <div class="link-icon forces-icon">
+                                <i class="bi bi-airplane"></i>
+                            </div>
+                            <h5>Sri Lanka Air Force</h5>
+                            <span class="link-url">www.airforce.lk</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Police Links -->
+            <div class="tab-pane fade" id="police" role="tabpanel" aria-labelledby="police-tab">
+                <div class="row g-3">
+                    <div class="col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="100">
+                        <a href="https://www.police.lk/" target="_blank" class="link-card">
+                            <div class="link-icon police-icon">
+                                <i class="bi bi-shield"></i>
+                            </div>
+                            <h5>Sri Lanka Police</h5>
+                            <span class="link-url">www.police.lk</span>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="200">
+                        <a href="https://npa.gov.lk/" target="_blank" class="link-card">
+                            <div class="link-icon police-icon">
+                                <i class="bi bi-mortarboard"></i>
+                            </div>
+                            <h5>National Police Academy</h5>
+                            <span class="link-url">npa.gov.lk</span>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="300">
+                        <a href="https://ineed.police.lk/" target="_blank" class="link-card">
+                            <div class="link-icon police-icon">
+                                <i class="bi bi-phone"></i>
+                            </div>
+                            <h5>Lost Phone Police Complaint System</h5>
+                            <span class="link-url">ineed.police.lk</span>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="400">
+                        <a href="https://eservices.police.lk/" target="_blank" class="link-card">
+                            <div class="link-icon police-icon">
+                                <i class="bi bi-file-earmark-check"></i>
+                            </div>
+                            <h5>Clearance Certificates Online</h5>
+                            <span class="link-url">eservices.police.lk</span>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="500">
+                        <a href="https://telligp.police.lk/" target="_blank" class="link-card">
+                            <div class="link-icon police-icon">
+                                <i class="bi bi-chat-left-text"></i>
+                            </div>
+                            <h5>Tell Inspector General of Police (IGP)</h5>
+                            <span class="link-url">telligp.police.lk</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Government Institutions -->
+            <div class="tab-pane fade" id="govt" role="tabpanel" aria-labelledby="govt-tab">
+                <div class="row g-3">
+                    <div class="col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="100">
+                        <a href="https://www.nitf.lk/" target="_blank" class="link-card">
+                            <div class="link-icon govt-icon">
+                                <i class="bi bi-shield-plus"></i>
+                            </div>
+                            <h5>National Insurance Trust Fund (Agrahara)</h5>
+                            <span class="link-url">www.nitf.lk</span>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="150">
+                        <a href="https://service.pensions.gov.lk/" target="_blank" class="link-card">
+                            <div class="link-icon govt-icon">
+                                <i class="bi bi-person-badge"></i>
+                            </div>
+                            <h5>Department of Pensions</h5>
+                            <span class="link-url">service.pensions.gov.lk</span>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="200">
+                        <a href="https://www.immigration.gov.lk/" target="_blank" class="link-card">
+                            <div class="link-icon govt-icon">
+                                <i class="bi bi-passport"></i>
+                            </div>
+                            <h5>Department of Immigration and Emigration</h5>
+                            <span class="link-url">www.immigration.gov.lk</span>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="250">
+                        <a href="http://www.dmt.gov.lk/" target="_blank" class="link-card">
+                            <div class="link-icon govt-icon">
+                                <i class="bi bi-car-front"></i>
+                            </div>
+                            <h5>Department of Motor Traffic (RMV)</h5>
+                            <span class="link-url">www.dmt.gov.lk</span>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="300">
+                        <a href="https://www.doenets.lk/" target="_blank" class="link-card">
+                            <div class="link-icon govt-icon">
+                                <i class="bi bi-journal-check"></i>
+                            </div>
+                            <h5>Department of Examinations</h5>
+                            <span class="link-url">www.doenets.lk</span>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="350">
+                        <a href="https://www.ugc.ac.lk/" target="_blank" class="link-card">
+                            <div class="link-icon govt-icon">
+                                <i class="bi bi-mortarboard"></i>
+                            </div>
+                            <h5>University Grants Commission (UGC)</h5>
+                            <span class="link-url">www.ugc.ac.lk</span>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="400">
+                        <a href="https://moe.gov.lk/" target="_blank" class="link-card">
+                            <div class="link-icon govt-icon">
+                                <i class="bi bi-book"></i>
+                            </div>
+                            <h5>Ministry of Education</h5>
+                            <span class="link-url">moe.gov.lk</span>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="450">
+                        <a href="https://www.labourdept.gov.lk/" target="_blank" class="link-card">
+                            <div class="link-icon govt-icon">
+                                <i class="bi bi-briefcase"></i>
+                            </div>
+                            <h5>Department of Labor</h5>
+                            <span class="link-url">www.labourdept.gov.lk</span>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="500">
+                        <a href="https://www.ird.gov.lk/" target="_blank" class="link-card">
+                            <div class="link-icon govt-icon">
+                                <i class="bi bi-cash-stack"></i>
+                            </div>
+                            <h5>Inland Revenue Department (IRD)</h5>
+                            <span class="link-url">www.ird.gov.lk</span>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="550">
+                        <a href="https://www.cbsl.gov.lk/" target="_blank" class="link-card">
+                            <div class="link-icon govt-icon">
+                                <i class="bi bi-bank"></i>
+                            </div>
+                            <h5>Central Bank of Sri Lanka (CBSL)</h5>
+                            <span class="link-url">www.cbsl.gov.lk</span>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="600">
+                        <a href="https://ntc.gov.lk/" target="_blank" class="link-card">
+                            <div class="link-icon govt-icon">
+                                <i class="bi bi-bus-front"></i>
+                            </div>
+                            <h5>National Transport Commission</h5>
+                            <span class="link-url">ntc.gov.lk</span>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="650">
+                        <a href="https://railway.gov.lk/" target="_blank" class="link-card">
+                            <div class="link-icon govt-icon">
+                                <i class="bi bi-train-front"></i>
+                            </div>
+                            <h5>Sri Lanka Railways</h5>
+                            <span class="link-url">railway.gov.lk</span>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="700">
+                        <a href="https://www.sltda.gov.lk/" target="_blank" class="link-card">
+                            <div class="link-icon govt-icon">
+                                <i class="bi bi-airplane"></i>
+                            </div>
+                            <h5>Sri Lanka Tourism Development Authority</h5>
+                            <span class="link-url">www.sltda.gov.lk</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Law & Parliament -->
+            <div class="tab-pane fade" id="law" role="tabpanel" aria-labelledby="law-tab">
+                <div class="row g-3">
+                    <div class="col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="100">
+                        <a href="https://www.lawcom.gov.lk/" target="_blank" class="link-card">
+                            <div class="link-icon law-icon">
+                                <i class="bi bi-journal-text"></i>
+                            </div>
+                            <h5>Law Commission of Sri Lanka</h5>
+                            <span class="link-url">www.lawcom.gov.lk</span>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="200">
+                        <a href="https://www.parliament.lk/" target="_blank" class="link-card">
+                            <div class="link-icon law-icon">
+                                <i class="bi bi-building-fill"></i>
+                            </div>
+                            <h5>Parliament of Sri Lanka</h5>
+                            <span class="link-url">www.parliament.lk</span>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="300">
+                        <a href="https://www.justiceministry.gov.lk/" target="_blank" class="link-card">
+                            <div class="link-icon law-icon">
+                                <i class="bi bi-building"></i>
+                            </div>
+                            <h5>Ministry of Justice</h5>
+                            <span class="link-url">www.justiceministry.gov.lk</span>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="400">
+                        <a href="http://www.supremecourt.lk/" target="_blank" class="link-card">
+                            <div class="link-icon law-icon">
+                                <i class="bi bi-bank2"></i>
+                            </div>
+                            <h5>Supreme Court of Sri Lanka</h5>
+                            <span class="link-url">www.supremecourt.lk</span>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="500">
+                        <a href="http://www.courtofappeal.lk/" target="_blank" class="link-card">
+                            <div class="link-icon law-icon">
+                                <i class="bi bi-bank"></i>
+                            </div>
+                            <h5>Court of Appeal of Sri Lanka</h5>
+                            <span class="link-url">www.courtofappeal.lk</span>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="600">
+                        <a href="https://attorneygeneral.gov.lk/" target="_blank" class="link-card">
+                            <div class="link-icon law-icon">
+                                <i class="bi bi-briefcase"></i>
+                            </div>
+                            <h5>Attorney General's Department</h5>
+                            <span class="link-url">attorneygeneral.gov.lk</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- Google AdSense Banner -->
 <div class="container ad-section">
     <div class="ad-placeholder" data-aos="fade-up">
@@ -702,4 +1254,55 @@
         <p class="text-muted mb-0">Advertisement Space</p>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+    // Animation for elements to fade in on scroll
+    const animateOnScroll = () => {
+        const elements = document.querySelectorAll('.fade-in-on-scroll');
+        elements.forEach(element => {
+            const elementTop = element.getBoundingClientRect().top;
+            const elementVisible = 150;
+            if (elementTop < window.innerHeight - elementVisible) {
+                element.classList.add('visible');
+            }
+        });
+    }
+
+    window.addEventListener('scroll', animateOnScroll);
+    // Trigger once on page load
+    animateOnScroll();
+
+    // Initialize Important Links tabs
+    document.addEventListener('DOMContentLoaded', function() {
+        const linksTabs = document.querySelectorAll('#govLinksTab .nav-link');
+        const linksContent = document.querySelectorAll('#govLinksTabContent .tab-pane');
+
+        linksTabs.forEach(tab => {
+            tab.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                // Remove active class from all tabs and hide all content
+                linksTabs.forEach(t => t.classList.remove('active'));
+                linksContent.forEach(content => content.classList.remove('show', 'active'));
+
+                // Add active class to clicked tab
+                this.classList.add('active');
+
+                // Show corresponding content
+                const targetId = this.getAttribute('data-bs-target').substring(1);
+                const targetContent = document.getElementById(targetId);
+                if (targetContent) {
+                    targetContent.classList.add('show', 'active');
+                }
+            });
+        });
+
+        // Activate first tab by default if not already done by Bootstrap
+        if (!document.querySelector('#govLinksTab .nav-link.active') && linksTabs.length > 0) {
+            linksTabs[0].click();
+        }
+    });
+</script>
 @endsection
