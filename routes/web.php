@@ -36,9 +36,9 @@ Route::get('/tools/unicode-typing', function () {
     return view('tools.unicode-typing');
 })->name('tools.unicode-typing');
 
-Route::get('/tools/name-converter', function () {
-    return view('tools.name-converter');
-})->name('tools.name-converter');
+Route::get('/tools/name-converter', [App\Http\Controllers\NameConverterController::class, 'index'])->name('tools.name-converter');
+Route::post('/tools/name-converter/single', [App\Http\Controllers\NameConverterController::class, 'convertSingle'])->name('name-converter.single');
+Route::post('/tools/name-converter/bulk', [App\Http\Controllers\NameConverterController::class, 'convertBulk'])->name('name-converter.bulk');
 
 // Authentication routes
 Auth::routes();
