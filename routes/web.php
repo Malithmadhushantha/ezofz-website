@@ -16,6 +16,12 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about', [HomeController::class, 'about'])->name('about');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 
+// PWA Manifest route
+Route::get('/manifest.json', function () {
+    return response()->file(public_path('manifest.json'))
+        ->header('Content-Type', 'application/manifest+json');
+})->name('manifest');
+
 // Public Penal Code route
 Route::get('/penal-code/public', [App\Http\Controllers\PenalCodeController::class, 'publicIndex'])->name('penal-code.public');
 
@@ -32,9 +38,10 @@ Route::delete('/criminal-procedure-code/{section}/note', [App\Http\Controllers\C
 Route::post('/criminal-procedure-code/{section}/star', [App\Http\Controllers\CriminalProcedureCodeController::class, 'toggleStar'])->name('criminal-procedure-code.star.toggle')->middleware('auth');
 Route::post('/criminal-procedure-code/{section}/like', [App\Http\Controllers\CriminalProcedureCodeController::class, 'toggleLike'])->name('criminal-procedure-code.like.toggle')->middleware('auth');
 // Tools Routes
-Route::get('/tools/unicode-typing', function () {
-    return view('tools.unicode-typing');
-})->name('tools.unicode-typing');
+Route::get('/tools/unicode-typing', [App\Http\Controllers\UnicodeConverterController::class, 'index'])->name('tools.unicode-typing');
+Route::post('/tools/unicode-typing/fm-to-unicode', [App\Http\Controllers\UnicodeConverterController::class, 'fmToUnicode'])->name('unicode.fm-to-unicode');
+Route::post('/tools/unicode-typing/unicode-to-fm', [App\Http\Controllers\UnicodeConverterController::class, 'unicodeToFm'])->name('unicode.unicode-to-fm');
+Route::post('/tools/unicode-typing/detect-type', [App\Http\Controllers\UnicodeConverterController::class, 'detectType'])->name('unicode.detect-type');
 
 Route::get('/tools/name-converter', [App\Http\Controllers\NameConverterController::class, 'index'])->name('tools.name-converter');
 Route::post('/tools/name-converter/single', [App\Http\Controllers\NameConverterController::class, 'convertSingle'])->name('name-converter.single');

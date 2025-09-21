@@ -5,6 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    <!-- PWA Meta Tags -->
+    <meta name="application-name" content="EZofz.lk">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="EZofz.lk">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="msapplication-TileColor" content="#0d6efd">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="theme-color" content="#0d6efd">
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
+
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" href="{{ asset('images/icons/icon-152x152.png') }}">
+    <link rel="apple-touch-icon" sizes="152x152" href="{{ asset('images/icons/icon-152x152.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/icons/icon-192x192.png') }}">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/icons/icon-72x72.png') }}">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
+
     <!-- SEO Meta Tags -->
     <meta name="description" content="@yield('description', 'EZofz.lk - Advanced tools and services for Sri Lankan public and private sector officers to streamline office work.')">
     <meta name="keywords" content="@yield('keywords', 'Sri Lanka, office tools, government, private sector, unicode typing, document conversion, office automation')">
@@ -528,6 +550,43 @@
             margin-left: 1rem;
         }
     }
+
+    /* Navbar Collapse Animation */
+    .navbar-collapse {
+        transition: all 0.3s ease-in-out;
+    }
+
+    .navbar-collapse:not(.show) {
+        display: none;
+    }
+
+    .navbar-collapse.show {
+        display: block;
+        animation: slideDown 0.3s ease-in-out;
+    }
+
+    @keyframes slideDown {
+        0% {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .navbar-toggler {
+        transition: all 0.3s ease;
+    }
+
+    .navbar-toggler.collapsed {
+        transform: rotate(0deg);
+    }
+
+    .navbar-toggler:not(.collapsed) {
+        transform: rotate(180deg);
+    }
     </style>
     @stack('styles')
 </head>
@@ -547,7 +606,7 @@
                     <img src="{{ asset('images/logo.png') }}" alt="EZofz.lk" height="40" class="me-2 pulse">
                     <span class="text-primary">EZofz.lk</span>
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
@@ -851,12 +910,50 @@
             var navbarToggler = document.querySelector('.navbar-toggler');
             var navbarContent = document.querySelector('#navbarNav');
             if (navbarToggler && navbarContent) {
-                var navbarCollapse = new bootstrap.Collapse(navbarContent, {
-                    toggle: false
+                // Remove any existing event listeners
+                var newToggler = navbarToggler.cloneNode(true);
+                navbarToggler.parentNode.replaceChild(newToggler, navbarToggler);
+                navbarToggler = newToggler;
+
+                // Add click event listener for toggle
+                navbarToggler.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    var isExpanded = navbarContent.classList.contains('show');
+
+                    if (isExpanded) {
+                        // Collapse the navbar
+                        navbarContent.classList.remove('show');
+                        navbarToggler.setAttribute('aria-expanded', 'false');
+                        navbarToggler.classList.add('collapsed');
+                    } else {
+                        // Expand the navbar
+                        navbarContent.classList.add('show');
+                        navbarToggler.setAttribute('aria-expanded', 'true');
+                        navbarToggler.classList.remove('collapsed');
+                    }
                 });
 
-                navbarToggler.addEventListener('click', function() {
-                    navbarCollapse.toggle();
+                // Close navbar when clicking on nav links (mobile)
+                var navLinks = navbarContent.querySelectorAll('.nav-link');
+                navLinks.forEach(function(link) {
+                    link.addEventListener('click', function() {
+                        if (window.innerWidth < 992) { // Only on mobile/tablet
+                            navbarContent.classList.remove('show');
+                            navbarToggler.setAttribute('aria-expanded', 'false');
+                            navbarToggler.classList.add('collapsed');
+                        }
+                    });
+                });
+
+                // Close navbar when clicking outside
+                document.addEventListener('click', function(e) {
+                    if (!e.target.closest('.navbar') && navbarContent.classList.contains('show')) {
+                        navbarContent.classList.remove('show');
+                        navbarToggler.setAttribute('aria-expanded', 'false');
+                        navbarToggler.classList.add('collapsed');
+                    }
                 });
             }
         });
@@ -951,6 +1048,91 @@
                     });
                 }
             }, 1000); // Wait 1 second to make sure Bootstrap had a chance to initialize
+        });
+    </script>
+
+    <!-- PWA Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(function(registration) {
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+
+                        // Check for updates
+                        registration.addEventListener('updatefound', function() {
+                            const newWorker = registration.installing;
+                            newWorker.addEventListener('statechange', function() {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    // New update available
+                                    if (confirm('A new version is available. Reload to update?')) {
+                                        window.location.reload();
+                                    }
+                                }
+                            });
+                        });
+                    })
+                    .catch(function(err) {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+            });
+        }
+
+        // PWA Install Prompt
+        let deferredPrompt;
+
+        window.addEventListener('beforeinstallprompt', function(e) {
+            console.log('beforeinstallprompt fired');
+            e.preventDefault();
+            deferredPrompt = e;
+
+            // Show install button or banner
+            showInstallPromotion();
+        });
+
+        function showInstallPromotion() {
+            // Create install button if it doesn't exist
+            if (!document.getElementById('pwa-install-btn')) {
+                const installBtn = document.createElement('button');
+                installBtn.id = 'pwa-install-btn';
+                installBtn.innerHTML = '<i class="fas fa-download me-1"></i> Install App';
+                installBtn.className = 'btn btn-primary btn-sm position-fixed';
+                installBtn.style.cssText = 'bottom: 20px; right: 20px; z-index: 1000; border-radius: 25px;';
+
+                installBtn.addEventListener('click', function() {
+                    if (deferredPrompt) {
+                        deferredPrompt.prompt();
+                        deferredPrompt.userChoice.then(function(choiceResult) {
+                            if (choiceResult.outcome === 'accepted') {
+                                console.log('User accepted the install prompt');
+                            } else {
+                                console.log('User dismissed the install prompt');
+                            }
+                            deferredPrompt = null;
+                            installBtn.remove();
+                        });
+                    }
+                });
+
+                document.body.appendChild(installBtn);
+
+                // Auto-hide after 10 seconds
+                setTimeout(function() {
+                    if (installBtn && installBtn.parentNode) {
+                        installBtn.remove();
+                    }
+                }, 10000);
+            }
+        }
+
+        // Handle successful installation
+        window.addEventListener('appinstalled', function(evt) {
+            console.log('App was installed successfully');
+            // Remove install button if it exists
+            const installBtn = document.getElementById('pwa-install-btn');
+            if (installBtn) {
+                installBtn.remove();
+            }
         });
     </script>
 </body>

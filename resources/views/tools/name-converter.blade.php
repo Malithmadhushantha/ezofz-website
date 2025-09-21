@@ -14,124 +14,88 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-6">
-                            <div class="card mb-4">
-                                <div class="card-header">
-                                    <h5 class="mb-0">Single Name Conversion</h5>
-                                </div>
-                                <div class="card-body">
-                                    <form id="singleConversionForm">
-                                        <div class="mb-3">
-                                            <label for="name" class="form-label">Enter Name</label>
-                                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter name in English" required>
-                                            <div id="nameError" class="invalid-feedback">
-                                                Please enter a name to convert.
-                                            </div>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label d-block">Conversion Type</label>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="conversionType" id="typeFull" value="full" checked>
-                                                <label class="form-check-label" for="typeFull">English to Sinhala (Full)</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="conversionType" id="typeInitials" value="initials">
-                                                <label class="form-check-label" for="typeInitials">English to Sinhala (Initials + Last Name)</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="conversionType" id="typeEnglishInitials" value="englishInitials">
-                                                <label class="form-check-label" for="typeEnglishInitials">English Initials to Sinhala Initials</label>
-                                            </div>
-                                        </div>
-                                        <div class="d-grid gap-2">
-                                            <button type="submit" class="btn btn-primary">Convert</button>
-                                        </div>
-                                        <div class="form-check mt-2">
-                                            <input class="form-check-input" type="checkbox" id="debugMode">
-                                            <label class="form-check-label small text-muted" for="debugMode">
-                                                Debug Mode (Show technical details)
-                                            </label>
-                                        </div>
-                                    </form>
-                                    <div id="singleResult" class="mt-3" style="display: none;">
-                                        <div class="card">
-                                            <div class="card-header bg-light">
-                                                <h6 class="mb-0">Result</h6>
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="mb-2">
-                                                    <strong>Original:</strong> <span id="originalName"></span>
-                                                </div>
-                                                <div class="mb-2">
-                                                    <strong>Converted:</strong>
-                                                    <div class="d-flex align-items-center mt-2">
-                                                        <div class="form-control bg-light" id="convertedNameContainer">
-                                                            <span id="convertedName"></span>
-                                                        </div>
-                                                        <button class="btn btn-primary ms-2" id="copyBtn" title="Copy to clipboard">
-                                                            <i class="far fa-copy"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                                <div class="mt-2">
-                                                    <span class="text-success d-none" id="copySuccess">
-                                                        <i class="fas fa-check"></i> Copied to clipboard!
-                                                    </span>
-                                                </div>
-                                                <div class="mt-3" id="debugSection" style="display: none;">
-                                                    <div class="alert alert-info">
-                                                        <strong>Debug Info:</strong>
-                                                        <pre id="debugInfo" class="mt-2"></pre>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
+                        <div class="col-md-8 mx-auto">
                             <div class="card">
-                                <div class="card-header">
-                                    <h5 class="mb-0">Bulk Conversion (Excel)</h5>
+                                <div class="card-header bg-primary text-white">
+                                    <h5 class="mb-0">Name Conversion (Excel)</h5>
                                 </div>
                                 <div class="card-body">
-                                    <form action="{{ route('name-converter.bulk') }}" method="POST" enctype="multipart/form-data">
+                                    <form action="{{ route('name-converter.bulk') }}" method="POST" enctype="multipart/form-data" id="bulkConversionForm">
                                         @csrf
-                                        <div class="mb-3">
-                                            <label for="file" class="form-label">Upload Excel File</label>
+                                        <div class="mb-4">
+                                            <label for="file" class="form-label fw-bold">Upload Excel File</label>
                                             <input type="file" class="form-control" id="file" name="file" accept=".xlsx, .xls, .csv" required>
                                             <div class="form-text">
                                                 File must be an Excel spreadsheet with names in the first column.
                                             </div>
-                                            <div class="mt-2">
-                                                <a href="{{ asset('downloads/name_converter_template.xlsx') }}" class="btn btn-sm btn-outline-primary">
+                                            <div class="mt-3 d-flex align-items-center">
+                                                <a href="{{ asset('downloads/name_converter_template.xlsx') }}" class="btn btn-outline-primary">
                                                     <i class="fas fa-download me-1"></i> Download Template
                                                 </a>
-                                                <span class="ms-2 text-muted small">First, download this template and add your names</span>
+                                                <span class="ms-3 text-muted">First, download this template and add your names</span>
                                             </div>
                                             @error('file')
                                                 <div class="text-danger mt-1">{{ $message }}</div>
                                             @enderror
                                         </div>
-                                        <div class="mb-3">
-                                            <label class="form-label d-block">Conversion Type</label>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="conversionType" id="bulkTypeFull" value="full" checked>
-                                                <label class="form-check-label" for="bulkTypeFull">English to Sinhala (Full)</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="conversionType" id="bulkTypeInitials" value="initials">
-                                                <label class="form-check-label" for="bulkTypeInitials">English to Sinhala (Initials + Last Name)</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="conversionType" id="bulkTypeEnglishInitials" value="englishInitials">
-                                                <label class="form-check-label" for="bulkTypeEnglishInitials">English Initials to Sinhala Initials</label>
+
+                                        <div class="mb-4">
+                                            <label class="form-label fw-bold">Choose Conversion Type</label>
+                                            <div class="row mt-2">
+                                                <div class="col-md-4 mb-3">
+                                                    <input type="radio" class="btn-check" name="conversionType" id="bulkTypeFull" value="full" checked autocomplete="off">
+                                                    <label class="btn btn-outline-primary w-100 d-flex flex-column align-items-center py-3" for="bulkTypeFull">
+                                                        <i class="fas fa-language fa-2x mb-2"></i>
+                                                        <span>Full Name</span>
+                                                        <small class="text-muted mt-1">English to Sinhala</small>
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <input type="radio" class="btn-check" name="conversionType" id="bulkTypeInitials" value="initials" autocomplete="off">
+                                                    <label class="btn btn-outline-primary w-100 d-flex flex-column align-items-center py-3" for="bulkTypeInitials">
+                                                        <i class="fas fa-signature fa-2x mb-2"></i>
+                                                        <span>Initials + Last Name</span>
+                                                        <small class="text-muted mt-1">J.D. Perera → ජේ.ඩී. පෙරේරා</small>
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <input type="radio" class="btn-check" name="conversionType" id="bulkTypeEnglishInitials" value="englishInitials" autocomplete="off">
+                                                    <label class="btn btn-outline-primary w-100 d-flex flex-column align-items-center py-3" for="bulkTypeEnglishInitials">
+                                                        <i class="fas fa-font fa-2x mb-2"></i>
+                                                        <span>English Initials</span>
+                                                        <small class="text-muted mt-1">J.A. to Sinhala</small>
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="d-grid gap-2">
-                                            <button type="submit" class="btn btn-primary">Convert & Download</button>
+
+                                        <!-- Conversion button and loading indicator -->
+                                        <div class="d-grid gap-2 mt-4">
+                                            <button type="submit" class="btn btn-primary btn-lg" id="convertBtn">
+                                                <span class="normal-state">
+                                                    <i class="fas fa-exchange-alt me-2"></i> Convert & Download
+                                                </span>
+                                                <span class="loading-state d-none">
+                                                    <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                                    Processing...
+                                                </span>
+                                            </button>
+                                        </div>
+
+                                        <!-- Progress indicator (hidden by default) -->
+                                        <div class="mt-4 d-none" id="conversionProgress">
+                                            <div class="text-center mb-3">
+                                                <h5 class="mb-1">Converting Names</h5>
+                                                <p class="text-muted mb-3">Please wait while we process your file...</p>
+                                            </div>
+                                            <div class="progress" style="height: 20px;">
+                                                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                                                    id="progressBar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                                            </div>
+                                            <div class="d-flex justify-content-between mt-1">
+                                                <small>Processing...</small>
+                                                <small id="progressPercentage">0%</small>
+                                            </div>
                                         </div>
                                     </form>
                                 </div>
@@ -141,37 +105,99 @@
 
                     <div class="row mt-4">
                         <div class="col-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h5 class="mb-0">How It Works</h5>
+                            <div class="card shadow-sm">
+                                <div class="card-header bg-light">
+                                    <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>How It Works</h5>
                                 </div>
                                 <div class="card-body">
-                                    <div class="mb-4">
-                                        <h6>1. English to Sinhala (Full)</h6>
-                                        <p>Converts each English name to its Sinhala equivalent.</p>
-                                        <div class="alert alert-light">
-                                            Example: <strong>John Smith</strong> → <strong>ජෝන් ස්මිත්</strong>
+                                    <!-- Quick Instructions -->
+                                    <div class="row mb-4">
+                                        <div class="col-md-12">
+                                            <div class="bg-light p-3 rounded-3">
+                                                <h5 class="border-bottom pb-2 mb-3">Quick Steps</h5>
+                                                <div class="row">
+                                                    <div class="col-md-3 mb-3 mb-md-0 text-center">
+                                                        <div class="bg-white rounded-circle p-3 mx-auto mb-2" style="width: 60px; height: 60px;">
+                                                            <i class="fas fa-download text-primary fa-2x"></i>
+                                                        </div>
+                                                        <h6>1. Download Template</h6>
+                                                        <small>Get the Excel template</small>
+                                                    </div>
+                                                    <div class="col-md-3 mb-3 mb-md-0 text-center">
+                                                        <div class="bg-white rounded-circle p-3 mx-auto mb-2" style="width: 60px; height: 60px;">
+                                                            <i class="fas fa-edit text-primary fa-2x"></i>
+                                                        </div>
+                                                        <h6>2. Add Names</h6>
+                                                        <small>Enter names in column A</small>
+                                                    </div>
+                                                    <div class="col-md-3 mb-3 mb-md-0 text-center">
+                                                        <div class="bg-white rounded-circle p-3 mx-auto mb-2" style="width: 60px; height: 60px;">
+                                                            <i class="fas fa-upload text-primary fa-2x"></i>
+                                                        </div>
+                                                        <h6>3. Upload File</h6>
+                                                        <small>Select your filled template</small>
+                                                    </div>
+                                                    <div class="col-md-3 mb-3 mb-md-0 text-center">
+                                                        <div class="bg-white rounded-circle p-3 mx-auto mb-2" style="width: 60px; height: 60px;">
+                                                            <i class="fas fa-exchange-alt text-primary fa-2x"></i>
+                                                        </div>
+                                                        <h6>4. Convert</h6>
+                                                        <small>Get your converted names</small>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div class="mb-4">
-                                        <h6>2. English to Sinhala (Initials + Last Name)</h6>
-                                        <p>Converts English full name to Sinhala initials followed by the last name.</p>
-                                        <div class="alert alert-light">
-                                            Example: <strong>John Adam Smith</strong> → <strong>ජේ. ඒ. ස්මිත්</strong>
+                                    <!-- Conversion Types Explanation -->
+                                    <h5 class="border-bottom pb-2 mb-3">Conversion Types</h5>
+                                    <div class="row mb-4">
+                                        <div class="col-md-4 mb-3">
+                                            <div class="card h-100 border-primary">
+                                                <div class="card-header bg-primary text-white">
+                                                    <h6 class="mb-0">English to Sinhala (Full)</h6>
+                                                </div>
+                                                <div class="card-body">
+                                                    <p class="card-text">Converts each English name to its Sinhala equivalent.</p>
+                                                    <div class="alert alert-light border">
+                                                        Example: <strong>John Smith</strong> → <strong>ජෝන් ස්මිත්</strong>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4 mb-3">
+                                            <div class="card h-100 border-primary">
+                                                <div class="card-header bg-primary text-white">
+                                                    <h6 class="mb-0">Initials + Last Name</h6>
+                                                </div>
+                                                <div class="card-body">
+                                                    <p class="card-text">Converts English full name to Sinhala initials followed by the last name.</p>
+                                                    <div class="alert alert-light border">
+                                                        Example: <strong>John Adam Smith</strong> → <strong>ජේ. ඒ. ස්මිත්</strong>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4 mb-3">
+                                            <div class="card h-100 border-primary">
+                                                <div class="card-header bg-primary text-white">
+                                                    <h6 class="mb-0">English Initials to Sinhala</h6>
+                                                </div>
+                                                <div class="card-body">
+                                                    <p class="card-text">Converts English initials with Sinhala last name to full Sinhala format.</p>
+                                                    <div class="alert alert-light border">
+                                                        Example: <strong>J.A. ස්මිත්</strong> → <strong>ජේ.ඒ. ස්මිත්</strong>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div class="mb-4">
-                                        <h6>3. English Initials to Sinhala Initials</h6>
-                                        <p>Converts English initials with Sinhala last name to full Sinhala format.</p>
-                                        <div class="alert alert-light">
-                                            Example: <strong>J.A. ස්මිත්</strong> → <strong>ජේ.ඒ. ස්මිත්</strong>
-                                        </div>
-                                    </div>
-
+                                    <!-- Detailed Instructions -->
                                     <div class="mt-4">
-                                        <h6>Bulk Conversion Instructions:</h6>
+                                        <h5 class="border-bottom pb-2 mb-3">Detailed Instructions</h5>
                                         <ol class="mt-2">
                                             <li>Download the Excel template using the "Download Template" button</li>
                                             <li>Open the template in Microsoft Excel or similar spreadsheet software</li>
@@ -199,164 +225,103 @@
 
 @section('styles')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<style>
+    .btn-check + label {
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+    }
+
+    .btn-check:checked + label {
+        background-color: #e7f1ff;
+        border-color: #0d6efd;
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-check + label:hover {
+        transform: translateY(-2px);
+    }
+
+    .progress-bar {
+        transition: width 0.5s ease;
+    }
+
+    .loading-state, .normal-state {
+        transition: opacity 0.3s ease;
+    }
+
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-control:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    }
+
+    /* File input styling */
+    .form-control[type="file"] {
+        padding: 0.75rem;
+    }
+
+    .form-control[type="file"]::file-selector-button {
+        background-color: #f8f9fa;
+        color: #212529;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        padding: 0.375rem 0.75rem;
+        margin-right: 1rem;
+        transition: background-color 0.15s ease-in-out;
+    }
+
+    .form-control[type="file"]::file-selector-button:hover {
+        background-color: #e9ecef;
+    }
+
+    /* Icon styling in cards */
+    .bg-white.rounded-circle {
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .bg-white.rounded-circle:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+</style>
 @endsection
 
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Handle single name conversion
-        const singleForm = document.getElementById('singleConversionForm');
-        const singleResult = document.getElementById('singleResult');
-        const originalNameEl = document.getElementById('originalName');
-        const convertedNameEl = document.getElementById('convertedName');
-        const debugModeCheckbox = document.getElementById('debugMode');
-        const debugSection = document.getElementById('debugSection');
+        // Handle bulk conversion form
+        const bulkForm = document.getElementById('bulkConversionForm');
+        const convertBtn = document.getElementById('convertBtn');
+        const normalState = convertBtn.querySelector('.normal-state');
+        const loadingState = convertBtn.querySelector('.loading-state');
+        const progressSection = document.getElementById('conversionProgress');
+        const progressBar = document.getElementById('progressBar');
+        const progressPercentage = document.getElementById('progressPercentage');
 
-        singleForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const nameInput = document.getElementById('name');
-            const name = nameInput.value.trim();
-            const nameError = document.getElementById('nameError');
-
-            // Validate input
-            if (name === '') {
-                nameInput.classList.add('is-invalid');
-                return;
-            } else {
-                nameInput.classList.remove('is-invalid');
-            }
-
-            const conversionType = document.querySelector('input[name="conversionType"]:checked').value;
-
-            // Show loading state
-            const submitBtn = singleForm.querySelector('button[type="submit"]');
-            const originalBtnText = submitBtn.innerHTML;
-            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Converting...';
-            submitBtn.disabled = true;
-
-            // Send AJAX request
-            fetch('{{ route("name-converter.single") }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({ name, conversionType })
-            })
-            .then(response => {
-                // Show debug info if debug mode is enabled
-                const debugInfo = document.getElementById('debugInfo');
-                debugSection.style.display = debugModeCheckbox.checked ? 'block' : 'none';
-
-                // Add response status to debug
-                debugInfo.textContent = `Response Status: ${response.status} ${response.statusText}\n`;
-
-                if (!response.ok) {
-                    throw new Error('Network response was not ok: ' + response.status);
-                }
-                return response.json();
-            })
-            .then(data => {
-                // Add response data to debug
-                const debugInfo = document.getElementById('debugInfo');
-                debugInfo.textContent += `Response Data: ${JSON.stringify(data, null, 2)}\n`;
-
-                // Display result
-                originalNameEl.textContent = data.original;
-                convertedNameEl.textContent = data.converted;
-                singleResult.style.display = 'block';
-
-                // Reset form state
-                submitBtn.innerHTML = originalBtnText;
-                submitBtn.disabled = false;
-            })
-            .catch(error => {
-                console.error('Error:', error);
-
-                // Add error to debug info
-                const debugInfo = document.getElementById('debugInfo');
-                debugInfo.textContent += `Error: ${error.message}\n`;
-
-                Swal.fire({
-                    title: 'Error',
-                    text: 'An error occurred while converting the name: ' + error.message,
-                    icon: 'error',
-                    confirmButtonText: 'OK'
-                });
-
-                // Reset form state
-                submitBtn.innerHTML = originalBtnText;
-                submitBtn.disabled = false;
+        // Style the selected conversion type button
+        const conversionTypeButtons = document.querySelectorAll('.btn-check');
+        conversionTypeButtons.forEach(btn => {
+            btn.addEventListener('change', function() {
+                // Update active button styling if needed
             });
         });
 
-        // Handle clipboard copy functionality
-        const copyBtn = document.getElementById('copyBtn');
-        const copySuccess = document.getElementById('copySuccess');
-
-        if (copyBtn) {
-            copyBtn.addEventListener('click', function() {
-                const textToCopy = document.getElementById('convertedName').textContent;
-
-                // Use the modern clipboard API if available
-                if (navigator.clipboard && window.isSecureContext) {
-                    navigator.clipboard.writeText(textToCopy)
-                        .then(() => {
-                            // Show success message
-                            copySuccess.classList.remove('d-none');
-                            setTimeout(() => {
-                                copySuccess.classList.add('d-none');
-                            }, 2000);
-                        })
-                        .catch(err => {
-                            console.error('Could not copy text: ', err);
-                            Swal.fire({
-                                title: 'Clipboard Error',
-                                text: 'Could not copy to clipboard: ' + err.message,
-                                icon: 'error',
-                                confirmButtonText: 'OK'
-                            });
-                        });
-                } else {
-                    // Fallback for older browsers
-                    try {
-                        const textarea = document.createElement('textarea');
-                        textarea.value = textToCopy;
-                        textarea.setAttribute('readonly', '');
-                        textarea.style.position = 'absolute';
-                        textarea.style.left = '-9999px';
-                        document.body.appendChild(textarea);
-
-                        textarea.select();
-                        const successful = document.execCommand('copy');
-                        document.body.removeChild(textarea);
-
-                        if (successful) {
-                            // Show success message
-                            copySuccess.classList.remove('d-none');
-                            setTimeout(() => {
-                                copySuccess.classList.add('d-none');
-                            }, 2000);
-                        } else {
-                            throw new Error('Copy command was unsuccessful');
-                        }
-                    } catch (err) {
-                        console.error('Could not copy text: ', err);
-                        Swal.fire({
-                            title: 'Clipboard Error',
-                            text: 'Could not copy to clipboard: ' + err.message,
-                            icon: 'error',
-                            confirmButtonText: 'OK'
-                        });
-                    }
-                }
-            });
-        }        // Handle bulk conversion form validation
-        const bulkForm = document.querySelector('form[action="{{ route("name-converter.bulk") }}"]');
+        // Handle form submission and show loading state
         bulkForm.addEventListener('submit', function(e) {
             const fileInput = document.getElementById('file');
+
+            // Check if file is selected
             if (!fileInput.files || fileInput.files.length === 0) {
                 e.preventDefault();
                 Swal.fire({
@@ -365,7 +330,60 @@
                     icon: 'warning',
                     confirmButtonText: 'OK'
                 });
+                return;
             }
+
+            // Show loading state
+            normalState.classList.add('d-none');
+            loadingState.classList.remove('d-none');
+            convertBtn.disabled = true;
+            progressSection.classList.remove('d-none');
+
+            // Simulate progress (since we can't track actual server-side progress)
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                // Increment progress more slowly at the beginning and end
+                if (progress < 90) {
+                    progress += Math.floor(Math.random() * 5) + 1;
+                    if (progress > 90) {
+                        progress = 90;
+                    }
+
+                    // Update progress bar
+                    progressBar.style.width = `${progress}%`;
+                    progressBar.setAttribute('aria-valuenow', progress);
+                    progressBar.textContent = `${progress}%`;
+                    progressPercentage.textContent = `${progress}%`;
+                }
+            }, 200);
+
+            // Store interval ID in form data to be cleared later
+            bulkForm.dataset.progressInterval = progressInterval;
+        });
+
+        // Handle file input change to reset loading state
+        document.getElementById('file').addEventListener('change', function() {
+            // Reset any previous loading state
+            normalState.classList.remove('d-none');
+            loadingState.classList.add('d-none');
+            convertBtn.disabled = false;
+            progressSection.classList.add('d-none');
+
+            // Clear any existing interval
+            if (bulkForm.dataset.progressInterval) {
+                clearInterval(parseInt(bulkForm.dataset.progressInterval));
+            }
+        });
+
+        // Make buttons with radio inputs more interactive
+        document.querySelectorAll('.btn-check + label').forEach(label => {
+            label.addEventListener('mouseover', function() {
+                this.classList.add('shadow-sm');
+            });
+
+            label.addEventListener('mouseout', function() {
+                this.classList.remove('shadow-sm');
+            });
         });
 
         // Flash messages
