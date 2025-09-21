@@ -587,6 +587,319 @@
     .navbar-toggler:not(.collapsed) {
         transform: rotate(180deg);
     }
+
+    /* WhatsApp Floating Button */
+    .whatsapp-float {
+        position: fixed;
+        width: 60px;
+        height: 60px;
+        bottom: 20px;
+        right: 20px;
+        background-color: #25d366;
+        color: white;
+        border-radius: 50px;
+        text-align: center;
+        font-size: 24px;
+        box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        animation: pulse-whatsapp 2s infinite;
+    }
+
+    .whatsapp-float:hover {
+        background-color: #128c7e;
+        color: white;
+        transform: scale(1.1);
+        box-shadow: 0 6px 25px rgba(37, 211, 102, 0.6);
+        text-decoration: none;
+    }
+
+    .whatsapp-float i {
+        margin-top: 2px;
+    }
+
+    @keyframes pulse-whatsapp {
+        0% {
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+        }
+        50% {
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.7), 0 0 0 10px rgba(37, 211, 102, 0.1);
+        }
+        100% {
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+        }
+    }
+
+    /* WhatsApp tooltip */
+    .whatsapp-float::before {
+        content: 'Contact us on WhatsApp';
+        position: absolute;
+        right: 70px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-size: 12px;
+        white-space: nowrap;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        font-family: 'Rajdhani', sans-serif;
+    }
+
+    .whatsapp-float::after {
+        content: '';
+        position: absolute;
+        right: 60px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 0;
+        height: 0;
+        border-left: 6px solid rgba(0, 0, 0, 0.8);
+        border-top: 6px solid transparent;
+        border-bottom: 6px solid transparent;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .whatsapp-float:hover::before,
+    .whatsapp-float:hover::after {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    /* Responsive adjustments for WhatsApp button */
+    @media (max-width: 768px) {
+        .whatsapp-float {
+            width: 55px;
+            height: 55px;
+            bottom: 15px;
+            right: 15px;
+            font-size: 22px;
+        }
+
+        .whatsapp-float::before {
+            content: 'WhatsApp';
+            right: 65px;
+            font-size: 11px;
+            padding: 6px 10px;
+        }
+
+        .whatsapp-float::after {
+            right: 55px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .whatsapp-float {
+            width: 50px;
+            height: 50px;
+            bottom: 10px;
+            right: 10px;
+            font-size: 20px;
+        }
+
+        .whatsapp-float::before {
+            right: 60px;
+        }
+
+        .whatsapp-float::after {
+            right: 50px;
+        }
+    }
+
+    /* Cookie Consent Banner */
+    .cookie-consent {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(10, 14, 23, 0.95);
+        backdrop-filter: blur(10px);
+        border-top: 2px solid var(--tech-cyan);
+        padding: 1rem;
+        z-index: 9999;
+        transform: translateY(100%);
+        transition: transform 0.5s ease-in-out;
+        box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .cookie-consent.show {
+        transform: translateY(0);
+    }
+
+    .cookie-consent-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: between;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .cookie-consent-text {
+        flex: 1;
+        color: #e0e0e0;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        min-width: 250px;
+    }
+
+    .cookie-consent-text h6 {
+        color: var(--tech-cyan);
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        font-family: 'Orbitron', sans-serif;
+    }
+
+    .cookie-consent-text p {
+        margin-bottom: 0;
+        color: #cbd5e0;
+    }
+
+    .cookie-consent-text a {
+        color: var(--tech-cyan);
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    .cookie-consent-text a:hover {
+        color: white;
+        text-shadow: 0 0 8px rgba(0, 217, 255, 0.5);
+    }
+
+    .cookie-consent-actions {
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
+        flex-shrink: 0;
+    }
+
+    .cookie-btn {
+        padding: 0.5rem 1.25rem;
+        border: none;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-family: 'Rajdhani', sans-serif;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .cookie-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .cookie-btn:hover::before {
+        left: 100%;
+    }
+
+    .cookie-btn-accept {
+        background: linear-gradient(135deg, var(--tech-blue), var(--tech-cyan));
+        color: white;
+        box-shadow: 0 2px 10px rgba(0, 214, 255, 0.3);
+    }
+
+    .cookie-btn-accept:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0, 214, 255, 0.5);
+    }
+
+    .cookie-btn-decline {
+        background: transparent;
+        color: #cbd5e0;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .cookie-btn-decline:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    .cookie-btn-settings {
+        background: transparent;
+        color: var(--tech-cyan);
+        border: 1px solid var(--tech-cyan);
+        font-size: 0.8rem;
+        padding: 0.4rem 1rem;
+    }
+
+    .cookie-btn-settings:hover {
+        background: rgba(0, 214, 255, 0.1);
+        box-shadow: 0 0 10px rgba(0, 214, 255, 0.3);
+    }
+
+    /* Cookie Icon Animation */
+    .cookie-icon {
+        margin-right: 0.5rem;
+        animation: cookieRotate 3s ease-in-out infinite;
+    }
+
+    @keyframes cookieRotate {
+        0%, 100% { transform: rotate(0deg); }
+        25% { transform: rotate(-5deg); }
+        75% { transform: rotate(5deg); }
+    }
+
+    /* Responsive Cookie Banner */
+    @media (max-width: 768px) {
+        .cookie-consent {
+            padding: 1rem 0.75rem;
+        }
+
+        .cookie-consent-content {
+            flex-direction: column;
+            text-align: center;
+            gap: 1rem;
+        }
+
+        .cookie-consent-text {
+            min-width: auto;
+        }
+
+        .cookie-consent-actions {
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .cookie-btn {
+            width: 100%;
+            padding: 0.75rem;
+        }
+
+        .cookie-btn-settings {
+            order: 3;
+            margin-top: 0.5rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .cookie-consent-text h6 {
+            font-size: 1rem;
+        }
+
+        .cookie-consent-text p {
+            font-size: 0.85rem;
+        }
+    }
     </style>
     @stack('styles')
 </head>
@@ -594,6 +907,36 @@
     <!-- Custom Cursor -->
     <div id="tech-cursor"></div>
     <div class="cursor-dot"></div>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/940707793037?text=Hello%20EZofz.lk!%20I%20would%20like%20to%20know%20more%20about%20your%20services."
+       class="whatsapp-float"
+       target="_blank"
+       rel="noopener noreferrer"
+       aria-label="Contact us on WhatsApp">
+        <i class="bi bi-whatsapp"></i>
+    </a>
+
+    <!-- Cookie Consent Banner -->
+    <div id="cookieConsent" class="cookie-consent">
+        <div class="cookie-consent-content">
+            <div class="cookie-consent-text">
+                <h6><i class="bi bi-shield-check cookie-icon"></i>We Value Your Privacy</h6>
+                <p>We use cookies to enhance your browsing experience, provide personalized content, and analyze our traffic. By clicking "Accept All", you consent to our use of cookies. <a href="#" onclick="showCookieSettings()">Cookie Settings</a> | <a href="#" target="_blank">Privacy Policy</a></p>
+            </div>
+            <div class="cookie-consent-actions">
+                <button class="cookie-btn cookie-btn-accept" onclick="acceptAllCookies()">
+                    <i class="bi bi-check-circle me-1"></i>Accept All
+                </button>
+                <button class="cookie-btn cookie-btn-decline" onclick="declineAllCookies()">
+                    <i class="bi bi-x-circle me-1"></i>Decline
+                </button>
+                <button class="cookie-btn cookie-btn-settings" onclick="showCookieSettings()">
+                    <i class="bi bi-gear me-1"></i>Settings
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- Grid Background -->
     <div class="grid-bg" id="gridBackground"></div>
@@ -638,6 +981,7 @@
                             <ul class="dropdown-menu" aria-labelledby="toolsDropdown">
                                 <li><a class="dropdown-item" href="{{ route('tools.unicode-typing') }}"><i class="bi bi-keyboard me-2"></i>Sinhala Unicode Typing</a></li>
                                 <li><a class="dropdown-item" href="{{ route('tools.name-converter') }}"><i class="bi bi-person-badge me-2"></i>Full Name to Initial Converter</a></li>
+                                <li><a class="dropdown-item" href="{{ route('tools.sl-idcard-details') }}"><i class="bi bi-credit-card-2-front me-2"></i>SL ID Card Details & Converter</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
@@ -727,9 +1071,9 @@
                     <div class="col-lg-2 col-md-6 mb-4">
                         <h6 class="text-white mb-3">Tools</h6>
                         <ul class="list-unstyled">
-                            <li><a href="#" class="text-light text-decoration-none">Unicode Typing</a></li>
-                            <li><a href="#" class="text-light text-decoration-none">Name Converter</a></li>
-                            <li><a href="#" class="text-light text-decoration-none">More Tools</a></li>
+                            <li><a href="{{ route('tools.unicode-typing') }}" class="text-light text-decoration-none">Unicode Typing</a></li>
+                            <li><a href="{{ route('tools.name-converter') }}" class="text-light text-decoration-none">Name Converter</a></li>
+                            <li><a href="{{ route('tools.sl-idcard-details') }}" class="text-light text-decoration-none">ID Card Details</a></li>
                         </ul>
                     </div>
                     <div class="col-lg-2 col-md-6 mb-4">
@@ -1002,6 +1346,153 @@
             });
         }
     </script>
+
+    <!-- Cookie Consent JavaScript -->
+    <script>
+        // Cookie Consent Functionality
+        class CookieConsent {
+            constructor() {
+                this.cookieName = 'ezofz_cookie_consent';
+                this.consentBanner = document.getElementById('cookieConsent');
+                this.init();
+            }
+
+            init() {
+                // Check if user has already given consent
+                if (!this.hasConsent()) {
+                    this.showBanner();
+                }
+            }
+
+            hasConsent() {
+                return localStorage.getItem(this.cookieName) !== null;
+            }
+
+            showBanner() {
+                if (this.consentBanner) {
+                    setTimeout(() => {
+                        this.consentBanner.classList.add('show');
+                    }, 1000); // Show after 1 second delay
+                }
+            }
+
+            hideBanner() {
+                if (this.consentBanner) {
+                    this.consentBanner.classList.remove('show');
+                    setTimeout(() => {
+                        this.consentBanner.style.display = 'none';
+                    }, 500);
+                }
+            }
+
+            acceptAll() {
+                this.setConsent({
+                    necessary: true,
+                    analytics: true,
+                    marketing: true,
+                    preferences: true
+                });
+                this.hideBanner();
+                this.initializeAllCookies();
+                console.log('All cookies accepted');
+            }
+
+            declineAll() {
+                this.setConsent({
+                    necessary: true, // Always necessary
+                    analytics: false,
+                    marketing: false,
+                    preferences: false
+                });
+                this.hideBanner();
+                console.log('Non-essential cookies declined');
+            }
+
+            setConsent(preferences) {
+                const consentData = {
+                    timestamp: new Date().toISOString(),
+                    preferences: preferences,
+                    version: '1.0'
+                };
+                localStorage.setItem(this.cookieName, JSON.stringify(consentData));
+
+                // Set cookie for server-side detection
+                document.cookie = `${this.cookieName}=accepted; path=/; max-age=${365 * 24 * 60 * 60}; SameSite=Lax`;
+            }
+
+            getConsent() {
+                const consent = localStorage.getItem(this.cookieName);
+                return consent ? JSON.parse(consent) : null;
+            }
+
+            initializeAllCookies() {
+                // Initialize Google Analytics or other tracking scripts here
+                if (this.getConsent()?.preferences?.analytics) {
+                    this.initGoogleAnalytics();
+                }
+
+                if (this.getConsent()?.preferences?.marketing) {
+                    this.initMarketingCookies();
+                }
+            }
+
+            initGoogleAnalytics() {
+                // Add your Google Analytics initialization here
+                console.log('Google Analytics initialized');
+
+                // Example: Load Google Analytics
+                /*
+                (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+                })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+                ga('create', 'YOUR-TRACKING-ID', 'auto');
+                ga('send', 'pageview');
+                */
+            }
+
+            initMarketingCookies() {
+                // Add your marketing cookies/pixels here
+                console.log('Marketing cookies initialized');
+
+                // Example: Facebook Pixel, Google Ads, etc.
+            }
+
+            showSettings() {
+                // For now, show a simple alert. You can enhance this with a modal
+                alert('Cookie settings panel will be implemented here. For now, you can:\n\n' +
+                      '• Accept All - Enables all features\n' +
+                      '• Decline - Only necessary cookies\n' +
+                      '• Contact us for specific preferences');
+            }
+        }
+
+        // Initialize cookie consent when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            window.cookieConsent = new CookieConsent();
+        });
+
+        // Global functions for button clicks
+        function acceptAllCookies() {
+            window.cookieConsent.acceptAll();
+        }
+
+        function declineAllCookies() {
+            window.cookieConsent.declineAll();
+        }
+
+        function showCookieSettings() {
+            window.cookieConsent.showSettings();
+        }
+
+        // Check if user wants to reset cookie preferences (for testing)
+        if (window.location.search.includes('reset-cookies')) {
+            localStorage.removeItem('ezofz_cookie_consent');
+            document.cookie = 'ezofz_cookie_consent=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+            console.log('Cookie preferences reset');
+        }
+    </script>
+
     @stack('scripts')
 
     <!-- Final bootstrap dropdown initialization fallback -->

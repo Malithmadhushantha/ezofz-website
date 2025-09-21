@@ -55,6 +55,15 @@ Route::get('/tools/name-converter', [App\Http\Controllers\NameConverterControlle
 Route::post('/tools/name-converter/single', [App\Http\Controllers\NameConverterController::class, 'convertSingle'])->name('name-converter.single');
 Route::post('/tools/name-converter/bulk', [App\Http\Controllers\NameConverterController::class, 'convertBulk'])->name('name-converter.bulk');
 
+Route::get('/tools/sl-idcard-details', function () {
+    return view('tools.sl-idcard-details');
+})->name('tools.sl-idcard-details');
+
+Route::post('/tools/sl-idcard-bulk-convert', [App\Http\Controllers\SLIdCardController::class, 'bulkConvert'])->name('tools.sl-idcard-bulk-convert');
+Route::post('/tools/sl-idcard-analyze-file', [App\Http\Controllers\SLIdCardController::class, 'analyzeFile'])->name('tools.sl-idcard-analyze-file');
+Route::post('/tools/sl-idcard-download-template', [App\Http\Controllers\SLIdCardController::class, 'downloadTemplate'])->name('tools.sl-idcard-download-template');
+Route::get('/tools/download-conversion-result/{filename}', [App\Http\Controllers\SLIdCardController::class, 'downloadResult'])->name('tools.download-conversion-result');
+
 // Authentication routes
 Auth::routes();
 

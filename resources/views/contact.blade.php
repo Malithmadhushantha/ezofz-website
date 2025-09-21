@@ -467,6 +467,156 @@
         animation: pulse-glow 2s ease-in-out infinite;
     }
 
+    /* Services Section */
+    .services-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+
+    .service-card {
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        padding: 2rem;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.5s ease;
+        cursor: pointer;
+        transform-style: preserve-3d;
+    }
+
+    .service-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: var(--primary-gradient);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: -1;
+    }
+
+    .service-card:hover {
+        transform: translateY(-10px) rotateX(5deg);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        border-color: var(--neon-blue);
+    }
+
+    .service-card:hover::before {
+        opacity: 0.1;
+    }
+
+    .service-icon {
+        width: 80px;
+        height: 80px;
+        background: var(--primary-gradient);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        font-size: 2rem;
+        color: white;
+        position: relative;
+        animation: float-icon 3s ease-in-out infinite;
+    }
+
+    .service-icon::before {
+        content: '';
+        position: absolute;
+        top: -5px;
+        left: -5px;
+        right: -5px;
+        bottom: -5px;
+        background: var(--neon-blue);
+        border-radius: 50%;
+        z-index: -1;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .service-card:hover .service-icon::before {
+        opacity: 0.3;
+    }
+
+    @keyframes float-icon {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+    }
+
+    .service-card h5 {
+        color: white;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        font-size: 1.25rem;
+    }
+
+    .service-card p {
+        color: var(--text-light);
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+    }
+
+    .service-features {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .service-features li {
+        color: var(--text-light);
+        padding: 0.5rem 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+        position: relative;
+        padding-left: 1.5rem;
+    }
+
+    .service-features li::before {
+        content: '▸';
+        position: absolute;
+        left: 0;
+        color: var(--neon-blue);
+        transition: transform 0.3s ease;
+    }
+
+    .service-card:hover .service-features li::before {
+        transform: translateX(5px);
+        color: var(--neon-purple);
+    }
+
+    .service-features li:last-child {
+        border-bottom: none;
+    }
+
+    /* Staggered Animation for Service Cards */
+    .service-card:nth-child(1) { animation-delay: 0.1s; }
+    .service-card:nth-child(2) { animation-delay: 0.2s; }
+    .service-card:nth-child(3) { animation-delay: 0.3s; }
+    .service-card:nth-child(4) { animation-delay: 0.4s; }
+    .service-card:nth-child(5) { animation-delay: 0.5s; }
+
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(50px) scale(0.9);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    .service-card.animate-in {
+        animation: slideInUp 0.8s ease-out forwards;
+    }
+
     /* Responsive Design */
     @media (max-width: 768px) {
         .glitch-text {
@@ -483,6 +633,21 @@
             width: 150px;
             height: 150px;
             font-size: 3rem;
+        }
+
+        .services-grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .service-card {
+            padding: 1.5rem;
+        }
+
+        .service-icon {
+            width: 60px;
+            height: 60px;
+            font-size: 1.5rem;
         }
     }
 </style>
@@ -510,63 +675,142 @@
 <div class="container">
     <!-- Developer Profile Section -->
     <section class="developer-profile" data-aos="fade-up" data-aos-delay="300">
-        <div class="row align-items-center">
-            <div class="col-lg-4 text-center mb-4 mb-lg-0">
+        <!-- Centered Profile Image -->
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-3 col-md-4 col-6 text-center">
                 <div class="profile-image mx-auto pulse-glow">
                     <img src="{{ asset('images/malith_madhushantha.jpg') }}" alt="Malith Madhushantha Profile" class="w-100 h-100 object-fit-cover rounded-circle">
                 </div>
             </div>
-            <div class="col-lg-8">
-                <div class="text-lg-start text-center">
-                    <h2 class="mb-3 fw-bold">
-                        <span class="text-gradient">Malith Madhushantha</span>
-                    </h2>
-                    <h4 class="text-info mb-4">Police Officer & Full-Stack Developer</h4>
-                    <p class="mb-4 text-light">
-                        A dedicated law enforcement officer with a passion for technology and innovation.
-                        Combining field experience in policing with advanced technical skills to create
-                        practical solutions for the Sri Lankan Police Force.
-                    </p>
+        </div>
 
-                    <div class="mb-4">
-                        <h5 class="text-warning mb-3">🎓 Education & Qualifications</h5>
-                        <ul class="list-unstyled text-light">
-                            <li class="mb-2">📜 Diploma in Human Resource Management - University of Colombo</li>
-                            <li class="mb-2">💻 Diploma in Information Technology - NYSC</li>
-                            <li class="mb-2">🚀 MERN Full Stack Development Certificate - Skyrek</li>
+        <!-- Centered Text Content -->
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-8 text-center">
+                <h2 class="mb-3 fw-bold">
+                    <span class="text-gradient">Developer Profile</span>
+                </h2>
+                <h4 class="text-info mb-4">Malith Madhushantha - Full-Stack Developer</h4>
+                <p class="mb-4 text-light">
+                    Passionate technology professional dedicated to creating innovative digital solutions.
+                    Specializing in comprehensive development services from concept to deployment,
+                    transforming ideas into powerful, user-friendly applications.
+                </p>
+            </div>
+        </div>
+
+        <!-- Centered Services Section -->
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <div class="text-center mb-4">
+                    <h5 class="text-warning mb-3">🎯 Other Services I Provide</h5>
+                </div>
+                <div class="services-grid">
+                    <div class="service-card animate-in">
+                        <div class="service-icon">
+                            <i class="bi bi-palette"></i>
+                        </div>
+                        <h5>Logo Design</h5>
+                        <p>Creative brand identity design that captures your vision</p>
+                        <ul class="service-features">
+                            <li>Professional Logo Creation</li>
+                            <li>Brand Identity Package</li>
+                            <li>Multiple Format Delivery</li>
                         </ul>
                     </div>
 
-                    <div class="mb-4">
-                        <h5 class="text-success mb-3">⚡ Technical Expertise</h5>
-                        <div class="tech-badges">
-                            <span class="tech-badge">PHP</span>
-                            <span class="tech-badge">MySQL</span>
-                            <span class="tech-badge">JavaScript</span>
-                            <span class="tech-badge">React.js</span>
-                            <span class="tech-badge">Node.js</span>
-                            <span class="tech-badge">MongoDB</span>
+                    <div class="service-card animate-in">
+                        <div class="service-icon">
+                            <i class="bi bi-calendar-event"></i>
                         </div>
+                        <h5>Calendar Design</h5>
+                        <p>Custom calendar designs for business and personal use</p>
+                        <ul class="service-features">
+                            <li>Corporate Calendar Design</li>
+                            <li>Event Planning Calendars</li>
+                            <li>Print & Digital Formats</li>
+                        </ul>
                     </div>
 
-                    <div class="contact-details">
-                        <div class="contact-item mb-3">
-                            <div class="contact-icon">
-                                <i class="bi bi-phone text-white"></i>
-                            </div>
-                            <div>
-                                <h6 class="mb-1 text-white">Phone</h6>
-                                <p class="mb-0 text-info">+94 71 980 3639</p>
-                            </div>
+                    <div class="service-card animate-in">
+                        <div class="service-icon">
+                            <i class="bi bi-globe"></i>
                         </div>
-                        <div class="contact-item">
-                            <div class="contact-icon">
-                                <i class="bi bi-geo-alt text-white"></i>
-                            </div>
-                            <div>
-                                <h6 class="mb-1 text-white">Location</h6>
-                                <p class="mb-0 text-info">Puttalam, Saliyawewa, Sri Lanka</p>
-                            </div>
+                        <h5>Website Development</h5>
+                        <p>Modern, responsive websites built with latest technologies</p>
+                        <ul class="service-features">
+                            <li>Responsive Web Design</li>
+                            <li>E-commerce Solutions</li>
+                            <li>SEO Optimization</li>
+                        </ul>
+                    </div>
+
+                    <div class="service-card animate-in">
+                        <div class="service-icon">
+                            <i class="bi bi-database"></i>
+                        </div>
+                        <h5>Database Development</h5>
+                        <p>Robust database solutions for data management and analytics</p>
+                        <ul class="service-features">
+                            <li>Database Design & Architecture</li>
+                            <li>Data Migration Services</li>
+                            <li>Performance Optimization</li>
+                        </ul>
+                    </div>
+
+                    <div class="service-card animate-in">
+                        <div class="service-icon">
+                            <i class="bi bi-phone"></i>
+                        </div>
+                        <h5>Mobile App Development</h5>
+                        <p>Cross-platform mobile applications for iOS and Android</p>
+                        <ul class="service-features">
+                            <li>Native & Cross-Platform Apps</li>
+                            <li>UI/UX Design</li>
+                            <li>App Store Deployment</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Centered Tech Expertise Section -->
+        <div class="row justify-content-center mt-5">
+            <div class="col-lg-8 text-center">
+                <h5 class="text-success mb-3">⚡ Technical Expertise</h5>
+                <div class="tech-badges">
+                    <span class="tech-badge">PHP</span>
+                    <span class="tech-badge">Laravel</span>
+                    <span class="tech-badge">MySQL</span>
+                    <span class="tech-badge">JavaScript</span>
+                    <span class="tech-badge">React.js</span>
+                    <span class="tech-badge">Node.js</span>
+                    <span class="tech-badge">MongoDB</span>
+                    <span class="tech-badge">Flutter</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Centered Contact Details -->
+        <div class="row justify-content-center mt-5">
+            <div class="col-lg-6">
+                <div class="contact-details">
+                    <div class="contact-item mb-3">
+                        <div class="contact-icon">
+                            <i class="bi bi-phone text-white"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-1 text-white">Phone</h6>
+                            <p class="mb-0 text-info">+94 71 980 3639</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="bi bi-geo-alt text-white"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-1 text-white">Location</h6>
+                            <p class="mb-0 text-info">Puttalam, Saliyawewa, Sri Lanka</p>
                         </div>
                     </div>
                 </div>
@@ -747,6 +991,59 @@ document.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
         // Add your form submission logic here
         alert('Message sent successfully! 🚀');
+    });
+
+    // Service Cards Animation on Scroll
+    const observerOptions = {
+        threshold: 0.3,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const serviceObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0) scale(1)';
+                }, index * 100); // Staggered animation
+            }
+        });
+    }, observerOptions);
+
+    // Initialize service cards
+    const serviceCards = document.querySelectorAll('.service-card');
+    serviceCards.forEach((card, index) => {
+        // Set initial state
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(50px) scale(0.9)';
+        card.style.transition = 'all 0.8s ease-out';
+
+        // Observe for intersection
+        serviceObserver.observe(card);
+
+        // Add hover effects
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-10px) rotateX(5deg) scale(1.02)';
+        });
+
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0) rotateX(0deg) scale(1)';
+        });
+    });
+
+    // Animate tech badges on scroll
+    const techBadges = document.querySelectorAll('.tech-badge');
+    const badgeObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                entry.target.style.animation = 'slideInUp 0.6s ease-out forwards';
+            }
+        });
+    }, observerOptions);
+
+    techBadges.forEach((badge, index) => {
+        badge.style.animationDelay = `${index * 0.1}s`;
+        badgeObserver.observe(badge);
     });
 
     // Window resize handler
