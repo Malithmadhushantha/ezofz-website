@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\TestimonialController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Auth;
@@ -15,6 +16,13 @@ Route::get('/home', function () {
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about', [HomeController::class, 'about'])->name('about');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
+
+// Testimonial routes
+Route::get('/testimonials', [TestimonialController::class, 'index'])->name('testimonials.index');
+Route::get('/api/testimonials/featured', [TestimonialController::class, 'getFeatured'])->name('testimonials.featured');
+Route::middleware('auth')->group(function () {
+    Route::post('/testimonials', [TestimonialController::class, 'store'])->name('testimonials.store');
+});
 
 // PWA Manifest route
 Route::get('/manifest.json', function () {
@@ -94,6 +102,13 @@ Route::middleware([App\Http\Middleware\AdminMiddleware::class])->prefix('admin')
     Route::get('/documents/{document}/edit', [DocumentController::class, 'edit'])->name('documents.edit');
     Route::put('/documents/{document}', [DocumentController::class, 'update'])->name('documents.update');
     Route::delete('/documents/{document}', [DocumentController::class, 'destroy'])->name('documents.destroy');
+
+    // Testimonial management
+    Route::get('/testimonials', [TestimonialController::class, 'adminIndex'])->name('admin.testimonials.index');
+    Route::put('/testimonials/{testimonial}/status', [TestimonialController::class, 'updateStatus'])->name('admin.testimonials.status');
+    Route::put('/testimonials/{testimonial}/featured', [TestimonialController::class, 'toggleFeatured'])->name('admin.testimonials.featured');
+    Route::delete('/testimonials/{testimonial}', [TestimonialController::class, 'destroy'])->name('admin.testimonials.destroy');
+
     // Category management
     Route::get('/categories', [DocumentController::class, 'categories'])->name('admin.categories');
     Route::post('/categories', [DocumentController::class, 'storeCategory'])->name('admin.categories.store');
