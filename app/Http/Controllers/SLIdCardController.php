@@ -111,6 +111,11 @@ class SLIdCardController extends Controller
     public function analyzeFile(Request $request)
     {
         try {
+            // Check if ZIP extension is available
+            if (!extension_loaded('zip')) {
+                return $this->handleCsvAnalysis($request);
+            }
+
             // Validate request with custom validation
             $request->validate([
                 'excel_file' => 'required|file|max:10240', // 10MB max
@@ -177,14 +182,17 @@ class SLIdCardController extends Controller
                 'message' => 'Unable to analyze file: ' . $e->getMessage()
             ], 500);
         }
-    }
-
-    /**
+    }    /**
      * Handle bulk ID conversion from uploaded Excel file
      */
     public function bulkConvert(Request $request)
     {
         try {
+            // Check if ZIP extension is available
+            if (!extension_loaded('zip')) {
+                return $this->handleCsvConversion($request);
+            }
+
             // Validate request with custom validation
             $request->validate([
                 'excel_file' => 'required|file|max:10240', // 10MB max
@@ -454,5 +462,182 @@ class SLIdCardController extends Controller
         }
 
         return true;
+    }
+
+    /**
+     * Handle CSV file analysis when ZIP extension is not available
+     */
+    private function handleCsvAnalysis(Request $request)
+    {
+        try {
+            $request->validate([
+                'excel_file' => 'required|file|max:10240',
+            ]);
+
+            $file = $request->file('excel_file');
+
+            // Check if it's a CSV file
+            if (strtolower($file->getClientOriginalExtension()) !== 'csv') {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'ZIP extension is not available. Please upload a CSV file instead of Excel files.'
+                ], 422);
+            }
+
+            // Read CSV headers
+            $columns = [];
+            if (($handle = fopen($file->getPathname(), "r")) !== FALSE) {
+                if (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+                    foreach ($data as $index => $header) {
+                        if (!empty(trim($header))) {
+                            $columns[] = [
+                                'index' => $index,
+                                'name' => trim($header)
+                            ];
+                        } else {
+                            $columns[] = [
+                                'index' => $index,
+                                'name' => 'Column ' . chr(65 + $index)
+                            ];
+                        }
+                    }
+                }
+                fclose($handle);
+            }
+
+            if (empty($columns)) {
+                $columns = [
+                    ['index' => 0, 'name' => 'Column A'],
+                    ['index' => 1, 'name' => 'Column B'],
+                    ['index' => 2, 'name' => 'Column C']
+                ];
+            }
+
+            return response()->json([
+                'success' => true,
+                'columns' => $columns,
+                'message' => 'CSV file analyzed successfully'
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('CSV analysis error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Unable to analyze CSV file: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Handle CSV bulk conversion when ZIP extension is not available
+     */
+    private function handleCsvConversion(Request $request)
+    {
+        try {
+            $request->validate([
+                'excel_file' => 'required|file|max:10240',
+                'column_index' => 'required|integer|min:0',
+                'conversion_type' => 'required|in:bulk-old-to-new,bulk-new-to-old'
+            ]);
+
+            $file = $request->file('excel_file');
+
+            // Check if it's a CSV file
+            if (strtolower($file->getClientOriginalExtension()) !== 'csv') {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'ZIP extension is not available. Please upload a CSV file instead of Excel files.'
+                ], 422);
+            }
+
+            $columnIndex = (int) $request->column_index;
+            $conversionType = $request->conversion_type;
+
+            $results = [];
+            $totalProcessed = 0;
+            $successfulConversions = 0;
+            $failedConversions = 0;
+
+            // Read CSV file
+            if (($handle = fopen($file->getPathname(), "r")) !== FALSE) {
+                $rowIndex = 0;
+                // Skip header row
+                fgetcsv($handle, 1000, ",");
+
+                while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+                    if (!isset($data[$columnIndex]) || empty(trim($data[$columnIndex]))) {
+                        continue;
+                    }
+
+                    $idNumber = trim($data[$columnIndex]);
+                    $totalProcessed++;
+
+                    try {
+                        if ($conversionType === 'bulk-old-to-new') {
+                            $convertedId = $this->convertOldToNew($idNumber);
+                        } else {
+                            $convertedId = $this->convertNewToOld($idNumber);
+                        }
+
+                        $results[] = [
+                            'row_number' => $rowIndex + 2,
+                            'original_id' => $idNumber,
+                            'converted_id' => $convertedId,
+                            'status' => 'Success',
+                            'error' => null
+                        ];
+                        $successfulConversions++;
+
+                    } catch (\Exception $e) {
+                        $results[] = [
+                            'row_number' => $rowIndex + 2,
+                            'original_id' => $idNumber,
+                            'converted_id' => null,
+                            'status' => 'Failed',
+                            'error' => $e->getMessage()
+                        ];
+                        $failedConversions++;
+                    }
+                    $rowIndex++;
+                }
+                fclose($handle);
+            }
+
+            // Generate CSV response
+            $timestamp = now()->format('Y-m-d_H-i-s');
+            $filename = "id_conversion_results_{$timestamp}.csv";
+
+            $headers = [
+                'Content-Type' => 'text/csv',
+                'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+            ];
+
+            return response()->stream(function () use ($results) {
+                $output = fopen('php://output', 'w');
+
+                // Write header
+                fputcsv($output, ['Row Number', 'Original ID', 'Converted ID', 'Status', 'Error Message']);
+
+                // Write data
+                foreach ($results as $result) {
+                    fputcsv($output, [
+                        $result['row_number'],
+                        $result['original_id'],
+                        $result['converted_id'] ?? '',
+                        $result['status'],
+                        $result['error'] ?? ''
+                    ]);
+                }
+
+                fclose($output);
+            }, 200, $headers);
+
+        } catch (\Exception $e) {
+            Log::error('CSV bulk conversion error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred during CSV conversion: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

@@ -54,6 +54,25 @@ Route::post('/tools/unicode-typing/detect-type', [App\Http\Controllers\UnicodeCo
 Route::get('/tools/name-converter', [App\Http\Controllers\NameConverterController::class, 'index'])->name('tools.name-converter');
 Route::post('/tools/name-converter/single', [App\Http\Controllers\NameConverterController::class, 'convertSingle'])->name('name-converter.single');
 Route::post('/tools/name-converter/bulk', [App\Http\Controllers\NameConverterController::class, 'convertBulk'])->name('name-converter.bulk');
+Route::get('/tools/name-converter/download-template', [App\Http\Controllers\NameConverterController::class, 'downloadTemplate'])->name('name-converter.download-template');
+
+// Test route for ZIP functionality
+Route::get('/test-zip', function () {
+    $result = [
+        'zip_extension_loaded' => extension_loaded('zip'),
+        'ziparchive_class_exists' => class_exists('ZipArchive'),
+        'php_version' => PHP_VERSION,
+    ];
+
+    try {
+        $zip = new ZipArchive();
+        $result['ziparchive_instantiation'] = 'Success - ZipArchive can be created';
+    } catch (Exception $e) {
+        $result['ziparchive_instantiation'] = 'Error: ' . $e->getMessage();
+    }
+
+    return response()->json($result);
+});
 
 Route::get('/tools/sl-idcard-details', function () {
     return view('tools.sl-idcard-details');

@@ -17,19 +17,19 @@
                         <div class="col-md-8 mx-auto">
                             <div class="card">
                                 <div class="card-header bg-primary text-white">
-                                    <h5 class="mb-0">Name Conversion (Excel)</h5>
+                                    <h5 class="mb-0">Name Conversion (Excel/CSV)</h5>
                                 </div>
                                 <div class="card-body">
                                     <form action="{{ route('name-converter.bulk') }}" method="POST" enctype="multipart/form-data" id="bulkConversionForm">
                                         @csrf
                                         <div class="mb-4">
-                                            <label for="file" class="form-label fw-bold">Upload Excel File</label>
+                                            <label for="file" class="form-label fw-bold">Upload Excel or CSV File</label>
                                             <input type="file" class="form-control" id="file" name="file" accept=".xlsx, .xls, .csv" required>
                                             <div class="form-text">
-                                                File must be an Excel spreadsheet with names in the first column.
+                                                Upload an Excel file (.xlsx, .xls) or CSV file with names in the first column.
                                             </div>
                                             <div class="mt-3 d-flex align-items-center">
-                                                <a href="{{ asset('downloads/name_converter_template.xlsx') }}" class="btn btn-outline-primary">
+                                                <a href="{{ route('name-converter.download-template') }}" class="btn btn-outline-primary">
                                                     <i class="fas fa-download me-1"></i> Download Template
                                                 </a>
                                                 <span class="ms-3 text-muted">First, download this template and add your names</span>
@@ -121,7 +121,7 @@
                                                             <i class="fas fa-download text-primary fa-2x"></i>
                                                         </div>
                                                         <h6>1. Download Template</h6>
-                                                        <small>Get the Excel template</small>
+                                                        <small>Get the Excel/CSV template</small>
                                                     </div>
                                                     <div class="col-md-3 mb-3 mb-md-0 text-center">
                                                         <div class="bg-white rounded-circle p-3 mx-auto mb-2" style="width: 60px; height: 60px;">
@@ -203,13 +203,17 @@
                                             <li>Open the template in Microsoft Excel or similar spreadsheet software</li>
                                             <li>Enter names in the first column (column A) below the example rows</li>
                                             <li>Leave the second column (B) empty - it will be filled after conversion</li>
-                                            <li>Save the file without changing its format (.xlsx)</li>
+                                            <li>Save the file in Excel format (.xlsx) or CSV format</li>
                                             <li>Upload your file and choose the conversion type</li>
                                             <li>Click "Convert & Download" to get your converted names</li>
                                         </ol>
                                         <div class="alert alert-info mt-3">
                                             <i class="fas fa-info-circle me-2"></i>
                                             <strong>Tip:</strong> For best results, use our template exactly as provided. Enter names starting from row 8 (below the examples) in column A.
+                                        </div>
+                                        <div class="alert alert-success mt-3">
+                                            <i class="fas fa-check-circle me-2"></i>
+                                            <strong>File Support:</strong> Upload CSV files for reliable processing. Excel support depends on server configuration.
                                         </div>
                                     </div>
                                 </div>
@@ -326,7 +330,7 @@
                 e.preventDefault();
                 Swal.fire({
                     title: 'File Required',
-                    text: 'Please select an Excel file to upload.',
+                    text: 'Please select an Excel or CSV file to upload.',
                     icon: 'warning',
                     confirmButtonText: 'OK'
                 });

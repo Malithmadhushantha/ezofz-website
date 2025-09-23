@@ -1204,17 +1204,28 @@ class SriLankanIDParser {
     parseOldFormat(idNumber) {
         const number = idNumber.slice(0, 9);
         const year = parseInt(number.slice(0, 2));
-        const dayOfYear = parseInt(number.slice(2, 5));
-        const serialNumber = parseInt(number.slice(5, 9));
+        const dayText = parseInt(number.slice(2, 5));
 
         // Determine full year
         const fullYear = year < 50 ? 2000 + year : 1900 + year;
 
-        // Calculate birth date
-        const birthDate = this.dayOfYearToDate(fullYear, dayOfYear);
+        // Determine gender and adjust day count
+        let gender, actualDayOfYear;
+        if (dayText > 500) {
+            gender = 'Female';
+            actualDayOfYear = dayText - 500;
+        } else {
+            gender = 'Male';
+            actualDayOfYear = dayText;
+        }
 
-        // Determine gender
-        const gender = serialNumber < 5000 ? 'Male' : 'Female';
+        // Validate day range
+        if (actualDayOfYear < 1 || actualDayOfYear > 366) {
+            throw new Error('Invalid day of year in ID number');
+        }
+
+        // Calculate birth date using month-based approach
+        const birthDate = this.calculateBirthDate(fullYear, actualDayOfYear);
 
         // Calculate age
         const age = this.calculateAge(birthDate);
@@ -1229,14 +1240,25 @@ class SriLankanIDParser {
 
     parseNewFormat(idNumber) {
         const year = parseInt(idNumber.slice(0, 4));
-        const dayOfYear = parseInt(idNumber.slice(4, 7));
-        const serialNumber = parseInt(idNumber.slice(7, 12));
+        const dayText = parseInt(idNumber.slice(4, 7));
 
-        // Calculate birth date
-        const birthDate = this.dayOfYearToDate(year, dayOfYear);
+        // Determine gender and adjust day count
+        let gender, actualDayOfYear;
+        if (dayText > 500) {
+            gender = 'Female';
+            actualDayOfYear = dayText - 500;
+        } else {
+            gender = 'Male';
+            actualDayOfYear = dayText;
+        }
 
-        // Determine gender
-        const gender = serialNumber < 50000 ? 'Male' : 'Female';
+        // Validate day range
+        if (actualDayOfYear < 1 || actualDayOfYear > 366) {
+            throw new Error('Invalid day of year in ID number');
+        }
+
+        // Calculate birth date using month-based approach
+        const birthDate = this.calculateBirthDate(year, actualDayOfYear);
 
         // Calculate age
         const age = this.calculateAge(birthDate);
@@ -1249,12 +1271,73 @@ class SriLankanIDParser {
         };
     }
 
+    calculateBirthDate(year, dayOfYear) {
+        let month = "";
+        let day = 0;
+
+        // Determine month and day based on day of year (following the working HTML logic)
+        if (dayOfYear > 335) {
+            day = dayOfYear - 335;
+            month = "December";
+        }
+        else if (dayOfYear > 305) {
+            day = dayOfYear - 305;
+            month = "November";
+        }
+        else if (dayOfYear > 274) {
+            day = dayOfYear - 274;
+            month = "October";
+        }
+        else if (dayOfYear > 244) {
+            day = dayOfYear - 244;
+            month = "September";
+        }
+        else if (dayOfYear > 213) {
+            day = dayOfYear - 213;
+            month = "August";
+        }
+        else if (dayOfYear > 182) {
+            day = dayOfYear - 182;
+            month = "July";
+        }
+        else if (dayOfYear > 152) {
+            day = dayOfYear - 152;
+            month = "June";
+        }
+        else if (dayOfYear > 121) {
+            day = dayOfYear - 121;
+            month = "May";
+        }
+        else if (dayOfYear > 91) {
+            day = dayOfYear - 91;
+            month = "April";
+        }
+        else if (dayOfYear > 60) {
+            day = dayOfYear - 60;
+            month = "March";
+        }
+        else if (dayOfYear > 31) {
+            day = dayOfYear - 31;
+            month = "February";
+        }
+        else if (dayOfYear < 32) {
+            month = "January";
+            day = dayOfYear;
+        }
+
+        // Convert month name to number
+        const monthNumbers = {
+            "January": 0, "February": 1, "March": 2, "April": 3,
+            "May": 4, "June": 5, "July": 6, "August": 7,
+            "September": 8, "October": 9, "November": 10, "December": 11
+        };
+
+        return new Date(year, monthNumbers[month], day);
+    }
+
     dayOfYearToDate(year, dayOfYear) {
-        // Create date for January 1st of the given year
-        const date = new Date(year, 0, 1);
-        // Add the number of days minus 1 (since January 1st is day 1, not day 0)
-        date.setDate(date.getDate() + dayOfYear - 1);
-        return date;
+        // This method is now replaced by calculateBirthDate but kept for compatibility
+        return this.calculateBirthDate(year, dayOfYear);
     }
 
     calculateAge(birthDate) {
@@ -1264,8 +1347,11 @@ class SriLankanIDParser {
         // Calculate total days lived
         const totalDays = Math.floor((today - birth) / (1000 * 60 * 60 * 24));
 
-        // Calculate years, months, and days
-        let years = today.getFullYear() - birth.getFullYear();
+        // Calculate years using the working HTML method
+        const yearsOld = Number(today.getTime() - birth.getTime()) / (365 * 24 * 3600 * 1000);
+        const years = Math.trunc(yearsOld);
+
+        // Calculate months and days more accurately
         let months = today.getMonth() - birth.getMonth();
         let days = today.getDate() - birth.getDate();
 
@@ -1279,7 +1365,6 @@ class SriLankanIDParser {
 
         // Adjust for negative months
         if (months < 0) {
-            years--;
             months += 12;
         }
 
@@ -1307,18 +1392,29 @@ class SriLankanIDParser {
 
         const number = oldId.slice(0, 9);
         const year = parseInt(number.slice(0, 2));
-        const dayOfYear = number.slice(2, 5);
+        const dayOfYear = parseInt(number.slice(2, 5));
         const serialNumber = parseInt(number.slice(5, 9));
 
         // Determine full year
         const fullYear = year < 50 ? 2000 + year : 1900 + year;
 
-        // Convert serial number (add 50000 for females)
-        const newSerialNumber = serialNumber >= 5000 ?
-            (serialNumber - 5000 + 50000).toString().padStart(5, '0') :
-            serialNumber.toString().padStart(5, '0');
+        // Determine if female based on day of year (>500)
+        const isFemale = dayOfYear > 500;
 
-        return fullYear.toString() + dayOfYear + newSerialNumber;
+        // Convert day of year and serial number for new format
+        let newDayOfYear, newSerialNumber;
+
+        if (isFemale) {
+            // For females: day of year stays >500, serial number gets +50000
+            newDayOfYear = dayOfYear.toString().padStart(3, '0');
+            newSerialNumber = (serialNumber + 50000).toString().padStart(5, '0');
+        } else {
+            // For males: day of year stays <500, serial number stays as is
+            newDayOfYear = dayOfYear.toString().padStart(3, '0');
+            newSerialNumber = serialNumber.toString().padStart(5, '0');
+        }
+
+        return fullYear.toString() + newDayOfYear + newSerialNumber;
     }
 
     convertNewToOld(newId) {
@@ -1329,20 +1425,29 @@ class SriLankanIDParser {
         }
 
         const year = parseInt(newId.slice(0, 4));
-        const dayOfYear = newId.slice(4, 7);
+        const dayOfYear = parseInt(newId.slice(4, 7));
         const serialNumber = parseInt(newId.slice(7, 12));
 
         // Convert year to 2 digits
         const shortYear = (year % 100).toString().padStart(2, '0');
 
-        // Convert serial number (subtract 50000 for females and add 5000)
-        const oldSerialNumber = serialNumber >= 50000 ?
-            (serialNumber - 50000 + 5000).toString().padStart(4, '0') :
-            serialNumber.toString().padStart(4, '0');
+        // Determine if female based on day of year (>500)
+        const isFemale = dayOfYear > 500;
 
-        const suffix = serialNumber >= 50000 ? 'V' : 'V';
+        // Convert day of year and serial number for old format
+        let oldDayOfYear, oldSerialNumber;
 
-        return shortYear + dayOfYear + oldSerialNumber + suffix;
+        if (isFemale) {
+            // For females: day of year stays >500, serial number gets -50000
+            oldDayOfYear = dayOfYear.toString().padStart(3, '0');
+            oldSerialNumber = (serialNumber - 50000).toString().padStart(4, '0');
+        } else {
+            // For males: day of year stays <500, serial number stays as is
+            oldDayOfYear = dayOfYear.toString().padStart(3, '0');
+            oldSerialNumber = serialNumber.toString().padStart(4, '0');
+        }
+
+        return shortYear + oldDayOfYear + oldSerialNumber + 'V';
     }
 }
 
@@ -1451,8 +1556,11 @@ function displayDetailsResults(result) {
         year: 'numeric'
     });
 
-    // Format birth date in ISO format (YYYY-MM-DD)
-    const birthDateISO = result.birthDate.toISOString().split('T')[0];
+    // Format birth date in ISO format (YYYY-MM-DD) without timezone conversion
+    const year = result.birthDate.getFullYear();
+    const month = String(result.birthDate.getMonth() + 1).padStart(2, '0');
+    const day = String(result.birthDate.getDate()).padStart(2, '0');
+    const birthDateISO = `${year}-${month}-${day}`;
 
     // Update all the display elements
     document.getElementById('birthDate').textContent = birthDate;

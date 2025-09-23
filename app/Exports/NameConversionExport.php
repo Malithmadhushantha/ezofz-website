@@ -11,10 +11,12 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 class NameConversionExport implements FromArray, WithHeadings, ShouldAutoSize, WithStyles
 {
     protected $data;
+    protected $isTemplate;
 
-    public function __construct(array $data)
+    public function __construct(array $data, $isTemplate = false)
     {
         $this->data = $data;
+        $this->isTemplate = $isTemplate;
     }
 
     /**
@@ -22,6 +24,11 @@ class NameConversionExport implements FromArray, WithHeadings, ShouldAutoSize, W
      */
     public function array(): array
     {
+        if ($this->isTemplate) {
+            // Return template data as-is
+            return $this->data;
+        }
+
         $results = [];
         foreach ($this->data as $row) {
             // Add data with original name and converted name
@@ -41,6 +48,10 @@ class NameConversionExport implements FromArray, WithHeadings, ShouldAutoSize, W
      */
     public function headings(): array
     {
+        if ($this->isTemplate) {
+            return []; // No headings for template
+        }
+
         return [
             'Original Name',
             'Converted Name'
@@ -52,6 +63,32 @@ class NameConversionExport implements FromArray, WithHeadings, ShouldAutoSize, W
      */
     public function styles(Worksheet $sheet)
     {
+        if ($this->isTemplate) {
+            // Template styling
+            $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(16);
+            $sheet->getStyle('A1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $sheet->mergeCells('A1:B1');
+
+            $sheet->getStyle('A3')->getFont()->setBold(true);
+            $sheet->getStyle('A4')->getFont()->setBold(true);
+
+            $sheet->getStyle('A6')->getFont()->setBold(true);
+            $sheet->getStyle('A7:B7')->getFill()
+                  ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                  ->getStartColor()->setARGB('FFE6F3FF');
+
+            $sheet->getStyle('A8')->getFont()->setBold(true);
+            $sheet->getStyle('A8')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $sheet->mergeCells('A8:B8');
+
+            // Auto-size columns
+            $sheet->getColumnDimension('A')->setAutoSize(true);
+            $sheet->getColumnDimension('B')->setAutoSize(true);
+
+            return [];
+        }
+
+        // Regular result styling
         // Add title and instructions
         $sheet->insertNewRowBefore(1, 3);
         $sheet->setCellValue('A1', 'EZofz.lk Name Conversion Results');
