@@ -12,7 +12,7 @@ class NameConversionImport implements ToArray, WithStartRow
      */
     public function startRow(): int
     {
-        return 4; // Start from row 4 (the actual headers row in our template)
+        return 2; // Start from row 2 (first data row after headers)
     }
 
     /**

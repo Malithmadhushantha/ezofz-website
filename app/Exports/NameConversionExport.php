@@ -25,7 +25,7 @@ class NameConversionExport implements FromArray, WithHeadings, ShouldAutoSize, W
     public function array(): array
     {
         if ($this->isTemplate) {
-            // Return template data as-is
+            // For template, return the data as-is (should be headers only)
             return $this->data;
         }
 
@@ -48,14 +48,8 @@ class NameConversionExport implements FromArray, WithHeadings, ShouldAutoSize, W
      */
     public function headings(): array
     {
-        if ($this->isTemplate) {
-            return []; // No headings for template
-        }
-
-        return [
-            'Original Name',
-            'Converted Name'
-        ];
+        // No additional headings needed - data already contains headers for template
+        return [];
     }
 
     /**
@@ -64,22 +58,17 @@ class NameConversionExport implements FromArray, WithHeadings, ShouldAutoSize, W
     public function styles(Worksheet $sheet)
     {
         if ($this->isTemplate) {
-            // Template styling
-            $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(16);
-            $sheet->getStyle('A1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-            $sheet->mergeCells('A1:B1');
-
-            $sheet->getStyle('A3')->getFont()->setBold(true);
-            $sheet->getStyle('A4')->getFont()->setBold(true);
-
-            $sheet->getStyle('A6')->getFont()->setBold(true);
-            $sheet->getStyle('A7:B7')->getFill()
+            // Simple template styling - just style the header row
+            $sheet->getStyle('A1:B1')->getFont()->setBold(true);
+            $sheet->getStyle('A1:B1')->getFill()
                   ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
                   ->getStartColor()->setARGB('FFE6F3FF');
+            $sheet->getStyle('A1:B1')->getAlignment()
+                  ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
-            $sheet->getStyle('A8')->getFont()->setBold(true);
-            $sheet->getStyle('A8')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-            $sheet->mergeCells('A8:B8');
+            // Add border to header row
+            $sheet->getStyle('A1:B1')->getBorders()->getAllBorders()
+                  ->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
             // Auto-size columns
             $sheet->getColumnDimension('A')->setAutoSize(true);

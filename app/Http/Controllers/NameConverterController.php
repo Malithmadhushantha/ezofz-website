@@ -124,7 +124,7 @@ class NameConverterController extends Controller
                     try {
                         $data = Excel::toArray(new NameConversionImport, $path);
 
-                    // Process the data (the import class already skips to row 4)
+                    // Process the data (the import class already skips to row 2)
                     if (!empty($data) && isset($data[0]) && count($data[0]) > 0) {
                         foreach ($data[0] as $row) {
                             // Check if the name column has a value (should be in column A)
@@ -204,30 +204,16 @@ class NameConverterController extends Controller
                 return response()->stream(function () {
                     $output = fopen('php://output', 'w');
 
-                    // Write template data
-                    fputcsv($output, ['Name Converter Template']);
-                    fputcsv($output, ['']);
-                    fputcsv($output, ['Instructions: Enter names in column A starting from row 8']);
-                    fputcsv($output, ['Column A: Original Names', 'Column B: Converted Names (auto-filled)']);
-                    fputcsv($output, ['']);
-                    fputcsv($output, ['Examples:']);
-                    fputcsv($output, ['John Smith', 'ජෝන් ස්මිත්']);
-                    fputcsv($output, ['Add your names below this row:']);
+                    // Write simple template with just headers
+                    fputcsv($output, ['Original Names', 'Converted Names']);
 
                     fclose($output);
                 }, 200, $headers);
             }
 
-            // Try to create Excel template
+            // Try to create Excel template - simplified structure
             $templateData = [
-                ['Name Converter Template'],
-                [''],
-                ['Instructions: Enter names in column A starting from row 8'],
-                ['Column A: Original Names', 'Column B: Converted Names (auto-filled)'],
-                [''],
-                ['Examples:'],
-                ['John Smith', 'ජෝන් ස්මිත්'],
-                ['Add your names below this row:'],
+                ['Original Names', 'Converted Names'], // Headers in row 1
             ];
 
             try {
@@ -249,15 +235,8 @@ class NameConverterController extends Controller
                 return response()->stream(function () {
                     $output = fopen('php://output', 'w');
 
-                    // Write template data
-                    fputcsv($output, ['Name Converter Template']);
-                    fputcsv($output, ['']);
-                    fputcsv($output, ['Instructions: Enter names in column A starting from row 8']);
-                    fputcsv($output, ['Column A: Original Names', 'Column B: Converted Names (auto-filled)']);
-                    fputcsv($output, ['']);
-                    fputcsv($output, ['Examples:']);
-                    fputcsv($output, ['John Smith', 'ජෝන් ස්මිත්']);
-                    fputcsv($output, ['Add your names below this row:']);
+                    // Write simple template with just headers
+                    fputcsv($output, ['Original Names', 'Converted Names']);
 
                     fclose($output);
                 }, 200, $headers);
@@ -284,8 +263,8 @@ class NameConverterController extends Controller
             while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
                 $rowCount++;
 
-                // Skip header rows (first 7 rows in template)
-                if ($rowCount <= 7) {
+                // Skip header row (first row in template)
+                if ($rowCount <= 1) {
                     continue;
                 }
 
@@ -385,8 +364,8 @@ class NameConverterController extends Controller
                 while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
                     $rowCount++;
 
-                    // Skip header rows (first 7 rows in template)
-                    if ($rowCount <= 7) {
+                    // Skip header row (first row in template)
+                    if ($rowCount <= 1) {
                         continue;
                     }
 
@@ -405,7 +384,7 @@ class NameConverterController extends Controller
             }
 
             if (empty($results)) {
-                return back()->with('error', 'No valid names found in the uploaded file. Please make sure you have names in the first column starting from row 8.');
+                return back()->with('error', 'No valid names found in the uploaded file. Please make sure you have names in the first column starting from row 2.');
             }
 
             // Generate CSV response

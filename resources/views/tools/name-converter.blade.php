@@ -201,7 +201,7 @@
                                         <ol class="mt-2">
                                             <li>Download the Excel template using the "Download Template" button</li>
                                             <li>Open the template in Microsoft Excel or similar spreadsheet software</li>
-                                            <li>Enter names in the first column (column A) below the example rows</li>
+                                            <li>Enter names in the first column (column A) starting from row 2 (below the headers)</li>
                                             <li>Leave the second column (B) empty - it will be filled after conversion</li>
                                             <li>Save the file in Excel format (.xlsx) or CSV format</li>
                                             <li>Upload your file and choose the conversion type</li>
@@ -209,7 +209,7 @@
                                         </ol>
                                         <div class="alert alert-info mt-3">
                                             <i class="fas fa-info-circle me-2"></i>
-                                            <strong>Tip:</strong> For best results, use our template exactly as provided. Enter names starting from row 8 (below the examples) in column A.
+                                            <strong>Tip:</strong> For best results, use our template exactly as provided. Enter names starting from row 2 (below the headers) in column A.
                                         </div>
                                         <div class="alert alert-success mt-3">
                                             <i class="fas fa-check-circle me-2"></i>
