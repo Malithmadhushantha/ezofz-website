@@ -120,6 +120,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
 
+    // User Profile Management
+    Route::get('/profile', [\App\Http\Controllers\UserController::class, 'profile'])->name('user.profile');
+    Route::put('/profile', [\App\Http\Controllers\UserController::class, 'updateProfile'])->name('user.profile.update');
+    Route::put('/profile/password', [\App\Http\Controllers\UserController::class, 'updatePassword'])->name('user.password.update');
+    Route::delete('/profile/avatar', [\App\Http\Controllers\UserController::class, 'deleteAvatar'])->name('user.avatar.delete');
+
         // Penal Code routes for users
     Route::get('/penal-code', [App\Http\Controllers\PenalCodeController::class, 'index'])->name('penal-code.index');
     Route::get('/penal-code/{section}', [App\Http\Controllers\PenalCodeController::class, 'show'])->name('penal-code.show');
@@ -172,3 +178,5 @@ Route::get('/documents/{document}/download/{type?}', [DocumentController::class,
 
 // Public documents index page
 Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');
+
+

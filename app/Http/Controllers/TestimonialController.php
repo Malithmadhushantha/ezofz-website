@@ -47,6 +47,13 @@ class TestimonialController extends Controller
             ->limit(5)
             ->get();
 
+        // Append computed attributes to user data
+        $testimonials->each(function ($testimonial) {
+            if ($testimonial->user) {
+                $testimonial->user->append(['avatar_url', 'initials']);
+            }
+        });
+
         return response()->json($testimonials);
     }
 

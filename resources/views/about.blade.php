@@ -352,11 +352,35 @@
         width: 50px;
         height: 50px;
         border-radius: 50%;
-        background: var(--primary-gradient);
         display: flex;
         align-items: center;
         justify-content: center;
         margin-right: 1rem;
+        position: relative;
+        overflow: hidden;
+        border: 2px solid rgba(102, 126, 234, 0.3);
+        transition: all 0.3s ease;
+    }
+
+    .testimonial-avatar:hover {
+        border-color: rgba(102, 126, 234, 0.6);
+        transform: scale(1.05);
+    }
+
+    .testimonial-avatar-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+
+    .testimonial-avatar-initials {
+        width: 100%;
+        height: 100%;
+        background: var(--primary-gradient);
+        display: flex;
+        align-items: center;
+        justify-content: center;
         color: white;
         font-weight: bold;
         font-size: 1.2rem;
@@ -777,6 +801,9 @@
         .testimonial-avatar {
             width: 40px;
             height: 40px;
+        }
+
+        .testimonial-avatar-initials {
             font-size: 1rem;
         }
 
@@ -1040,47 +1067,51 @@
                     return;
                 }
 
-                carousel.innerHTML = testimonials.map(testimonial => `
-                    <div class="testimonial-item">
-                        <div class="testimonial-header">
-                            <div class="testimonial-avatar">
-                                <i class="bi bi-person-fill"></i>
+                function createTestimonialHTML(testimonial) {
+                    // Generate initials from user name if not provided
+                    const generateInitials = (name) => {
+                        if (!name) return 'U';
+                        const names = name.trim().split(' ');
+                        let initials = '';
+                        names.forEach(n => {
+                            if (n.length > 0) initials += n.charAt(0).toUpperCase();
+                        });
+                        return initials.substring(0, 2) || 'U';
+                    };
+
+                    const userInitials = testimonial.user.initials || generateInitials(testimonial.user.name);
+                    const avatarUrl = testimonial.user.avatar_url || (testimonial.user.avatar ? `/storage/${testimonial.user.avatar}` : null);
+
+                    const avatarHTML = avatarUrl ?
+                        `<img src="${avatarUrl}" alt="${testimonial.user.name}" class="testimonial-avatar-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                         <div class="testimonial-avatar-initials" style="display: none;">${userInitials}</div>` :
+                        `<div class="testimonial-avatar-initials">${userInitials}</div>`;
+
+                    return `
+                        <div class="testimonial-item">
+                            <div class="testimonial-header">
+                                <div class="testimonial-avatar">
+                                    ${avatarHTML}
+                                </div>
+                                <div class="testimonial-user-info">
+                                    <h6>${testimonial.user.name}</h6>
+                                    <div class="testimonial-date">${new Date(testimonial.created_at).toLocaleDateString()}</div>
+                                </div>
                             </div>
-                            <div class="testimonial-user-info">
-                                <h6>${testimonial.user.name}</h6>
-                                <div class="testimonial-date">${new Date(testimonial.created_at).toLocaleDateString()}</div>
+                            <div class="testimonial-rating">
+                                ${Array.from({length: 5}, (_, i) =>
+                                    `<i class="bi bi-star-fill star ${i < testimonial.rating ? '' : 'empty'}"></i>`
+                                ).join('')}
+                            </div>
+                            <div class="testimonial-content">
+                                "${testimonial.content}"
                             </div>
                         </div>
-                        <div class="testimonial-rating">
-                            ${Array.from({length: 5}, (_, i) =>
-                                `<i class="bi bi-star-fill star ${i < testimonial.rating ? '' : 'empty'}"></i>`
-                            ).join('')}
-                        </div>
-                        <div class="testimonial-content">
-                            "${testimonial.content}"
-                        </div>
-                    </div>
-                `).join('') + testimonials.map(testimonial => `
-                    <div class="testimonial-item">
-                        <div class="testimonial-header">
-                            <div class="testimonial-avatar">
-                                <i class="bi bi-person-fill"></i>
-                            </div>
-                            <div class="testimonial-user-info">
-                                <h6>${testimonial.user.name}</h6>
-                                <div class="testimonial-date">${new Date(testimonial.created_at).toLocaleDateString()}</div>
-                            </div>
-                        </div>
-                        <div class="testimonial-rating">
-                            ${Array.from({length: 5}, (_, i) =>
-                                `<i class="bi bi-star-fill star ${i < testimonial.rating ? '' : 'empty'}"></i>`
-                            ).join('')}
-                        </div>
-                        <div class="testimonial-content">
-                            "${testimonial.content}"
-                        </div>
-                    </div>
-                `).join(''); // Duplicate for seamless scroll
+                    `;
+                }
+
+                carousel.innerHTML = testimonials.map(createTestimonialHTML).join('') +
+                                   testimonials.map(createTestimonialHTML).join(''); // Duplicate for seamless scroll
             })
             .catch(error => {
                 console.error('Error loading testimonials:', error);

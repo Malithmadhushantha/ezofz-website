@@ -1011,6 +1011,66 @@
             font-size: 0.85rem;
         }
     }
+
+    /* Navbar Avatar Styles */
+    .navbar-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid rgba(0, 214, 255, 0.3);
+        transition: all 0.3s ease;
+    }
+
+    .navbar-avatar:hover {
+        border-color: var(--tech-cyan);
+        box-shadow: 0 0 8px rgba(0, 214, 255, 0.4);
+    }
+
+    .navbar-avatar-placeholder {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: white;
+        border: 2px solid rgba(0, 214, 255, 0.3);
+        transition: all 0.3s ease;
+    }
+
+    .navbar-avatar-placeholder:hover {
+        border-color: var(--tech-cyan);
+        box-shadow: 0 0 8px rgba(0, 214, 255, 0.4);
+        transform: scale(1.05);
+    }
+
+    .navbar-username {
+        color: #e0e0e0;
+        font-weight: 500;
+        transition: color 0.3s ease;
+    }
+
+    #userDropdown:hover .navbar-username {
+        color: var(--tech-cyan);
+    }
+
+    /* Mobile navbar avatar adjustments */
+    @media (max-width: 991.98px) {
+        .navbar-avatar,
+        .navbar-avatar-placeholder {
+            width: 28px;
+            height: 28px;
+            font-size: 0.75rem;
+        }
+
+        .navbar-username {
+            font-size: 0.9rem;
+        }
+    }
     </style>
     @stack('styles')
 </head>
@@ -1122,7 +1182,17 @@
                         @else
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-person-circle me-2"></i>{{ Auth::user()->name }}
+                                    @if(Auth::user()->avatar)
+                                        <img src="{{ Auth::user()->avatar_url }}" alt="{{ Auth::user()->name }}" class="navbar-avatar me-2" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                        <div class="navbar-avatar-placeholder me-2" style="display: none;">
+                                            {{ Auth::user()->initials }}
+                                        </div>
+                                    @else
+                                        <div class="navbar-avatar-placeholder me-2">
+                                            {{ Auth::user()->initials }}
+                                        </div>
+                                    @endif
+                                    <span class="navbar-username">{{ Auth::user()->name }}</span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                                     @if(Auth::user()->isAdmin())
@@ -1130,6 +1200,7 @@
                                     @else
                                         <li><a class="dropdown-item" href="{{ route('dashboard') }}"><i class="bi bi-house-door me-2"></i>Dashboard</a></li>
                                     @endif
+                                    <li><a class="dropdown-item" href="{{ route('user.profile') }}"><i class="bi bi-person-lines-fill me-2"></i>My Profile</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li>
                                         <a class="dropdown-item" href="{{ route('logout') }}"

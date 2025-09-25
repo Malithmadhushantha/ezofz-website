@@ -79,13 +79,38 @@
         width: 50px;
         height: 50px;
         border-radius: 50%;
-        background: var(--primary-gradient);
         display: flex;
         align-items: center;
         justify-content: center;
         margin-right: 1rem;
+        position: relative;
+        overflow: hidden;
+        border: 2px solid rgba(102, 126, 234, 0.3);
+        transition: all 0.3s ease;
+    }
+
+    .user-avatar:hover {
+        border-color: rgba(102, 126, 234, 0.6);
+        transform: scale(1.05);
+    }
+
+    .avatar-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+
+    .avatar-initials {
+        width: 100%;
+        height: 100%;
+        background: var(--primary-gradient);
+        display: flex;
+        align-items: center;
+        justify-content: center;
         color: white;
         font-weight: bold;
+        font-size: 1.1rem;
     }
 
     .user-name {
@@ -175,7 +200,16 @@
                     <div class="testimonial-card">
                         <div class="user-info">
                             <div class="user-avatar">
-                                <i class="bi bi-person-fill"></i>
+                                @if($testimonial->user->avatar)
+                                    <img src="{{ $testimonial->user->avatar_url }}" alt="{{ $testimonial->user->name }}" class="avatar-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                    <div class="avatar-initials" style="display: none;">
+                                        {{ $testimonial->user->initials }}
+                                    </div>
+                                @else
+                                    <div class="avatar-initials">
+                                        {{ $testimonial->user->initials }}
+                                    </div>
+                                @endif
                             </div>
                             <div>
                                 <div class="user-name">{{ $testimonial->user->name }}</div>
