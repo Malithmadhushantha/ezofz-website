@@ -843,7 +843,7 @@
                     <h4>Identity Card Details</h4>
                     <p>Sri Lankan Identity Card Details and Identity Card Number Converter.</p>
                     <a href="{{ route('tools.sl-idcard-details') }}" class="tool-btn primary" aria-label="Access Identity Card Details Tool">
-                        <i class="bi bi-arrow-right me-2"></i>Open Forms
+                        <i class="bi bi-arrow-right me-2"></i>Access Now
                     </a>
                 </div>
             </div>
