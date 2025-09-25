@@ -835,6 +835,19 @@
                 </div>
             </div>
 
+            <div class="col-lg-3 col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="400">
+                <div class="tool-card">
+                    <div class="tool-icon primary">
+                        <i class="bi bi-card-text fs-2 text-white"></i>
+                    </div>
+                    <h4>Identity Card Details</h4>
+                    <p>Sri Lankan Identity Card Details and Identity Card Number Converter.</p>
+                    <a href="{{ route('tools.sl-idcard-details') }}" class="tool-btn primary" aria-label="Access Identity Card Details Tool">
+                        <i class="bi bi-arrow-right me-2"></i>Open Forms
+                    </a>
+                </div>
+            </div>
+
             <div class="col-lg-3 col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="300">
                 <div class="tool-card">
                     <div class="tool-icon warning">
@@ -848,18 +861,7 @@
                 </div>
             </div>
 
-            <div class="col-lg-3 col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="400">
-                <div class="tool-card">
-                    <div class="tool-icon primary">
-                        <i class="bi bi-calendar-check fs-2 text-white"></i>
-                    </div>
-                    <h4>Easy Forms</h4>
-                    <p>Fill and download essential government forms with guided instructions.</p>
-                    <a href="{{ route('documents.index') }}" class="tool-btn primary" aria-label="Access Easy Forms Tool">
-                        <i class="bi bi-arrow-right me-2"></i>Open Forms
-                    </a>
-                </div>
-            </div>
+
         </div>
     </div>
 </section>

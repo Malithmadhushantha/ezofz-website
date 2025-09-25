@@ -31,26 +31,92 @@ class DocumentController extends Controller
             'description' => 'nullable|string',
             'category_id' => 'required|exists:categories,id',
             'subcategory_id' => 'nullable|exists:subcategories,id',
-            'file' => 'required|file|mimes:pdf,doc,docx,xls,xlsx|max:2048'
+            'pdf_file' => 'nullable|file|mimes:pdf|max:10240',
+            'word_file' => 'nullable|file|mimes:doc,docx|max:10240',
+            'excel_file' => 'nullable|file|mimes:xls,xlsx|max:10240'
         ]);
 
-        $file = $request->file('file');
-        $path = $file->store('documents', 'public');
+        // Ensure at least one file is uploaded
+        if (!$request->hasFile('pdf_file') && !$request->hasFile('word_file') && !$request->hasFile('excel_file')) {
+            return redirect()->back()->withErrors(['files' => 'At least one file (PDF, Word, or Excel) must be uploaded.']);
+        }
 
-        Document::create([
+        $documentData = [
             'title' => $request->title,
             'description' => $request->description,
             'category_id' => $request->category_id,
             'subcategory_id' => $request->subcategory_id,
-            'file_path' => $path
-        ]);
+        ];
 
-        return redirect()->back()->with('success', 'Document uploaded successfully!');
+        // Handle PDF file upload
+        if ($request->hasFile('pdf_file')) {
+            $pdfFile = $request->file('pdf_file');
+            $pdfPath = $pdfFile->store('documents/pdf', 'public');
+            $documentData['pdf_file_path'] = $pdfPath;
+            $documentData['pdf_file_size'] = $pdfFile->getSize();
+
+            // Keep backward compatibility with old file_path column
+            if (!isset($documentData['file_path'])) {
+                $documentData['file_path'] = $pdfPath;
+            }
+        }
+
+        // Handle Word file upload
+        if ($request->hasFile('word_file')) {
+            $wordFile = $request->file('word_file');
+            $wordPath = $wordFile->store('documents/word', 'public');
+            $documentData['word_file_path'] = $wordPath;
+            $documentData['word_file_size'] = $wordFile->getSize();
+
+            // Keep backward compatibility with old file_path column
+            if (!isset($documentData['file_path'])) {
+                $documentData['file_path'] = $wordPath;
+            }
+        }
+
+        // Handle Excel file upload
+        if ($request->hasFile('excel_file')) {
+            $excelFile = $request->file('excel_file');
+            $excelPath = $excelFile->store('documents/excel', 'public');
+            $documentData['excel_file_path'] = $excelPath;
+            $documentData['excel_file_size'] = $excelFile->getSize();
+
+            // Keep backward compatibility with old file_path column
+            if (!isset($documentData['file_path'])) {
+                $documentData['file_path'] = $excelPath;
+            }
+        }
+
+        Document::create($documentData);
+
+        $uploadedTypes = [];
+        if ($request->hasFile('pdf_file')) $uploadedTypes[] = 'PDF';
+        if ($request->hasFile('word_file')) $uploadedTypes[] = 'Word';
+        if ($request->hasFile('excel_file')) $uploadedTypes[] = 'Excel';
+
+        $message = 'Document uploaded successfully with ' . implode(', ', $uploadedTypes) . ' file(s)!';
+
+        return redirect()->back()->with('success', $message);
     }
 
     public function destroy(Document $document)
     {
-        Storage::disk('public')->delete($document->file_path);
+        // Delete all associated files
+        if ($document->pdf_file_path) {
+            Storage::disk('public')->delete($document->pdf_file_path);
+        }
+        if ($document->word_file_path) {
+            Storage::disk('public')->delete($document->word_file_path);
+        }
+        if ($document->excel_file_path) {
+            Storage::disk('public')->delete($document->excel_file_path);
+        }
+
+        // Delete old file_path for backward compatibility
+        if ($document->file_path) {
+            Storage::disk('public')->delete($document->file_path);
+        }
+
         $document->delete();
 
         return redirect()->back()->with('success', 'Document deleted successfully!');
@@ -60,14 +126,24 @@ class DocumentController extends Controller
     {
         try {
             $category = \App\Models\Category::where('name', 'police')->first();
-            $documents = $category
-                ? Document::where('category_id', $category->id)->orderByDesc('created_at')->paginate(10)
-                : new \Illuminate\Pagination\LengthAwarePaginator([], 0, 10);
+
+            if ($category) {
+                $documents = Document::where('category_id', $category->id)
+                    ->with(['subcategory'])
+                    ->orderByDesc('created_at')
+                    ->paginate(15);
+
+                $subcategories = $category->subcategories()->with('documents')->get();
+            } else {
+                $documents = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 15);
+                $subcategories = collect();
+            }
         } catch (\Exception $e) {
-            $documents = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 10);
+            $documents = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 15);
+            $subcategories = collect();
         }
 
-        return view('documents.police', compact('documents'));
+        return view('documents.police', compact('documents', 'subcategories'));
     }
 
     public function index()
@@ -82,25 +158,70 @@ class DocumentController extends Controller
     {
         try {
             $category = \App\Models\Category::where('name', 'law')->first();
-            $documents = $category
-                ? Document::where('category_id', $category->id)->orderByDesc('created_at')->paginate(10)
-                : new \Illuminate\Pagination\LengthAwarePaginator([], 0, 10);
+
+            if ($category) {
+                $documents = Document::where('category_id', $category->id)
+                    ->with(['subcategory'])
+                    ->orderByDesc('created_at')
+                    ->paginate(15);
+
+                $subcategories = $category->subcategories()->with('documents')->get();
+            } else {
+                $documents = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 15);
+                $subcategories = collect();
+            }
         } catch (\Exception $e) {
-            $documents = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 10);
+            $documents = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 15);
+            $subcategories = collect();
         }
 
-        return view('documents.law', compact('documents'));
+        return view('documents.law', compact('documents', 'subcategories'));
     }
 
-    public function download(Document $document)
+    public function download(Document $document, $type = null)
     {
-        $filePath = $document->file_path;
-        if (!Storage::disk('public')->exists($filePath)) {
+        $filePath = null;
+        $extension = '';
+
+        // Determine which file to download based on type parameter
+        switch ($type) {
+            case 'pdf':
+                $filePath = $document->pdf_file_path;
+                $extension = 'pdf';
+                break;
+            case 'word':
+                $filePath = $document->word_file_path;
+                $extension = pathinfo($filePath ?? '', PATHINFO_EXTENSION) ?: 'doc';
+                break;
+            case 'excel':
+                $filePath = $document->excel_file_path;
+                $extension = pathinfo($filePath ?? '', PATHINFO_EXTENSION) ?: 'xlsx';
+                break;
+            default:
+                // If no type specified, download the first available file
+                if ($document->pdf_file_path) {
+                    $filePath = $document->pdf_file_path;
+                    $extension = 'pdf';
+                } elseif ($document->word_file_path) {
+                    $filePath = $document->word_file_path;
+                    $extension = pathinfo($document->word_file_path, PATHINFO_EXTENSION);
+                } elseif ($document->excel_file_path) {
+                    $filePath = $document->excel_file_path;
+                    $extension = pathinfo($document->excel_file_path, PATHINFO_EXTENSION);
+                } else {
+                    // Fallback to old file_path
+                    $filePath = $document->file_path;
+                    $extension = pathinfo($filePath ?? '', PATHINFO_EXTENSION);
+                }
+                break;
+        }
+
+        if (!$filePath || !Storage::disk('public')->exists($filePath)) {
             abort(404, 'File not found.');
         }
-        $extension = pathinfo($filePath, PATHINFO_EXTENSION);
+
         $filename = $document->title . '.' . $extension;
-        return Storage::disk('public')->download($filePath, $filename);
+        return response()->download(storage_path('app/public/' . $filePath), $filename);
     }
 
     // Show form to edit a document
@@ -148,5 +269,65 @@ class DocumentController extends Controller
         $documents = Document::where('category_id', $category->id)->orderByDesc('created_at')->paginate(10);
 
         return view('documents.category', compact('category', 'documents'));
+    }
+
+    public function policeDocumentsBySubcategory($subcategory)
+    {
+        try {
+            $category = \App\Models\Category::where('name', 'police')->first();
+            $subcategoryModel = \App\Models\Subcategory::where('id', $subcategory)
+                ->orWhere('name', $subcategory)
+                ->first();
+
+            if ($category && $subcategoryModel) {
+                $documents = Document::where('category_id', $category->id)
+                    ->where('subcategory_id', $subcategoryModel->id)
+                    ->with(['subcategory'])
+                    ->orderByDesc('created_at')
+                    ->paginate(15);
+
+                $subcategories = $category->subcategories()->with('documents')->get();
+            } else {
+                $documents = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 15);
+                $subcategories = collect();
+                $subcategoryModel = null;
+            }
+        } catch (\Exception $e) {
+            $documents = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 15);
+            $subcategories = collect();
+            $subcategoryModel = null;
+        }
+
+        return view('documents.police', compact('documents', 'subcategories', 'subcategoryModel'));
+    }
+
+    public function lawDocumentsBySubcategory($subcategory)
+    {
+        try {
+            $category = \App\Models\Category::where('name', 'law')->first();
+            $subcategoryModel = \App\Models\Subcategory::where('id', $subcategory)
+                ->orWhere('name', $subcategory)
+                ->first();
+
+            if ($category && $subcategoryModel) {
+                $documents = Document::where('category_id', $category->id)
+                    ->where('subcategory_id', $subcategoryModel->id)
+                    ->with(['subcategory'])
+                    ->orderByDesc('created_at')
+                    ->paginate(15);
+
+                $subcategories = $category->subcategories()->with('documents')->get();
+            } else {
+                $documents = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 15);
+                $subcategories = collect();
+                $subcategoryModel = null;
+            }
+        } catch (\Exception $e) {
+            $documents = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 15);
+            $subcategories = collect();
+            $subcategoryModel = null;
+        }
+
+        return view('documents.law', compact('documents', 'subcategories', 'subcategoryModel'));
     }
 }

@@ -161,12 +161,14 @@ Route::middleware([App\Http\Middleware\AdminMiddleware::class])->prefix('admin')
 
 // Public Police Documents page
 Route::get('/documents/police', [DocumentController::class, 'policeDocuments'])->name('documents.police');
-
-// Public document download route
-Route::get('/documents/{document}/download', [DocumentController::class, 'download'])->name('documents.download');
-
-// Public documents index page
-Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');
+Route::get('/documents/police/{subcategory}', [DocumentController::class, 'policeDocumentsBySubcategory'])->name('documents.police.subcategory');
 
 // Public law documents page
 Route::get('/documents/law', [DocumentController::class, 'lawDocuments'])->name('documents.law');
+Route::get('/documents/law/{subcategory}', [DocumentController::class, 'lawDocumentsBySubcategory'])->name('documents.law.subcategory');
+
+// Public document download route with optional type parameter
+Route::get('/documents/{document}/download/{type?}', [DocumentController::class, 'download'])->name('documents.download');
+
+// Public documents index page
+Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');

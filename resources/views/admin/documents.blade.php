@@ -65,20 +65,80 @@
                             @enderror
                         </div>
 
+                        <!-- File Upload Sections -->
                         <div class="col-12">
-                            <label for="file" class="form-label">Document File *</label>
-                            <input type="file" class="form-control @error('file') is-invalid @enderror"
-                                   id="file" name="file" accept=".pdf,.doc,.docx,.xls,.xlsx" required>
-                            <div class="form-text">Allowed formats: PDF, DOC, DOCX, XLS, XLSX. Max size: 2MB</div>
-                            @error('file')
-                                <div class="invalid-feedback">{{ $message }}</div>
+                            <div class="row g-3 file-upload-cards">
+                                <!-- PDF File Upload -->
+                                <div class="col-md-4">
+                                    <div class="card border-danger">
+                                        <div class="card-header bg-danger text-white py-2">
+                                            <h6 class="mb-0"><i class="bi bi-file-pdf me-2"></i>Upload PDF File</h6>
+                                        </div>
+                                        <div class="card-body p-3">
+                                            <label for="pdf_file" class="form-label">PDF Document</label>
+                                            <input type="file" class="form-control @error('pdf_file') is-invalid @enderror"
+                                                   id="pdf_file" name="pdf_file" accept=".pdf">
+                                            <div class="form-text">Allowed formats: PDF. Max size: 10MB</div>
+                                            @error('pdf_file')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Word File Upload -->
+                                <div class="col-md-4">
+                                    <div class="card border-primary">
+                                        <div class="card-header bg-primary text-white py-2">
+                                            <h6 class="mb-0"><i class="bi bi-file-word me-2"></i>Upload Word File</h6>
+                                        </div>
+                                        <div class="card-body p-3">
+                                            <label for="word_file" class="form-label">Word Document</label>
+                                            <input type="file" class="form-control @error('word_file') is-invalid @enderror"
+                                                   id="word_file" name="word_file" accept=".doc,.docx">
+                                            <div class="form-text">Allowed formats: DOC, DOCX. Max size: 10MB</div>
+                                            @error('word_file')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Excel File Upload -->
+                                <div class="col-md-4">
+                                    <div class="card border-success">
+                                        <div class="card-header bg-success text-white py-2">
+                                            <h6 class="mb-0"><i class="bi bi-file-excel me-2"></i>Upload Excel File</h6>
+                                        </div>
+                                        <div class="card-body p-3">
+                                            <label for="excel_file" class="form-label">Excel Document</label>
+                                            <input type="file" class="form-control @error('excel_file') is-invalid @enderror"
+                                                   id="excel_file" name="excel_file" accept=".xls,.xlsx">
+                                            <div class="form-text">Allowed formats: XLS, XLSX. Max size: 10MB</div>
+                                            @error('excel_file')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- File Upload Instructions -->
+                            <div class="alert alert-info mt-3">
+                                <i class="bi bi-info-circle me-2"></i>
+                                <strong>Upload Instructions:</strong> You can upload files in any combination - PDF only, Word only, Excel only, or multiple file types for the same document. At least one file must be uploaded.
+                            </div>
+
+                            @error('files')
+                                <div class="alert alert-danger mt-2">{{ $message }}</div>
                             @enderror
                         </div>
 
                         <div class="col-12">
-                            <button type="submit" class="btn btn-primary">
+                            <button type="submit" class="btn btn-secondary" disabled>
                                 <i class="bi bi-upload me-2"></i>Upload Document
                             </button>
+                            <small class="text-muted ms-3">Select at least one file to enable upload</small>
                         </div>
                     </div>
                 </form>
@@ -143,9 +203,8 @@
                             <th>Title</th>
                             <th>Description</th>
                             <th>Category</th>
-                            <th>Subcategory</th>
+                            <th>Available Files</th>
                             <th>Uploaded</th>
-                            <th>File Size</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -166,37 +225,85 @@
                                     <span class="badge bg-secondary">
                                         {{ optional($document->category)->name }}
                                     </span>
+                                    @if(optional($document->subcategory)->name)
+                                        <br>
+                                        <small class="badge bg-info text-dark mt-1">
+                                            {{ optional($document->subcategory)->name }}
+                                        </small>
+                                    @endif
                                 </td>
                                 <td>
-                                    <span class="badge bg-info text-dark">
-                                        {{ optional($document->subcategory)->name ?: '-' }}
-                                    </span>
+                                    <div class="d-flex flex-column gap-1">
+                                        @if($document->hasPdfFile())
+                                            <div class="d-flex align-items-center">
+                                                <span class="badge bg-danger me-2">
+                                                    <i class="bi bi-file-pdf me-1"></i>PDF
+                                                </span>
+                                                <small class="text-muted">{{ $document->getPdfFileSizeFormatted() }}</small>
+                                            </div>
+                                        @endif
+                                        @if($document->hasWordFile())
+                                            <div class="d-flex align-items-center">
+                                                <span class="badge bg-primary me-2">
+                                                    <i class="bi bi-file-word me-1"></i>Word
+                                                </span>
+                                                <small class="text-muted">{{ $document->getWordFileSizeFormatted() }}</small>
+                                            </div>
+                                        @endif
+                                        @if($document->hasExcelFile())
+                                            <div class="d-flex align-items-center">
+                                                <span class="badge bg-success me-2">
+                                                    <i class="bi bi-file-excel me-1"></i>Excel
+                                                </span>
+                                                <small class="text-muted">{{ $document->getExcelFileSizeFormatted() }}</small>
+                                            </div>
+                                        @endif
+                                        @if(!$document->hasPdfFile() && !$document->hasWordFile() && !$document->hasExcelFile())
+                                            <span class="text-muted">No files available</span>
+                                        @endif
+                                    </div>
                                 </td>
                                 <td>
                                     <small class="text-muted">{{ $document->created_at->format('M d, Y') }}</small>
                                 </td>
                                 <td>
-                                    <small class="text-muted">
-                                        @if(Storage::exists('public/' . $document->file_path))
-                                            {{ round(Storage::size('public/' . $document->file_path) / 1024, 2) }} KB
-                                        @else
-                                            N/A
-                                        @endif
-                                    </small>
-                                </td>
-                                <td>
-                                    <div class="btn-group btn-group-sm">
-                                        <a href="{{ route('documents.edit', $document) }}" class="btn btn-outline-warning" title="Edit">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <form action="{{ route('documents.destroy', $document) }}" method="POST" class="d-inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-outline-danger"
-                                                    onclick="return confirm('Are you sure you want to delete this document?')" title="Delete">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </form>
+                                    <div class="d-flex flex-column gap-1">
+                                        <!-- Download Buttons -->
+                                        <div class="btn-group btn-group-sm">
+                                            @if($document->hasPdfFile())
+                                                <a href="{{ route('documents.download', ['document' => $document, 'type' => 'pdf']) }}"
+                                                   class="btn btn-outline-danger btn-sm" title="Download PDF">
+                                                    <i class="bi bi-download"></i> PDF
+                                                </a>
+                                            @endif
+                                            @if($document->hasWordFile())
+                                                <a href="{{ route('documents.download', ['document' => $document, 'type' => 'word']) }}"
+                                                   class="btn btn-outline-primary btn-sm" title="Download Word">
+                                                    <i class="bi bi-download"></i> Word
+                                                </a>
+                                            @endif
+                                            @if($document->hasExcelFile())
+                                                <a href="{{ route('documents.download', ['document' => $document, 'type' => 'excel']) }}"
+                                                   class="btn btn-outline-success btn-sm" title="Download Excel">
+                                                    <i class="bi bi-download"></i> Excel
+                                                </a>
+                                            @endif
+                                        </div>
+
+                                        <!-- Management Buttons -->
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="{{ route('documents.edit', $document) }}" class="btn btn-outline-warning" title="Edit">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <form action="{{ route('documents.destroy', $document) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-outline-danger"
+                                                        onclick="return confirm('Are you sure you want to delete this document?')" title="Delete">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
                                     </div>
                                 </td>
                             </tr>
@@ -222,6 +329,55 @@
     </div>
 </div>
 @endsection
+
+@push('styles')
+<style>
+/* File upload card styles */
+.file-upload-cards .card {
+    transition: all 0.3s ease;
+    opacity: 0.8;
+}
+
+.file-upload-cards .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    opacity: 1;
+}
+
+.file-upload-cards .card.file-selected {
+    opacity: 1;
+    border-width: 2px !important;
+}
+
+.file-upload-cards .card-header {
+    font-weight: 600;
+}
+
+.file-info {
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Table improvements for file types */
+.table td {
+    vertical-align: middle;
+}
+
+.btn-group .btn {
+    margin-bottom: 2px;
+}
+</style>
+@endpush
 
 @push('scripts')
 <script>
@@ -274,6 +430,102 @@ document.addEventListener('DOMContentLoaded', function() {
                 subcategorySelect.value = "{{ old('subcategory_id') }}";
             @endif
         @endif
+    }
+
+    // File upload indicators
+    const fileInputs = ['pdf_file', 'word_file', 'excel_file'];
+    fileInputs.forEach(function(inputId) {
+        const input = document.getElementById(inputId);
+        if (input) {
+            input.addEventListener('change', function() {
+                const card = this.closest('.card');
+                const cardHeader = card.querySelector('.card-header');
+
+                if (this.files.length > 0) {
+                    const file = this.files[0];
+                    const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
+
+                    // Add file info
+                    let fileInfo = card.querySelector('.file-info');
+                    if (!fileInfo) {
+                        fileInfo = document.createElement('div');
+                        fileInfo.className = 'file-info mt-2 p-2 bg-light rounded';
+                        card.querySelector('.card-body').appendChild(fileInfo);
+                    }
+
+                    fileInfo.innerHTML = `
+                        <small class="text-success">
+                            <i class="bi bi-check-circle me-1"></i>
+                            <strong>${file.name}</strong><br>
+                            Size: ${sizeMB} MB
+                        </small>
+                    `;
+
+                    // Update card header to show selected
+                    cardHeader.classList.add('border-success');
+                    cardHeader.style.opacity = '1';
+                } else {
+                    // Remove file info
+                    const fileInfo = card.querySelector('.file-info');
+                    if (fileInfo) {
+                        fileInfo.remove();
+                    }
+
+                    // Reset card header
+                    cardHeader.classList.remove('border-success');
+                    cardHeader.style.opacity = '0.8';
+                }
+
+                // Update submit button state
+                updateSubmitButton();
+            });
+        }
+    });
+
+    function updateSubmitButton() {
+        const submitBtn = document.querySelector('button[type="submit"]');
+        const hasFiles = fileInputs.some(inputId => {
+            const input = document.getElementById(inputId);
+            return input && input.files.length > 0;
+        });
+
+        if (hasFiles) {
+            submitBtn.classList.remove('btn-secondary');
+            submitBtn.classList.add('btn-primary');
+            submitBtn.disabled = false;
+        } else {
+            submitBtn.classList.remove('btn-primary');
+            submitBtn.classList.add('btn-secondary');
+            submitBtn.disabled = true;
+        }
+    }
+
+    // Initial submit button state
+    updateSubmitButton();
+
+    // Form submission confirmation
+    const uploadForm = document.querySelector('form[action*="documents.store"]');
+    if (uploadForm) {
+        uploadForm.addEventListener('submit', function(e) {
+            const selectedFiles = [];
+            fileInputs.forEach(inputId => {
+                const input = document.getElementById(inputId);
+                if (input && input.files.length > 0) {
+                    const type = inputId.replace('_file', '').toUpperCase();
+                    selectedFiles.push(type);
+                }
+            });
+
+            if (selectedFiles.length === 0) {
+                e.preventDefault();
+                alert('Please select at least one file to upload.');
+                return false;
+            }
+
+            const submitBtn = this.querySelector('button[type="submit"]');
+            submitBtn.innerHTML = '<i class="bi bi-spinner-border spinner-border-sm me-2" role="status"></i>Uploading...';
+            submitBtn.disabled = true;
+        });
     }
 });
 </script>

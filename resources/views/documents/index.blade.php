@@ -99,10 +99,58 @@
                                                         {{ Str::limit($document->description, 100) }}
                                                     </p>
                                                 @endif
-                                                <a href="{{ route('documents.download', $document) }}"
-                                                   class="btn btn-sm btn-outline-primary d-block">
-                                                    <i class="bi bi-download me-1"></i> Download
-                                                </a>
+
+                                                <!-- Available File Types -->
+                                                <div class="available-files mb-3">
+                                                    <div class="d-flex flex-wrap gap-1 mb-2">
+                                                        @if($document->hasPdfFile())
+                                                            <span class="badge bg-danger file-badge">
+                                                                <i class="bi bi-file-pdf me-1"></i>PDF
+                                                            </span>
+                                                        @endif
+                                                        @if($document->hasWordFile())
+                                                            <span class="badge bg-primary file-badge">
+                                                                <i class="bi bi-file-word me-1"></i>Word
+                                                            </span>
+                                                        @endif
+                                                        @if($document->hasExcelFile())
+                                                            <span class="badge bg-success file-badge">
+                                                                <i class="bi bi-file-excel me-1"></i>Excel
+                                                            </span>
+                                                        @endif
+                                                    </div>
+                                                </div>
+
+                                                <!-- Download Buttons -->
+                                                <div class="download-buttons d-grid gap-1">
+                                                    @if($document->hasPdfFile())
+                                                        <a href="{{ route('documents.download', ['document' => $document, 'type' => 'pdf']) }}"
+                                                           class="btn btn-sm btn-outline-danger download-btn">
+                                                            <i class="bi bi-download me-1"></i>Download PDF
+                                                            <small class="d-block">{{ $document->getPdfFileSizeFormatted() }}</small>
+                                                        </a>
+                                                    @endif
+                                                    @if($document->hasWordFile())
+                                                        <a href="{{ route('documents.download', ['document' => $document, 'type' => 'word']) }}"
+                                                           class="btn btn-sm btn-outline-primary download-btn">
+                                                            <i class="bi bi-download me-1"></i>Download Word
+                                                            <small class="d-block">{{ $document->getWordFileSizeFormatted() }}</small>
+                                                        </a>
+                                                    @endif
+                                                    @if($document->hasExcelFile())
+                                                        <a href="{{ route('documents.download', ['document' => $document, 'type' => 'excel']) }}"
+                                                           class="btn btn-sm btn-outline-success download-btn">
+                                                            <i class="bi bi-download me-1"></i>Download Excel
+                                                            <small class="d-block">{{ $document->getExcelFileSizeFormatted() }}</small>
+                                                        </a>
+                                                    @endif
+
+                                                    @if(!$document->hasPdfFile() && !$document->hasWordFile() && !$document->hasExcelFile())
+                                                        <button class="btn btn-sm btn-outline-secondary" disabled>
+                                                            <i class="bi bi-x-circle me-1"></i>No files available
+                                                        </button>
+                                                    @endif
+                                                </div>
                                             </div>
                                             <div class="card-footer py-2 px-4">
                                                 <small class="text-muted">
@@ -343,8 +391,79 @@
         }
     }
 
-    /* Responsive adjustments */
+    /* File badge styling */
+    .downloads-page .file-badge {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.375rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+    }
+
+    .downloads-page .file-badge:hover {
+        transform: scale(1.05);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Download button styling */
+    .downloads-page .download-btn {
+        text-align: left;
+        border-radius: 8px;
+        padding: 0.5rem 0.75rem;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        font-weight: 500;
+    }
+
+    .downloads-page .download-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .downloads-page .download-btn small {
+        font-size: 0.7rem;
+        opacity: 0.8;
+        font-weight: 400;
+    }
+
+    /* File type specific colors */
+    .downloads-page .btn-outline-danger:hover {
+        background-color: rgba(220, 53, 69, 0.1);
+        border-color: #dc3545;
+        color: #dc3545;
+    }
+
+    .downloads-page .btn-outline-primary:hover {
+        background-color: rgba(13, 110, 253, 0.1);
+        border-color: #0d6efd;
+        color: #0d6efd;
+    }
+
+    .downloads-page .btn-outline-success:hover {
+        background-color: rgba(25, 135, 84, 0.1);
+        border-color: #198754;
+        color: #198754;
+    }
+
+    /* Mobile responsive grid adjustments */
+    @media (max-width: 768px) {
+        .downloads-page .col-xl-3 {
+            max-width: 50%;
+        }
+    }
+
     @media (max-width: 576px) {
+        .downloads-page .col-xl-3,
+        .downloads-page .col-md-4,
+        .downloads-page .col-sm-6 {
+            max-width: 100%;
+            flex: 0 0 100%;
+        }
+
         .downloads-page .tech-card {
             padding: 1rem;
         }
@@ -358,12 +477,48 @@
             font-size: 2rem;
         }
 
-        .downloads-page .btn-outline-primary {
-            font-size: 0.9rem;
+        .downloads-page .card-body {
+            padding: 1rem !important;
+        }
+
+        .downloads-page .download-btn {
+            font-size: 0.8rem;
+            padding: 0.4rem 0.6rem;
+        }
+
+        .downloads-page .download-btn small {
+            font-size: 0.65rem;
+        }
+
+        .downloads-page .file-badge {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.4rem;
+        }
+
+        /* Stack download buttons vertically on mobile */
+        .downloads-page .download-buttons {
+            gap: 0.5rem !important;
+        }
+
+        /* Reduce spacing on mobile */
+        .downloads-page .available-files .d-flex {
+            gap: 0.25rem !important;
+        }
+    }
+
+    /* Ultra small screens */
+    @media (max-width: 400px) {
+        .downloads-page .download-btn {
+            font-size: 0.75rem;
+            padding: 0.35rem 0.5rem;
+        }
+
+        .downloads-page .file-badge {
+            font-size: 0.65rem;
         }
 
         .downloads-page .card-body {
-            padding: 1rem !important;
+            padding: 0.75rem !important;
         }
     }
 </style>
