@@ -123,6 +123,46 @@
         left: 100%;
     }
 
+    /* Google Sign-in Button */
+    .google-btn {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #e0e0e0;
+        font-family: 'Orbitron', sans-serif;
+        font-weight: 600;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+    }
+
+    .google-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.4);
+        color: #ffffff;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(255, 255, 255, 0.1);
+    }
+
+    .google-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        transition: left 0.7s ease;
+    }
+
+    .google-btn:hover::before {
+        left: 100%;
+    }
+
+    .google-btn i {
+        color: #4285f4;
+    }
+
     /* Link styling */
     .text-decoration-none {
         color: var(--tech-cyan);
@@ -269,6 +309,20 @@
                             <button type="submit" class="btn btn-primary btn-lg">
                                 <i class="bi bi-box-arrow-in-right me-2"></i>{{ __('Login') }}
                             </button>
+                        </div>
+
+                        <div class="text-center mb-3">
+                            <div class="d-flex align-items-center">
+                                <hr class="flex-grow-1" style="border-color: rgba(0, 214, 255, 0.3);">
+                                <span class="mx-3" style="color: #d1d5db; font-family: 'Rajdhani', sans-serif;">or</span>
+                                <hr class="flex-grow-1" style="border-color: rgba(0, 214, 255, 0.3);">
+                            </div>
+                        </div>
+
+                        <div class="d-grid mb-4">
+                            <a href="{{ route('google.redirect') }}" class="btn btn-outline-light btn-lg google-btn">
+                                <i class="bi bi-google me-2"></i>Sign in with Google
+                            </a>
                         </div>
 
                         <div class="text-center">

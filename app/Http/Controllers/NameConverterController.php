@@ -55,7 +55,7 @@ class NameConverterController extends Controller
     {
         try {
             // Log incoming request data for debugging
-            \Log::info('Name conversion request:', $request->all());
+            Log::info('Name conversion request:', $request->all());
 
             $request->validate([
                 'name' => 'required|string|max:255',
@@ -68,7 +68,7 @@ class NameConverterController extends Controller
             $result = $this->performConversion($name, $type);
 
             // Log the result
-            \Log::info('Name conversion result:', ['original' => $name, 'converted' => $result]);
+            Log::info('Name conversion result:', ['original' => $name, 'converted' => $result]);
 
             return response()->json([
                 'original' => $name,
@@ -77,7 +77,7 @@ class NameConverterController extends Controller
             ]);
         } catch (\Exception $e) {
             // Log any exceptions
-            \Log::error('Name conversion error: ' . $e->getMessage(), [
+            Log::error('Name conversion error: ' . $e->getMessage(), [
                 'exception' => $e,
                 'request' => $request->all()
             ]);

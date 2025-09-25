@@ -8,7 +8,7 @@ class HomeController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->except(['index', 'about', 'contact']);
+        $this->middleware('auth')->except(['index', 'about', 'contact', 'privacy']);
     }
 
     public function index()
@@ -24,6 +24,11 @@ class HomeController extends Controller
     public function contact()
     {
         return view('contact');
+    }
+
+    public function privacy()
+    {
+        return view('privacy_policy');
     }
 
     public function dashboard()

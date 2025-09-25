@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 // Simple test route to check ZIP functionality
 Route::get('/test-zip', function () {
     return response()->json([

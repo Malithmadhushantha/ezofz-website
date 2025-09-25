@@ -1,2 +1,15 @@
 User-agent: *
-Disallow:
+Disallow: /admin/
+Disallow: /auth/
+Disallow: /login
+Disallow: /register
+Disallow: /dashboard
+Disallow: /password/
+Disallow: /api/
+Disallow: /test-zip
+
+# Development sitemap
+Sitemap: http://localhost:8000/sitemap.xml
+
+# Production sitemap (update when deploying)
+# Sitemap: https://ezofz.web.lk/sitemap.xml

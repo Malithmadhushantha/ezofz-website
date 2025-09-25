@@ -16,7 +16,7 @@ Route::get('/home', function () {
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about', [HomeController::class, 'about'])->name('about');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
-
+Route::get('/privacy-policy', [HomeController::class, 'privacy'])->name('privacy');
 // Testimonial routes
 Route::get('/testimonials', [TestimonialController::class, 'index'])->name('testimonials.index');
 Route::get('/api/testimonials/featured', [TestimonialController::class, 'getFeatured'])->name('testimonials.featured');
@@ -26,9 +26,13 @@ Route::middleware('auth')->group(function () {
 
 // PWA Manifest route
 Route::get('/manifest.json', function () {
-    return response()->file(public_path('manifest.json'))
-        ->header('Content-Type', 'application/manifest+json');
+    return response()->file(public_path('manifest.json'), [
+        'Content-Type' => 'application/manifest+json'
+    ]);
 })->name('manifest');
+
+// Sitemap route
+Route::get('/sitemap.xml', [App\Http\Controllers\SitemapController::class, 'index'])->name('sitemap');
 
 // Public Penal Code route
 Route::get('/penal-code/public', [App\Http\Controllers\PenalCodeController::class, 'publicIndex'])->name('penal-code.public');
@@ -85,6 +89,10 @@ Route::get('/tools/download-conversion-result/{filename}', [App\Http\Controllers
 
 // Authentication routes
 Auth::routes();
+
+// Google OAuth routes
+Route::get('/auth/google', [App\Http\Controllers\Auth\GoogleAuthController::class, 'redirectToGoogle'])->name('google.redirect');
+Route::get('/auth/google/callback', [App\Http\Controllers\Auth\GoogleAuthController::class, 'handleGoogleCallback'])->name('google.callback');
 
     // Admin Penal Code routes
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
