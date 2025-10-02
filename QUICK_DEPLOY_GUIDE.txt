@@ -1,0 +1,89 @@
+# MANUAL UPLOAD DEPLOYMENT - QUICK START
+
+## ✅ Your ZIP Package is Ready!
+
+**File Created**: `ezofz-website-production-2025-10-01_20-50.zip` (14.47 MB)
+
+## 🚀 DEPLOYMENT STEPS
+
+### 1. Upload to Plesk Hosting
+
+1. **Login to Plesk Control Panel**
+2. **Go to Files section**
+3. **Navigate to `/httpdocs` directory**
+4. **Upload the ZIP file**: `ezofz-website-production-2025-10-01_20-50.zip`
+5. **Extract the ZIP file** (right-click → Extract)
+6. **Move all extracted contents** to `/httpdocs` root directory
+7. **Delete the ZIP file and empty folder**
+
+### 2. Configure Plesk Settings
+
+1. **Set Document Root**:
+   - Go to: **Hosting & DNS** → **Apache & nginx Settings**
+   - Change **Document root** from `/httpdocs` to `/httpdocs/public`
+   - **Save** the changes
+
+2. **Install PHP Dependencies**:
+   - Go to: **Dev Tools** → **PHP Composer**
+   - Run: `install --no-dev --optimize-autoloader`
+   - Wait for completion (may take 2-3 minutes)
+
+### 3. Run Deployment Script
+
+**Open in browser**: `https://ezofz.web.lk/deploy-manual.php?key=your_secret_deploy_key_2025`
+
+This will:
+- ✅ Copy production environment settings
+- ✅ Clear and rebuild all caches
+- ✅ Run database migrations
+- ✅ Create storage symlinks
+- ✅ Set up production .htaccess
+- ✅ Verify installation
+
+### 4. Configure SSL Certificate
+
+1. **In Plesk**: Go to **SSL/TLS Certificates**
+2. **Install Let's Encrypt** certificate
+3. **Enable "Redirect HTTP to HTTPS"**
+
+### 5. Test Your Website
+
+- ✅ **Homepage**: https://ezofz.web.lk
+- ✅ **Tools**: https://ezofz.web.lk/tools/unicode-typing
+- ✅ **Documents**: https://ezofz.web.lk/documents
+- ✅ **Admin**: https://ezofz.web.lk/admin/dashboard
+
+### 6. Security Cleanup
+
+**Delete deployment script**: Remove `deploy-manual.php` after successful deployment
+
+---
+
+## 🔧 TROUBLESHOOTING
+
+**If you get errors:**
+
+1. **500 Error**: Check file permissions for `storage/` and `bootstrap/cache/` folders
+2. **Database Error**: Verify database credentials in production environment
+3. **Missing Files**: Ensure document root points to `/httpdocs/public`
+4. **Composer Issues**: Try manual Composer install via Plesk
+
+## 📞 SUPPORT INFO
+
+- **Database**: velocity254_easyofficedb
+- **DB User**: ezofzweb_user
+- **System User**: ezofzweb
+- **Server IP**: 46.250.226.182
+
+## 🎯 SUCCESS CRITERIA
+
+Your deployment is successful when:
+- ✅ Website loads at https://ezofz.web.lk
+- ✅ All tools function correctly
+- ✅ SSL certificate shows as secure
+- ✅ Admin panel is accessible
+- ✅ No errors in Plesk logs
+
+---
+
+**🎉 Your Laravel application is ready for production deployment!**

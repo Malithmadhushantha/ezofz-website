@@ -1,0 +1,65 @@
+# Robots.txt for EZofz.lk - Sri Lankan Office Tools
+User-agent: *
+Allow: /
+Allow: /tools/
+Allow: /documents/
+Allow: /penal-code/
+Allow: /criminal-procedure-code
+Allow: /about
+Allow: /contact
+Allow: /testimonials
+Allow: /images/
+Allow: /css/
+Allow: /js/
+
+# Disallow private areas
+Disallow: /admin/
+Disallow: /auth/
+Disallow: /login
+Disallow: /register
+Disallow: /dashboard
+Disallow: /api/
+Disallow: /_debugbar/
+Disallow: /telescope/
+Disallow: /horizon/
+Disallow: /storage/logs/
+
+# Crawl delay (optional - helps prevent overloading server)
+Crawl-delay: 1
+Disallow: /password/
+Disallow: /api/
+Disallow: /test-zip
+Disallow: /storage/
+Disallow: /vendor/
+Disallow: /.env
+Disallow: /config/
+
+# Allow important tools for indexing
+Allow: /tools/unicode-typing
+Allow: /tools/name-converter
+Allow: /tools/sl-idcard-details
+
+# Google specific
+User-agent: Googlebot
+Allow: /
+Allow: /tools/
+Allow: /documents/
+Crawl-delay: 1
+
+# Bing specific
+User-agent: Bingbot
+Allow: /
+Allow: /tools/
+Allow: /documents/
+# Crawl delay (optional - helps prevent overloading server)
+Crawl-delay: 1
+
+# SEO Enhancement - Allow specific files
+Allow: /manifest.json
+Allow: /sitemap.xml
+Allow: /robots.txt
+
+# Sitemap location
+Sitemap: https://ezofz.web.lk/sitemap.xml
+Sitemap: https://ezofz.web.lk/sitemap-tools.xml
+Sitemap: https://ezofz.web.lk/sitemap-documents.xml

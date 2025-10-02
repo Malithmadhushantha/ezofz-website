@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+    <!-- Home Page - Main entry point -->
+    <url>
+        <loc>https://ezofz.web.lk/</loc>
+        <priority>1.0</priority>
+        <changefreq>daily</changefreq>
+        <lastmod>2025-10-01</lastmod>
+        <xhtml:link rel="alternate" hreflang="en-lk" href="https://ezofz.web.lk/"/>
+        <xhtml:link rel="alternate" hreflang="si-lk" href="https://ezofz.web.lk/"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://ezofz.web.lk/"/>
+        <image:image>
+            <image:loc>https://ezofz.web.lk/images/banner_image.png</image:loc>
+            <image:title>EZofz.lk - Advanced Office Tools for Sri Lankan Officers</image:title>
+            <image:caption>Office automation tools including Sinhala unicode typing, name conversion, and document management</image:caption>
+        </image:image>
+    </url>
+    <!-- About Page -->
+    <url>
+        <loc>https://ezofz.web.lk/about</loc>
+        <priority>0.8</priority>
+        <changefreq>monthly</changefreq>
+        <lastmod>2025-10-01</lastmod>
+        <xhtml:link rel="alternate" hreflang="en-lk" href="https://ezofz.web.lk/about"/>
+        <xhtml:link rel="alternate" hreflang="si-lk" href="https://ezofz.web.lk/about"/>
+    </url>
+    <url>
+        <loc>https://ezofz.web.lk/contact</loc>
+        <priority>0.8</priority>
+        <changefreq>monthly</changefreq>
+        <lastmod>2025-10-01</lastmod>
+    </url>
+    <url>
+        <loc>https://ezofz.web.lk/testimonials</loc>
+        <priority>0.7</priority>
+        <changefreq>weekly</changefreq>
+        <lastmod>2025-10-01</lastmod>
+    </url>
+    <url>
+        <loc>https://ezofz.web.lk/documents</loc>
+        <priority>0.9</priority>
+        <changefreq>weekly</changefreq>
+        <lastmod>2025-10-01</lastmod>
+    </url>
+    <url>
+        <loc>https://ezofz.web.lk/documents/police</loc>
+        <priority>0.8</priority>
+        <changefreq>weekly</changefreq>
+        <lastmod>2025-09-23</lastmod>
+    </url>
+    <url>
+        <loc>https://ezofz.web.lk/documents/law</loc>
+        <priority>0.8</priority>
+        <changefreq>weekly</changefreq>
+        <lastmod>2025-09-23</lastmod>
+    </url>
+    <url>
+        <loc>https://ezofz.web.lk/penal-code/public</loc>
+        <priority>0.9</priority>
+        <changefreq>weekly</changefreq>
+        <lastmod>2025-09-23</lastmod>
+    </url>
+    <url>
+        <loc>https://ezofz.web.lk/criminal-procedure-code</loc>
+        <priority>0.9</priority>
+        <changefreq>weekly</changefreq>
+        <lastmod>2025-09-23</lastmod>
+    </url>
+    <url>
+        <loc>https://ezofz.web.lk/tools/unicode-typing</loc>
+        <priority>0.8</priority>
+        <changefreq>monthly</changefreq>
+        <lastmod>2025-09-23</lastmod>
+    </url>
+    <url>
+        <loc>https://ezofz.web.lk/tools/name-converter</loc>
+        <priority>0.8</priority>
+        <changefreq>monthly</changefreq>
+        <lastmod>2025-09-23</lastmod>
+    </url>
+    <url>
+        <loc>https://ezofz.web.lk/tools/sl-idcard-details</loc>
+        <priority>0.8</priority>
+        <changefreq>monthly</changefreq>
+        <lastmod>2025-10-01</lastmod>
+    </url>
+    <!-- Additional important pages -->
+    <url>
+        <loc>https://ezofz.web.lk/police-directory</loc>
+        <priority>0.8</priority>
+        <changefreq>weekly</changefreq>
+        <lastmod>2025-10-01</lastmod>
+    </url>
+    <url>
+        <loc>https://ezofz.web.lk/privacy-policy</loc>
+        <priority>0.5</priority>
+        <changefreq>monthly</changefreq>
+        <lastmod>2025-10-01</lastmod>
+    </url>
+    <!-- Document download examples -->
+    <url>
+        <loc>https://ezofz.web.lk/documents/1/download</loc>
+        <priority>0.6</priority>
+        <changefreq>yearly</changefreq>
+        <lastmod>2025-10-01</lastmod>
+    </url>
+</urlset>

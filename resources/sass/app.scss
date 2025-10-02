@@ -1,0 +1,122 @@
+// Fonts
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import 'bootstrap/scss/bootstrap';
+// Variables
+@import 'variables';
+
+// AOS Animation
+@import 'aos/dist/aos.css';
+
+// Custom styles
+:root {
+    --primary-color: #3b82f6;
+    --secondary-color: #64748b;
+    --accent-color: #f59e0b;
+    --success-color: #10b981;
+    --danger-color: #ef4444;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+}
+
+// ...existing code...
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+.hero-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+}
+
+.tool-card {
+    transition: all 0.3s ease;
+    border: none;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.tool-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.admin-sidebar {
+    background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+    min-height: 100vh;
+}
+
+.admin-sidebar .nav-link {
+    color: #d1d5db;
+    transition: all 0.3s ease;
+}
+
+.admin-sidebar .nav-link:hover {
+    color: #fff;
+    background-color: rgba(59, 130, 246, 0.1);
+}
+
+.admin-sidebar .nav-link.active {
+    background-color: #3b82f6;
+    color: #fff;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.4);
+}
+
+.form-control:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 0.25rem rgba(59, 130, 246, 0.25);
+}
+
+.navbar-nav .dropdown-menu {
+    border: none;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    border-radius: 0.5rem;
+}
+
+.footer {
+    background: #1f2937;
+    color: #d1d5db;
+}
+
+// Animations
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.8s ease-out;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+    .hero-section h1 {
+        font-size: 2rem;
+    }
+
+    .admin-sidebar {
+        min-height: auto;
+    }
+}

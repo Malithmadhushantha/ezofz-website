@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+    <!-- Documents Index -->
+    <url>
+        <loc>https://ezofz.web.lk/documents</loc>
+        <lastmod>2025-09-28</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <!-- Police Documents -->
+    <url>
+        <loc>https://ezofz.web.lk/documents/police</loc>
+        <lastmod>2025-09-28</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <!-- Law Documents -->
+    <url>
+        <loc>https://ezofz.web.lk/documents/law</loc>
+        <lastmod>2025-09-28</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <!-- Penal Code -->
+    <url>
+        <loc>https://ezofz.web.lk/penal-code/public</loc>
+        <lastmod>2025-09-28</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <!-- Criminal Procedure Code -->
+    <url>
+        <loc>https://ezofz.web.lk/criminal-procedure-code</loc>
+        <lastmod>2025-09-28</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.9</priority>
+    </url>
+</urlset>
