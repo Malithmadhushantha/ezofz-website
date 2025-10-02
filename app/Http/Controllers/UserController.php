@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
+use Exception;
 
 class UserController extends Controller
 {
@@ -80,12 +83,14 @@ class UserController extends Controller
                 $data['avatar'] = $avatarPath;
 
             } catch (\Exception $e) {
+                $file = $request->file('avatar');
                 Log::error('Avatar upload failed: ' . $e->getMessage(), [
                     'user_id' => $user->id,
-                    'file_size' => $request->file('avatar') ? $request->file('avatar')->getSize() : 'unknown',
-                    'file_type' => $request->file('avatar') ? $request->file('avatar')->getMimeType() : 'unknown'
+                    'file_size' => $file ? $file->getSize() : 'unknown',
+                    'file_type' => $file ? $file->getMimeType() : 'unknown'
                 ]);
-                return redirect()->route('user.profile')->withErrors(['avatar' => 'Failed to upload avatar. Please try again or contact support. Error: ' . $e->getMessage()]);
+                return redirect()->route('user.profile')
+                    ->withErrors(['avatar' => 'Failed to upload avatar. Please try again or contact support.']);
             }
         }
 
