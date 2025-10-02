@@ -6,6 +6,7 @@ use App\Models\Document;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class AdminController extends Controller
 {
@@ -16,8 +17,25 @@ class AdminController extends Controller
 
     public function dashboard()
     {
-        $documents = Document::latest()->paginate(10);
-        return view('admin.dashboard', compact('documents'));
+        try {
+            $documents = Document::latest()->paginate(10);
+
+            // Get additional stats for the dashboard
+            $totalDocuments = Document::count();
+            $totalUsers = User::count();
+            $recentUsers = User::latest()->take(5)->get();
+
+            return view('admin.dashboard', compact('documents', 'totalDocuments', 'totalUsers', 'recentUsers'));
+        } catch (\Exception $e) {
+            Log::error('Admin dashboard error: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            // Return a simple error view or redirect with error
+            return redirect()->route('home')->with('error', 'Unable to load admin dashboard. Please contact support.');
+        }
     }
 
     public function documents()

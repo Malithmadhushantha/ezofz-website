@@ -8,7 +8,12 @@
 
     <link href="https://fonts.bunny.net/css?family=Inter:300,400,500,600,700" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
     <style>
         /* Admin Police Directory Styles */
@@ -149,6 +154,9 @@
             </main>
         </div>
     </div>
+
+    <!-- Bootstrap JavaScript Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
     @stack('scripts')
 </body>
