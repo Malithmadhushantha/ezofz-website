@@ -113,13 +113,8 @@
     @stack('head')
 
 <style>
+    /* Additional tech-themed variables */
     :root {
-        --primary-color: #3b82f6;
-        --secondary-color: #64748b;
-        --accent-color: #f59e0b;
-        --success-color: #10b981;
-        --danger-color: #ef4444;
-        --tech-blue: #0066ff;
         --tech-cyan: #00d9ff;
         --tech-purple: #8a2be2;
         --tech-dark: #0a0e17;
@@ -1819,6 +1814,21 @@
             document.cookie = 'ezofz_cookie_consent=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
             console.log('Cookie preferences reset');
         }
+    </script>
+
+    <!-- Bootstrap JavaScript Bundle (includes Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+    <!-- AOS Animation JavaScript -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <!-- Initialize AOS -->
+    <script>
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 100
+        });
     </script>
 
     @stack('scripts')
