@@ -19,41 +19,10 @@
     }
 
     body {
-        background: linear-gradient(135deg, #0a0f1c 0%, #1a1f35 50%, #0f1419 100%);
+        background: #ffffff !important;
         min-height: 100vh;
         position: relative;
-        color: white;
-    }
-
-    body::before {
-        content: '';
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background:
-            radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
-            radial-gradient(circle at 80% 20%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
-            radial-gradient(circle at 40% 80%, rgba(64, 224, 208, 0.1) 0%, transparent 50%);
-        pointer-events: none;
-        z-index: -1;
-    }
-
-    body::after {
-        content: '';
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-image:
-            linear-gradient(90deg, rgba(102, 126, 234, 0.1) 1px, transparent 1px),
-            linear-gradient(0deg, rgba(102, 126, 234, 0.1) 1px, transparent 1px);
-        background-size: 50px 50px;
-        pointer-events: none;
-        z-index: -1;
-        animation: gridMove 20s linear infinite;
+        color: #2d3748 !important;
     }
 
     @keyframes gridMove {
@@ -62,9 +31,13 @@
     }
 
     .hero-section {
-        padding: 100px 0;
+        padding: 120px 0 !important;
         position: relative;
         overflow: hidden;
+        min-height: 100vh !important;
+        display: flex;
+        align-items: center;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
     }
 
     .hero-section::before {
@@ -74,9 +47,9 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: rgba(0, 0, 0, 0.3);
-        backdrop-filter: blur(5px);
-        pointer-events: none; /* Allow clicks to pass through */
+        background: rgba(0, 0, 0, 0.1);
+        pointer-events: none;
+        z-index: 1;
     }
 
     .hero-section::after {
@@ -87,68 +60,107 @@
         right: 0;
         bottom: 0;
         background:
-            linear-gradient(90deg, transparent 0%, rgba(102, 126, 234, 0.5) 50%, transparent 100%),
-            linear-gradient(45deg, transparent 0%, rgba(64, 224, 208, 0.3) 50%, transparent 100%);
-        background-size: 400px 2px, 500px 1px;
-        background-repeat: no-repeat;
-        animation: heroTechLines 5s ease-in-out infinite;
-        z-index: 1;
-        pointer-events: none; /* Allow clicks to pass through */
+            linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+            linear-gradient(0deg, transparent 0%, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+        background-size: 60px 60px;
+        opacity: 0.3;
+        animation: heroGrid 25s linear infinite;
+        pointer-events: none;
+        z-index: 2;
     }
 
-    @keyframes heroTechLines {
-        0%, 100% {
-            background-position: -400px 30%, -500px 70%;
-            opacity: 0;
-        }
-        50% {
-            background-position: calc(100% + 400px) 30%, calc(100% + 500px) 70%;
-            opacity: 1;
-        }
+    @keyframes heroGrid {
+        0% { transform: translate(0, 0); }
+        100% { transform: translate(60px, 60px); }
     }
 
     .hero-content {
         position: relative;
-        z-index: 10; /* Increased z-index for better stacking */
+        z-index: 10;
         text-align: center;
         color: white;
+        padding: 2rem 0;
     }
 
     .hero-title {
-        font-size: 3.5rem;
-        font-weight: 800;
-        background: linear-gradient(135deg, #ffffff 0%, #e0e6ff 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        margin-bottom: 1.5rem;
-        text-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        font-size: 4rem !important;
+        font-weight: 800 !important;
+        color: #ffffff !important;
+        margin-bottom: 1.5rem !important;
+        line-height: 1.1 !important;
+        letter-spacing: -0.02em !important;
+        text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
     }
 
     .hero-subtitle {
-        font-size: 1.3rem;
-        color: rgba(255, 255, 255, 0.9);
-        margin-bottom: 2rem;
-        font-weight: 300;
+        font-size: 1.4rem;
+        color: rgba(255, 255, 255, 0.95);
+        margin-bottom: 3rem;
+        font-weight: 400;
+        line-height: 1.6;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .hero-section .hero-stats {
+        display: flex !important;
+        justify-content: center;
+        gap: 3rem;
+        margin: 2rem 0 !important;
+        flex-wrap: wrap;
+    }
+
+    .hero-section .hero-stat {
+        text-align: center;
+        color: rgba(255, 255, 255, 0.9) !important;
+    }
+
+    .hero-section .hero-stat-number {
+        font-size: 2rem !important;
+        font-weight: 700 !important;
+        color: #ffffff !important;
+        display: block;
+        margin-bottom: 0.5rem;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3) !important;
+    }
+
+    .hero-section .hero-stat-label {
+        font-size: 0.9rem !important;
+        color: rgba(255, 255, 255, 0.85) !important;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
 
     .hero-image {
         position: relative;
-        transform: perspective(1000px) rotateY(-15deg) rotateX(10deg);
         transition: all 0.6s ease;
-        filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.3));
+        filter: drop-shadow(0 25px 50px rgba(0, 0, 0, 0.3));
+        border-radius: 20px;
+        overflow: hidden;
+        background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 1rem;
     }
 
     .hero-image:hover {
-        transform: perspective(1000px) rotateY(-5deg) rotateX(5deg) scale(1.05);
+        transform: translateY(-10px) scale(1.02);
+        filter: drop-shadow(0 35px 60px rgba(59, 130, 246, 0.2));
+    }
+
+    .hero-image img {
+        border-radius: 15px;
+        width: 100%;
+        height: auto;
     }
 
     .tools-section {
         padding: 100px 0;
-        background: rgba(15, 25, 40, 0.6);
-        backdrop-filter: blur(20px);
-        border-top: 1px solid rgba(102, 126, 234, 0.3);
-        border-bottom: 1px solid rgba(102, 126, 234, 0.3);
+        background: #f8fafc;
+        border-top: 1px solid rgba(102, 126, 234, 0.1);
+        border-bottom: 1px solid rgba(102, 126, 234, 0.1);
         position: relative;
         overflow: hidden;
     }
@@ -178,14 +190,13 @@
     .section-title {
         font-size: 2.8rem;
         font-weight: 700;
-        color: white;
+        color: #2d3748;
         text-align: center;
         margin-bottom: 1rem;
-        text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     }
 
     .section-subtitle {
-        color: rgba(255, 255, 255, 0.8);
+        color: #718096;
         text-align: center;
         font-size: 1.2rem;
         margin-bottom: 4rem;
@@ -193,17 +204,16 @@
     }
 
     .tool-card {
-        background: rgba(15, 25, 40, 0.9);
+        background: #ffffff;
         border: none;
         border-radius: 15px;
         padding: 1.5rem;
         height: 100%;
         position: relative;
         overflow: hidden;
-        backdrop-filter: blur(20px);
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        border: 1px solid rgba(102, 126, 234, 0.2);
+        border: 1px solid rgba(102, 126, 234, 0.1);
     }
 
     .tool-card::before {
@@ -224,8 +234,8 @@
 
     .tool-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-        border-color: rgba(102, 126, 234, 0.6);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        border-color: rgba(102, 126, 234, 0.3);
     }
 
     .tool-icon {
@@ -263,14 +273,14 @@
 
     .tool-card h4 {
         font-weight: 600;
-        color: #ffffff;
+        color: #2d3748;
         margin-bottom: 0.8rem;
         font-size: 1.2rem;
         text-align: center;
     }
 
     .tool-card p {
-        color: #cbd5e0;
+        color: #718096;
         line-height: 1.5;
         margin-bottom: 1.5rem;
         font-size: 0.95rem;
@@ -325,8 +335,7 @@
 
     .features-section {
         padding: 100px 0;
-        background: rgba(0, 0, 0, 0.2);
-        backdrop-filter: blur(10px);
+        background: #ffffff;
         position: relative;
         overflow: hidden;
     }
@@ -369,17 +378,17 @@
         align-items: flex-start;
         margin-bottom: 2rem;
         padding: 1.5rem;
-        background: rgba(15, 25, 40, 0.6);
+        background: #f8fafc;
         border-radius: 15px;
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(102, 126, 234, 0.2);
+        border: 1px solid rgba(102, 126, 234, 0.1);
         transition: all 0.3s ease;
     }
 
     .feature-item:hover {
-        background: rgba(15, 25, 40, 0.8);
+        background: #f1f5f9;
         transform: translateX(10px);
-        border-color: rgba(102, 126, 234, 0.5);
+        border-color: rgba(102, 126, 234, 0.2);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
     }
 
     .feature-icon {
@@ -395,13 +404,13 @@
     }
 
     .feature-content h5 {
-        color: white;
+        color: #2d3748;
         font-weight: 600;
         margin-bottom: 0.5rem;
     }
 
     .feature-content p {
-        color: #a0aec0;
+        color: #718096;
         margin: 0;
         line-height: 1.6;
     }
@@ -477,19 +486,18 @@
     }
 
     .ad-placeholder {
-        background: rgba(15, 25, 40, 0.9);
+        background: #f8fafc;
         border-radius: 15px;
         padding: 3rem;
         text-align: center;
-        border: 2px dashed rgba(102, 126, 234, 0.3);
+        border: 2px dashed rgba(102, 126, 234, 0.2);
         transition: all 0.3s ease;
-        backdrop-filter: blur(10px);
-        color: #cbd5e0;
+        color: #718096;
     }
 
     .ad-placeholder:hover {
-        border-color: rgba(102, 126, 234, 0.6);
-        background: rgba(15, 25, 40, 0.95);
+        border-color: rgba(102, 126, 234, 0.3);
+        background: #f1f5f9;
     }
 
     .ad-placeholder i {
@@ -497,7 +505,7 @@
     }
 
     .ad-placeholder p {
-        color: #a0aec0 !important;
+        color: #718096 !important;
     }
 
     /* Animation Classes */
@@ -522,7 +530,7 @@
     /* Important Links Section Styles */
     .important-links-section {
         padding: 100px 0;
-        background: rgba(15, 25, 40, 0.8);
+        background: #f8fafc;
         position: relative;
         overflow: hidden;
     }
@@ -558,15 +566,17 @@
     }
 
     .links-tab-container {
-        background: rgba(15, 20, 30, 0.6);
+        background: #ffffff;
         padding: 10px;
         border-radius: 50px;
         display: inline-flex;
         margin: 0 auto 2rem;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        border: 1px solid rgba(102, 126, 234, 0.1);
     }
 
     .links-tab-container .nav-link {
-        color: #e0e0e0;
+        color: #718096;
         border-radius: 50px;
         padding: 10px 20px;
         margin: 0 5px;
@@ -594,7 +604,7 @@
     .links-tab-container .nav-link.active {
         background: linear-gradient(135deg, var(--tech-blue), var(--tech-purple));
         color: white;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
     }
 
     .link-card {
@@ -602,16 +612,17 @@
         flex-direction: column;
         align-items: center;
         padding: 1.2rem 0.8rem;
-        background: rgba(20, 30, 50, 0.8);
+        background: #ffffff;
         border-radius: 12px;
         height: 100%;
         text-decoration: none;
-        color: white;
+        color: #2d3748;
         transition: all 0.3s ease;
-        border: 1px solid rgba(102, 126, 234, 0.2);
+        border: 1px solid rgba(102, 126, 234, 0.1);
         position: relative;
         overflow: hidden;
         max-width: 100%;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
     }
 
     .link-card::before {
@@ -621,15 +632,15 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(to bottom, rgba(102, 126, 234, 0.1), transparent);
+        background: linear-gradient(to bottom, rgba(102, 126, 234, 0.05), transparent);
         transition: all 0.5s ease;
     }
 
     .link-card:hover {
         transform: translateY(-5px);
-        border-color: rgba(102, 126, 234, 0.6);
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        color: white;
+        border-color: rgba(102, 126, 234, 0.3);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        color: #2d3748;
     }
 
     .link-card:hover::before {
@@ -675,24 +686,44 @@
         text-align: center;
         margin-bottom: 0.3rem;
         font-weight: 600;
-        color: white;
+        color: #2d3748;
         font-size: 0.95rem;
     }
 
     .link-url {
         font-size: 0.75rem;
-        color: rgba(255, 255, 255, 0.6);
+        color: #a0aec0;
         margin-top: auto;
     }
 
     /* Responsive Design */
     @media (max-width: 768px) {
+        .hero-section {
+            padding: 80px 0;
+            min-height: auto;
+        }
+
         .hero-title {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
+            line-height: 1.2;
         }
 
         .hero-subtitle {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .hero-stats {
+            gap: 2rem;
+            margin: 1.5rem 0;
+        }
+
+        .hero-stat-number {
+            font-size: 1.5rem;
+        }
+
+        .hero-stat-label {
+            font-size: 0.8rem;
         }
 
         .section-title {
@@ -701,8 +732,14 @@
 
         .hero-image {
             transform: none;
-            max-width: 80%;
+            max-width: 90%;
             margin: 2rem auto 0;
+            padding: 0.75rem;
+        }
+
+        .hero-content {
+            text-align: center;
+            padding: 1rem 0;
         }
 
         .feature-item {
@@ -774,26 +811,58 @@
 @section('content')
 <!-- Hero Section -->
 <section class="hero-section">
-    <div class="container position-relative"> <!-- Added position-relative for proper stacking context -->
-        <div class="row align-items-center min-vh-100">
+    <div class="container position-relative">
+        <div class="row align-items-center">
             <div class="col-lg-6" data-aos="fade-right">
                 <div class="hero-content">
-                    <h1 class="hero-title">Advanced Office Tools</h1>
-                    <p class="hero-subtitle">Streamline your office work with cutting-edge tools designed specifically for Sri Lankan officers</p>
-                    @guest
-                        <a href="{{ route('register') }}" class="btn btn-light btn-lg cta-btn glow-pulse position-relative"> <!-- Added position-relative -->
-                            <i class="bi bi-rocket-takeoff me-2"></i>Start Your Journey
-                        </a>
-                    @else
-                        <a href="{{ Auth::user()->isAdmin() ? route('admin.dashboard') : route('dashboard') }}" class="btn btn-light btn-lg cta-btn glow-pulse position-relative"> <!-- Added position-relative -->
-                            <i class="bi bi-speedometer2 me-2"></i>Access Dashboard
-                        </a>
-                    @endguest
+                    <div class="mb-3">
+                        <span class="badge bg-primary bg-gradient px-3 py-2 rounded-pill mb-3">
+                            <i class="bi bi-lightning-fill me-2"></i>Trusted by 10,000+ Officers
+                        </span>
+                    </div>
+                    <h1 class="hero-title">Professional Office Tools for Sri Lankan Officers</h1>
+                    <p class="hero-subtitle">Streamline your daily office tasks with our comprehensive suite of tools - from Sinhala unicode typing to official document processing, designed specifically for Sri Lankan public and private sector professionals.</p>
+
+                    <!-- Hero Stats -->
+                    <div class="hero-stats">
+                        <div class="hero-stat">
+                            <span class="hero-stat-number">50K+</span>
+                            <span class="hero-stat-label">Documents Processed</span>
+                        </div>
+                        <div class="hero-stat">
+                            <span class="hero-stat-number">15+</span>
+                            <span class="hero-stat-label">Professional Tools</span>
+                        </div>
+                        <div class="hero-stat">
+                            <span class="hero-stat-number">99.9%</span>
+                            <span class="hero-stat-label">Uptime</span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start mt-4">
+                        @guest
+                            <a href="{{ route('register') }}" class="btn btn-primary btn-lg px-4 py-3">
+                                <i class="bi bi-rocket-takeoff me-2"></i>Start Free Today
+                            </a>
+                            <a href="#tools" class="btn btn-outline-light btn-lg px-4 py-3">
+                                <i class="bi bi-eye me-2"></i>View Tools
+                            </a>
+                        @else
+                            <a href="{{ Auth::user()->isAdmin() ? route('admin.dashboard') : route('dashboard') }}" class="btn btn-primary btn-lg px-4 py-3">
+                                <i class="bi bi-speedometer2 me-2"></i>Access Dashboard
+                            </a>
+                            <a href="#tools" class="btn btn-outline-light btn-lg px-4 py-3">
+                                <i class="bi bi-tools me-2"></i>Browse Tools
+                            </a>
+                        @endguest
+                    </div>
                 </div>
             </div>
             <div class="col-lg-6" data-aos="fade-left">
-                <div class="text-center">
-                    <img src="{{ asset('images/banner_image.png') }}" alt="Office Tools" class="hero-image img-fluid rounded-3 floating">
+                <div class="text-center mt-5 mt-lg-0">
+                    <div class="hero-image">
+                        <img src="{{ asset('images/banner_image.png') }}" alt="Professional Office Tools for Sri Lankan Officers" class="img-fluid">
+                    </div>
                 </div>
             </div>
         </div>
@@ -1305,6 +1374,34 @@
         if (!document.querySelector('#govLinksTab .nav-link.active') && linksTabs.length > 0) {
             linksTabs[0].click();
         }
+    });
+
+    // Force apply hero styles to ensure they override layout styles
+    document.addEventListener('DOMContentLoaded', function() {
+        const heroSection = document.querySelector('.hero-section');
+        const heroTitle = document.querySelector('.hero-title');
+        const heroStats = document.querySelectorAll('.hero-stat-number');
+
+        if (heroSection) {
+            heroSection.style.background = 'linear-gradient(135deg, #0a0f1c 0%, #1a2235 50%, #0f1419 100%)';
+            heroSection.style.minHeight = '100vh';
+            heroSection.style.padding = '120px 0';
+        }
+
+        if (heroTitle) {
+            heroTitle.style.background = 'linear-gradient(135deg, #ffffff 0%, #3b82f6 50%, #8b5cf6 100%)';
+            heroTitle.style.webkitBackgroundClip = 'text';
+            heroTitle.style.webkitTextFillColor = 'transparent';
+            heroTitle.style.backgroundClip = 'text';
+            heroTitle.style.fontSize = '4rem';
+            heroTitle.style.fontWeight = '800';
+        }
+
+        heroStats.forEach(stat => {
+            stat.style.color = '#3b82f6';
+            stat.style.fontSize = '2rem';
+            stat.style.fontWeight = '700';
+        });
     });
 </script>
 @endsection

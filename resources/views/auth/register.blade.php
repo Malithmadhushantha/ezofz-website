@@ -4,258 +4,222 @@
 
 @section('content')
 <style>
-    /* Tech-themed card styling */
-    .tech-card {
-        background: rgba(15, 20, 30, 0.8);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(0, 214, 255, 0.2);
-        box-shadow: 0 0 20px rgba(0, 214, 255, 0.1);
-        border-radius: 12px;
+    /* Professional register card styling */
+    .register-card {
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(37, 99, 235, 0.1);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        border-radius: 20px;
         position: relative;
         overflow: hidden;
-        transition: transform 0.3s ease;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
-    .tech-card:hover {
+    .register-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 10px 30px rgba(0, 214, 255, 0.2);
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.15);
     }
 
-    /* Scanline effect for card */
-    .tech-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 2px;
-        background: linear-gradient(to right, transparent, var(--tech-cyan), transparent);
-        animation: scan 3s linear infinite;
-        opacity: 0.7;
+    /* Professional header gradient */
+    .register-header {
+        background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+        padding: 2rem;
+        text-align: center;
+        color: white;
+        margin: -2rem -2rem 2rem -2rem;
     }
 
-    /* Form input styling */
+    /* Professional form styling */
     .form-control {
-        background: rgba(20, 25, 35, 0.9);
-        border: 1px solid rgba(0, 214, 255, 0.3);
-        color: #e0e0e0;
+        background: #ffffff;
+        border: 2px solid var(--medium-gray);
+        color: var(--text-dark);
         transition: all 0.3s ease;
-        font-family: 'Rajdhani', sans-serif;
-        border-radius: 6px;
+        font-family: 'Inter', sans-serif;
+        border-radius: 10px;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
     }
 
     .form-control:focus {
-        background: rgba(20, 25, 35, 1);
-        border-color: var(--tech-cyan);
-        box-shadow: 0 0 10px rgba(0, 214, 255, 0.5);
-        color: #e0e0e0;
-        animation: digitalTyping 0.3s ease;
+        background: #ffffff;
+        border-color: var(--primary-blue);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        color: var(--text-dark);
+        outline: none;
     }
 
     .input-group-text {
-        background: rgba(10, 14, 23, 0.8);
-        border: 1px solid rgba(0, 214, 255, 0.3);
-        color: var(--tech-cyan);
-        border-radius: 6px 0 0 6px;
+        background: var(--light-gray);
+        border: 2px solid var(--medium-gray);
+        color: var(--primary-blue);
+        border-radius: 10px 0 0 10px;
+        border-right: none;
     }
 
     .form-label {
-        color: #e0e0e0;
-        font-family: 'Orbitron', sans-serif;
-        font-weight: 500;
-        text-shadow: 0 0 5px rgba(0, 214, 255, 0.3);
+        color: var(--text-dark);
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
     }
 
-    /* Error message styling */
+    /* Professional error styling */
     .invalid-feedback {
         color: var(--danger-color);
-        font-family: 'Rajdhani', sans-serif;
-        text-shadow: 0 0 5px rgba(239, 68, 68, 0.5);
+        font-family: 'Inter', sans-serif;
+        font-weight: 500;
     }
 
-    /* Checkbox styling */
+    /* Professional checkbox styling */
     .form-check-input {
-        background-color: rgba(20, 25, 35, 0.9);
-        border: 1px solid rgba(0, 214, 255, 0.3);
+        background-color: #ffffff;
+        border: 2px solid var(--medium-gray);
         transition: all 0.3s ease;
+        border-radius: 6px;
     }
 
     .form-check-input:checked {
-        background-color: var(--tech-cyan);
-        border-color: var(--tech-cyan);
-        box-shadow: 0 0 8px rgba(0, 214, 255, 0.5);
+        background-color: var(--primary-blue);
+        border-color: var(--primary-blue);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
     }
 
     .form-check-label {
-        color: #e0e0e0;
-        font-family: 'Rajdhani', sans-serif;
+        color: var(--text-dark);
+        font-family: 'Inter', sans-serif;
+        font-weight: 500;
     }
 
     .form-check-label a {
-        color: var(--tech-cyan);
+        color: var(--primary-blue);
         text-decoration: none;
+        font-weight: 600;
     }
 
     .form-check-label a:hover {
-        text-shadow: 0 0 8px rgba(0, 214, 255, 0.5);
+        color: var(--secondary-blue);
+        text-decoration: underline;
     }
 
-    /* Button styling */
+    /* Professional button styling */
     .btn-primary {
-        background: linear-gradient(135deg, var(--tech-blue), var(--tech-purple));
+        background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
         border: none;
-        font-family: 'Orbitron', sans-serif;
+        font-family: 'Inter', sans-serif;
         font-weight: 600;
-        position: relative;
-        overflow: hidden;
-        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
-        animation: pulse 2s infinite;
+        border-radius: 10px;
+        padding: 0.75rem 2rem;
+        font-size: 1rem;
+        letter-spacing: 0.025em;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(37, 99, 235, 0.25);
     }
 
     .btn-primary:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(59, 130, 246, 0.5);
+        box-shadow: 0 8px 25px rgba(37, 99, 235, 0.35);
+        background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-blue) 100%);
     }
 
-    .btn-primary::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-        transition: left 0.7s ease;
-    }
-
-    .btn-primary:hover::before {
-        left: 100%;
-    }
-
-    /* Google Sign-in Button */
+    /* Professional Google button */
     .google-btn {
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        color: #e0e0e0;
-        font-family: 'Orbitron', sans-serif;
+        background: #ffffff;
+        border: 2px solid var(--medium-gray);
+        color: var(--text-dark);
+        font-family: 'Inter', sans-serif;
         font-weight: 600;
-        position: relative;
-        overflow: hidden;
+        border-radius: 10px;
+        padding: 0.75rem 2rem;
         transition: all 0.3s ease;
-        backdrop-filter: blur(10px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     }
 
     .google-btn:hover {
-        background: rgba(255, 255, 255, 0.2);
-        border-color: rgba(255, 255, 255, 0.4);
-        color: #ffffff;
+        background: var(--light-gray);
+        border-color: var(--primary-blue);
+        color: var(--text-dark);
         transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(255, 255, 255, 0.1);
-    }
-
-    .google-btn::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-        transition: left 0.7s ease;
-    }
-
-    .google-btn:hover::before {
-        left: 100%;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
     }
 
     .google-btn i {
         color: #4285f4;
     }
 
-    /* Link styling */
+    /* Professional link styling */
     .text-decoration-none.fw-bold {
-        color: var(--tech-cyan);
-        font-family: 'Rajdhani', sans-serif;
+        color: var(--primary-blue);
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
         transition: all 0.3s ease;
     }
 
     .text-decoration-none.fw-bold:hover {
-        text-shadow: 0 0 8px rgba(0, 214, 255, 0.5);
+        color: var(--secondary-blue);
+        text-decoration: underline !important;
     }
 
-    /* Digital typing animation for inputs */
-    @keyframes digitalTyping {
-        0% {
-            transform: translateX(-5px);
-            opacity: 0.5;
-        }
-        50% {
-            transform: translateX(5px);
-            opacity: 0.7;
-        }
-        100% {
-            transform: translateX(0);
-            opacity: 1;
-        }
+    /* Professional divider */
+    .register-divider {
+        color: var(--text-light);
+        font-family: 'Inter', sans-serif;
+        font-weight: 500;
     }
 
-    /* Parallax effect for card background */
-    .tech-card::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: radial-gradient(circle at 50% 50%, rgba(0, 214, 255, 0.1), transparent 70%);
-        z-index: -1;
-        transition: transform 0.5s ease;
+    .register-divider hr {
+        border-color: var(--medium-gray) !important;
+    }
+
+    /* Page background */
+    body {
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%) !important;
+        min-height: 100vh;
+    }
+
+    /* Professional text styling */
+    .register-text {
+        color: var(--text-dark);
+        font-family: 'Inter', sans-serif;
+    }
+
+    .register-subtitle {
+        color: var(--text-light);
+        font-family: 'Inter', sans-serif;
     }
 
     /* Responsive adjustments */
     @media (max-width: 576px) {
-        .tech-card {
+        .register-card {
+            margin: 1rem;
+        }
+
+        .register-header {
             padding: 1.5rem;
+            margin: -1.5rem -1.5rem 1.5rem -1.5rem;
         }
 
         .form-label {
             font-size: 0.9rem;
         }
 
-        .btn-primary {
+        .btn-primary, .google-btn {
             font-size: 1rem;
         }
     }
 </style>
 
-<script>
-    // Parallax effect for tech-card
-    document.addEventListener('mousemove', (e) => {
-        const card = document.querySelector('.tech-card');
-        if (!card) return;
-
-        const rect = card.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
-        const moveX = (e.clientX - centerX) / 50;
-        const moveY = (e.clientY - centerY) / 50;
-
-        card.style.setProperty('--parallax-x', `${moveX}px`);
-        card.style.setProperty('--parallax-y', `${moveY}px`);
-        card.querySelector('::after').style.transform = `translate(${moveX}px, ${moveY}px)`;
-    });
-</script>
-
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-md-8 col-lg-6">
-            <div class="tech-card scanline" data-aos="zoom-in" data-aos-duration="800">
-                <div class="card-body p-5">
-                    <div class="text-center mb-4">
-                        <img src="{{ asset('images/logo.png') }}" alt="EZofz.lk" height="60" class="mb-3 pulse">
-                        <h3 class="fw-bold" style="font-family: 'Orbitron', sans-serif; color: var(--tech-cyan); text-shadow: 0 0 10px rgba(0, 214, 255, 0.5);">Join EZofz.lk</h3>
-                        <p style="color: #d1d5db; font-family: 'Rajdhani', sans-serif;">Create your account to access advanced tools</p>
-                    </div>
+            <div class="register-card" data-aos="zoom-in" data-aos-duration="800">
+                <div class="register-header">
+                    <img src="{{ asset('images/logo.png') }}" alt="EZofz.lk" height="60" class="mb-3">
+                    <h3 class="fw-bold mb-2">Join EZofz.lk</h3>
+                    <p class="mb-0 opacity-90">Create your account to access professional tools</p>
+                </div>
+                <div class="card-body p-4">
 
                     <form method="POST" action="{{ route('register') }}">
                         @csrf
@@ -329,9 +293,9 @@
 
                         <div class="text-center mb-3">
                             <div class="d-flex align-items-center">
-                                <hr class="flex-grow-1" style="border-color: rgba(0, 214, 255, 0.3);">
-                                <span class="mx-3" style="color: #d1d5db; font-family: 'Rajdhani', sans-serif;">or</span>
-                                <hr class="flex-grow-1" style="border-color: rgba(0, 214, 255, 0.3);">
+                                <hr class="flex-grow-1 register-divider">
+                                <span class="mx-3 register-divider">or</span>
+                                <hr class="flex-grow-1 register-divider">
                             </div>
                         </div>
 
@@ -342,10 +306,10 @@
                         </div>
                     </form>
 
-                    <hr class="my-4" style="border-color: rgba(0, 214, 255, 0.2);">
+                    <hr class="my-4" style="border-color: var(--medium-gray);">
 
                     <div class="text-center">
-                        <p class="mb-0" style="color: #d1d5db; font-family: 'Rajdhani', sans-serif;">
+                        <p class="mb-0 register-text">
                             Already have an account?
                             <a href="{{ route('login') }}" class="text-decoration-none fw-bold">Sign in here</a>
                         </p>
