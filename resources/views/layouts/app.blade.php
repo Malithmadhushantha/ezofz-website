@@ -723,8 +723,8 @@
         right: 0;
         top: 0;
         bottom: 0;
-        width: 100vw;
-        max-width: 100vw;
+        width: 85vw;
+        max-width: 400px;
         background: rgba(255, 255, 255, 0.98);
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
@@ -783,7 +783,7 @@
 
     /* Mobile Navigation Content */
     .mobile-nav-header {
-        padding: 20px 24px;
+        padding: 16px 20px;
         border-bottom: 1px solid rgba(37, 99, 235, 0.1);
         display: flex;
         align-items: center;
@@ -791,10 +791,11 @@
         background: rgba(37, 99, 235, 0.05);
         width: 100%;
         box-sizing: border-box;
-        min-height: 70px;
+        min-height: 64px;
         position: sticky;
         top: 0;
         z-index: 1001;
+        flex-shrink: 0;
     }
 
     .mobile-brand {
@@ -885,12 +886,13 @@
     }
 
     .mobile-auth-section {
-        padding: 24px;
+        padding: 20px 24px 24px;
         border-top: 1px solid rgba(37, 99, 235, 0.1);
         background: rgba(37, 99, 235, 0.02);
         width: 100%;
         box-sizing: border-box;
         margin-top: auto;
+        flex-shrink: 0;
     }
 
     .mobile-user-info {
@@ -1201,10 +1203,8 @@
         }
 
         .mobile-nav-content {
-            width: 100vw;
-            max-width: 100vw;
-            right: 0;
-            left: 0;
+            width: 90vw;
+            max-width: 350px;
         }
 
         .mobile-nav-overlay {
@@ -1232,33 +1232,30 @@
         }
 
         .mobile-nav-content {
-            width: 100vw;
-            max-width: 100vw;
-            right: 0;
-            left: 0;
-            transform: translateX(100%);
-        }
-
-        .mobile-nav-overlay.show .mobile-nav-content {
-            transform: translateX(0);
+            width: 95vw;
+            max-width: 320px;
         }
 
         .mobile-nav-item {
-            padding: 20px 24px;
-            font-size: 1.2rem;
-            min-height: 64px;
+            padding: 16px 20px;
+            font-size: 1rem;
+            min-height: 56px;
         }
 
         .mobile-nav-group-header {
-            padding: 20px 24px;
-            font-size: 1.2rem;
-            min-height: 64px;
+            padding: 16px 20px;
+            font-size: 1rem;
+            min-height: 56px;
         }
 
         .mobile-auth-btn {
-            padding: 18px 20px;
-            font-size: 1.2rem;
-            min-height: 60px;
+            padding: 14px 16px;
+            font-size: 1rem;
+            min-height: 52px;
+        }
+
+        .mobile-auth-section {
+            padding: 16px 20px 20px;
         }
     }
 
@@ -2414,6 +2411,19 @@
                             </div>
                             <div class="dropdown-menu" id="downloads-dropdown">
                                 <div class="dropdown-content">
+                                    <a href="{{ route('documents.index') }}" class="dropdown-item">
+                                        <div class="item-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2H5a2 2 0 0 0-2-2V7z"/>
+                                                <path d="M8 21l0-12"/>
+                                                <path d="M16 21l0-12"/>
+                                            </svg>
+                                        </div>
+                                        <div class="item-content">
+                                            <span class="item-title">All Downloads</span>
+                                            <span class="item-desc">Browse all documents</span>
+                                        </div>
+                                    </a>
                                     <a href="{{ route('documents.law') }}" class="dropdown-item">
                                         <div class="item-icon">
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -2496,7 +2506,7 @@
                         </div>
                     @else
                         <div class="user-menu dropdown">
-                            <div class="user-trigger dropdown-trigger" data-dropdown="user">
+                            <div class="user-trigger dropdown-trigger" data-dropdown="user-dropdown">
                                 <div class="user-avatar">
                                     @if(Auth::user()->avatar)
                                         <img src="{{ Auth::user()->avatar_url }}" alt="{{ Auth::user()->name }}">
@@ -2681,6 +2691,9 @@
                                 </div>
                             </div>
                             <div class="mobile-nav-group-content" id="mobile-downloads">
+                                <a href="{{ route('documents.index') }}" class="mobile-nav-subitem">
+                                    <span>All Downloads</span>
+                                </a>
                                 <a href="{{ route('documents.law') }}" class="mobile-nav-subitem">
                                     <span>Law Documents</span>
                                 </a>
@@ -3351,7 +3364,7 @@
                 });
             }
 
-            // Desktop dropdown functionality
+            // Desktop dropdown functionality (includes user dropdown)
             dropdownTriggers.forEach(trigger => {
                 const dropdown = trigger.nextElementSibling;
                 if (dropdown) {
@@ -3370,30 +3383,7 @@
                         dropdown.classList.toggle('show');
                     });
                 }
-            });
-
-            // User menu dropdown
-            if (userTrigger) {
-                const userDropdown = userTrigger.parentElement.querySelector('.user-dropdown');
-                if (userDropdown) {
-                    userTrigger.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-
-                        // Close other dropdowns
-                        document.querySelectorAll('.dropdown-menu.show').forEach(menu => {
-                            if (menu !== userDropdown) {
-                                menu.classList.remove('show');
-                            }
-                        });
-
-                        // Toggle user dropdown
-                        userDropdown.classList.toggle('show');
-                    });
-                }
-            }
-
-            // Mobile navigation groups toggle
+            });            // Mobile navigation groups toggle
             mobileGroupHeaders.forEach(header => {
                 header.addEventListener('click', function() {
                     const groupName = this.getAttribute('data-mobile-group');
