@@ -43,60 +43,78 @@ class UserController extends Controller
         // Handle avatar upload
         if ($request->hasFile('avatar')) {
             try {
+                // Validate file
+                $file = $request->file('avatar');
+                if (!$file->isValid()) {
+                    return redirect()->route('user.profile')
+                        ->withErrors(['avatar' => 'Invalid file upload. Please try again.']);
+                }
+
                 // Ensure avatars directory exists in storage
                 $storageAvatarsPath = storage_path('app/public/avatars');
                 if (!is_dir($storageAvatarsPath)) {
-                    mkdir($storageAvatarsPath, 0755, true);
-                }
-
-                // Also ensure public/storage/avatars exists (fallback for hosting without symlinks)
-                $publicAvatarsPath = public_path('storage/avatars');
-                if (!is_dir($publicAvatarsPath)) {
-                    mkdir($publicAvatarsPath, 0755, true);
+                    if (!mkdir($storageAvatarsPath, 0755, true)) {
+                        throw new Exception('Could not create avatars directory');
+                    }
                 }
 
                 // Delete old avatar if exists
                 if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
                     Storage::disk('public')->delete($user->avatar);
-
-                    // Also delete from public/storage if it exists (fallback)
-                    $oldPublicPath = public_path('storage/' . $user->avatar);
-                    if (file_exists($oldPublicPath)) {
-                        unlink($oldPublicPath);
-                    }
                 }
 
                 // Generate unique filename
-                $file = $request->file('avatar');
                 $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
 
                 // Store new avatar with custom filename
                 $avatarPath = $file->storeAs('avatars', $filename, 'public');
 
-                // Copy to public/storage as fallback (for hosting environments without symlinks)
-                $sourcePath = storage_path('app/public/' . $avatarPath);
-                $destinationPath = public_path('storage/' . $avatarPath);
-                if (file_exists($sourcePath) && is_dir(dirname($destinationPath))) {
-                    copy($sourcePath, $destinationPath);
+                if (!$avatarPath) {
+                    throw new Exception('Failed to store uploaded file');
                 }
 
                 $data['avatar'] = $avatarPath;
 
-            } catch (\Exception $e) {
-                $file = $request->file('avatar');
+                Log::info('Avatar uploaded successfully', [
+                    'user_id' => $user->id,
+                    'avatar_path' => $avatarPath,
+                    'file_size' => $file->getSize()
+                ]);
+
+            } catch (Exception $e) {
                 Log::error('Avatar upload failed: ' . $e->getMessage(), [
                     'user_id' => $user->id,
-                    'file_size' => $file ? $file->getSize() : 'unknown',
-                    'file_type' => $file ? $file->getMimeType() : 'unknown'
+                    'file_size' => $request->file('avatar') ? $request->file('avatar')->getSize() : 'unknown',
+                    'file_type' => $request->file('avatar') ? $request->file('avatar')->getMimeType() : 'unknown',
+                    'trace' => $e->getTraceAsString()
                 ]);
                 return redirect()->route('user.profile')
-                    ->withErrors(['avatar' => 'Failed to upload avatar. Please try again or contact support.']);
+                    ->withErrors(['avatar' => 'Failed to upload avatar: ' . $e->getMessage()]);
             }
         }
 
-        $user->update($data);
+        try {
+            Log::info('Updating user profile', [
+                'user_id' => $user->id,
+                'data_keys' => array_keys($data),
+                'data' => $data
+            ]);
 
-        return redirect()->route('user.profile')->with('success', 'Profile updated successfully!');
+            $user->update($data);
+
+            Log::info('Profile updated successfully', ['user_id' => $user->id]);
+
+            return redirect()->route('user.profile')->with('success', 'Profile updated successfully!');
+        } catch (Exception $e) {
+            Log::error('Profile update failed: ' . $e->getMessage(), [
+                'user_id' => $user->id,
+                'data' => $data,
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return redirect()->route('user.profile')
+                ->withErrors(['profile' => 'Failed to update profile: ' . $e->getMessage()]);
+        }
     }
 
     public function updatePassword(Request $request)

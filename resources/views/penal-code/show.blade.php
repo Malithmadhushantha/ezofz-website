@@ -14,9 +14,12 @@
     <!-- User Actions Bar -->
     <div class="card mb-4">
         <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center">
-                <h4 class="mb-0">Section {{ $section->section_number }}</h4>
-                <div class="d-flex gap-2">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
+                <div>
+                    <h4 class="mb-1">Section {{ $section->section_number }}</h4>
+                    <p class="text-muted mb-0">{{ $section->name_of_the_section }}</p>
+                </div>
+                <div class="d-flex flex-column flex-sm-row gap-2 w-100 w-md-auto">
                     <button class="btn {{ $isStarred ? 'btn-warning' : 'btn-outline-warning' }}"
                             onclick="toggleStar({{ $section->id }})"
                             id="star-btn-{{ $section->id }}"
@@ -36,23 +39,71 @@
         </div>
     </div>
 
+    <!-- User Notes (Mobile-First) -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="bi bi-journal-text me-2"></i>Your Notes
+                    </h5>
+                    @if($userNote)
+                    <div class="btn-group">
+                        <button class="btn btn-sm btn-light" onclick="editNote()" title="Edit Note">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-sm btn-light" onclick="confirmDeleteNote({{ $section->id }})" title="Delete Note">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                    @endif
+                </div>
+                <div class="card-body">
+                    <div class="note-editor">
+                        <div id="note-display" class="mb-3 p-3 bg-light rounded{{ !$userNote ? ' d-none' : '' }}">
+                            <p class="mb-0">{{ $userNote }}</p>
+                        </div>
+                        <div id="note-form" class="{{ $userNote ? 'd-none' : '' }}">
+                            <textarea class="form-control mb-2"
+                                      id="note-{{ $section->id }}"
+                                      rows="4"
+                                      placeholder="Add your notes here...">{{ $userNote }}</textarea>
+                            <div class="d-flex flex-column flex-sm-row gap-2">
+                                <button class="btn btn-success flex-grow-1" onclick="saveNote({{ $section->id }})">
+                                    <i class="bi bi-save me-1"></i>Save Note
+                                </button>
+                                @if($userNote)
+                                <button class="btn btn-secondary" onclick="cancelEdit()">
+                                    <i class="bi bi-x me-1"></i>Cancel
+                                </button>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-lg-8 col-md-12">
             <!-- Main Section Details -->
             <div class="card mb-4">
                 <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Section Information</h5>
+                    <h5 class="mb-0">
+                        <i class="bi bi-info-circle me-2"></i>Section Information
+                    </h5>
                 </div>
                 <div class="card-body">
                     <div class="row mb-3">
-                        <div class="col-md-6">
+                        <div class="col-sm-6 mb-3 mb-sm-0">
                             <h6 class="text-primary">Chapter</h6>
                             <p class="mb-1">{{ $section->chapter_name }}</p>
                             @if($section->sub_chapter_name)
                                 <small class="text-muted">{{ $section->sub_chapter_name }}</small>
                             @endif
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-sm-6">
                             <h6 class="text-primary">Section Number</h6>
                             <p class="mb-1">{{ $section->section_number }}</p>
                             @if($section->sub_section_number)
@@ -148,52 +199,73 @@
             @endif
         </div>
 
-        <div class="col-md-4">
-            <!-- User Notes -->
+        <div class="col-lg-4 col-md-12">
+            <!-- Quick Actions Sidebar -->
             <div class="card mb-4">
-                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Your Notes</h5>
-                    @if($userNote)
-                    <div class="btn-group">
-                        <button class="btn btn-sm btn-light" onclick="editNote()" title="Edit Note">
-                            <i class="bi bi-pencil"></i>
-                        </button>
-                        <button class="btn btn-sm btn-light" onclick="confirmDeleteNote({{ $section->id }})" title="Delete Note">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    </div>
-                    @endif
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-speedometer2 me-2"></i>Quick Actions
+                    </h5>
                 </div>
                 <div class="card-body">
-                    <div class="note-editor">
-                        <div id="note-display" class="mb-3 p-3 bg-light rounded{{ !$userNote ? ' d-none' : '' }}">
-                            <p class="mb-0">{{ $userNote }}</p>
-                        </div>
-                        <div id="note-form" class="{{ $userNote ? 'd-none' : '' }}">
-                            <textarea class="form-control mb-2"
-                                      id="note-{{ $section->id }}"
-                                      rows="4"
-                                      placeholder="Add your notes here...">{{ $userNote }}</textarea>
-                            <div class="d-flex gap-2">
-                                <button class="btn btn-primary flex-grow-1" onclick="saveNote({{ $section->id }})">
-                                    <i class="bi bi-save me-1"></i>Save Note
-                                </button>
-                                @if($userNote)
-                                <button class="btn btn-secondary" onclick="cancelEdit()">
-                                    <i class="bi bi-x me-1"></i>Cancel
-                                </button>
-                                @endif
-                            </div>
-                        </div>
+                    <div class="d-grid gap-2">
+                        <a href="{{ route('penal-code.index') }}" class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-arrow-left me-2"></i>Back to All Sections
+                        </a>
+                        <button class="btn btn-outline-secondary btn-sm" onclick="window.print()">
+                            <i class="bi bi-printer me-2"></i>Print Section
+                        </button>
+                        <button class="btn btn-outline-info btn-sm" onclick="shareSection()">
+                            <i class="bi bi-share me-2"></i>Share Section
+                        </button>
                     </div>
                 </div>
             </div>
 
-            <!-- Amendments -->
-            @if($section->amendments->count() > 0)
+            <!-- Section Statistics -->
+            <div class="card mb-4">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-graph-up me-2"></i>Section Details
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-6 border-end">
+                            <h6 class="text-muted mb-1">Illustrations</h6>
+                            <h4 class="mb-0 text-primary">
+                                {{ collect([$section->illustrations_1, $section->illustrations_2, $section->illustrations_3])->filter()->count() }}
+                            </h4>
+                        </div>
+                        <div class="col-6">
+                            <h6 class="text-muted mb-1">Explanations</h6>
+                            <h4 class="mb-0 text-success">
+                                {{ collect([$section->explanation_1, $section->explanation_2, $section->explanation_3])->filter()->count() }}
+                            </h4>
+                        </div>
+                    </div>
+                    @if($section->amendments->count() > 0)
+                    <hr>
+                    <div class="text-center">
+                        <h6 class="text-muted mb-1">Amendments</h6>
+                        <h4 class="mb-0 text-warning">{{ $section->amendments->count() }}</h4>
+                    </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Amendments History (Full Width for Better Readability) -->
+    @if($section->amendments->count() > 0)
+    <div class="row mt-4">
+        <div class="col-12">
             <div class="card">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Amendments History</h5>
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">
+                        <i class="bi bi-clock-history me-2"></i>Amendments History
+                        <span class="badge bg-dark ms-2">{{ $section->amendments->count() }} {{ Str::plural('Amendment', $section->amendments->count()) }}</span>
+                    </h5>
                 </div>
                 <div class="card-body p-0">
                     <div class="accordion" id="amendments-{{ $section->id }}">
@@ -203,8 +275,13 @@
                                 <button class="accordion-button collapsed" type="button"
                                         data-bs-toggle="collapse"
                                         data-bs-target="#amendment-{{ $section->id }}-{{ $amendment->id }}">
-                                    <span class="badge bg-primary me-2">Amendment {{ $amendment->amendment_number }}</span>
-                                    {{ $amendment->amendment_date->format('Y-m-d') }}
+                                    <div class="d-flex align-items-center w-100">
+                                        <span class="badge bg-primary me-3">Amendment {{ $amendment->amendment_number }}</span>
+                                        <div class="flex-grow-1">
+                                            <strong>{{ $amendment->amendment_date->format('F j, Y') }}</strong>
+                                            <small class="text-muted ms-2">({{ $amendment->amendment_date->diffForHumans() }})</small>
+                                        </div>
+                                    </div>
                                 </button>
                             </h2>
                             <div id="amendment-{{ $section->id }}-{{ $amendment->id }}"
@@ -212,56 +289,74 @@
                                  data-bs-parent="#amendments-{{ $section->id }}">
                                 <div class="accordion-body bg-light">
                                     <div class="amendment-content">
-                                        <h6 class="text-primary mb-3">Amendment Content</h6>
-                                        <div class="content-box p-3 bg-white rounded mb-3">
-                                            {!! nl2br(e($amendment->amendment_content)) !!}
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h6 class="text-primary mb-3">
+                                                    <i class="bi bi-file-text me-1"></i>Amendment Content
+                                                </h6>
+                                                <div class="content-box p-3 bg-white rounded mb-3 border">
+                                                    {!! nl2br(e($amendment->amendment_content)) !!}
+                                                </div>
+                                            </div>
                                         </div>
 
                                         @if($amendment->illustrations_1 || $amendment->illustrations_2 || $amendment->illustrations_3)
-                                        <h6 class="text-primary mb-2">Illustrations</h6>
-                                        <div class="illustrations mb-3">
-                                            @if($amendment->illustrations_1)
-                                            <div class="illustration p-2 bg-white rounded mb-2">
-                                                <strong class="text-muted">Illustration 1:</strong>
-                                                <p class="mb-0">{{ $amendment->illustrations_1 }}</p>
+                                        <div class="row mt-3">
+                                            <div class="col-md-12">
+                                                <h6 class="text-primary mb-2">
+                                                    <i class="bi bi-lightbulb me-1"></i>Illustrations
+                                                </h6>
+                                                <div class="illustrations">
+                                                    @if($amendment->illustrations_1)
+                                                    <div class="illustration p-3 bg-white rounded mb-2 border-start border-primary border-3">
+                                                        <strong class="text-primary">Illustration 1:</strong>
+                                                        <p class="mb-0 mt-1">{{ $amendment->illustrations_1 }}</p>
+                                                    </div>
+                                                    @endif
+                                                    @if($amendment->illustrations_2)
+                                                    <div class="illustration p-3 bg-white rounded mb-2 border-start border-primary border-3">
+                                                        <strong class="text-primary">Illustration 2:</strong>
+                                                        <p class="mb-0 mt-1">{{ $amendment->illustrations_2 }}</p>
+                                                    </div>
+                                                    @endif
+                                                    @if($amendment->illustrations_3)
+                                                    <div class="illustration p-3 bg-white rounded mb-2 border-start border-primary border-3">
+                                                        <strong class="text-primary">Illustration 3:</strong>
+                                                        <p class="mb-0 mt-1">{{ $amendment->illustrations_3 }}</p>
+                                                    </div>
+                                                    @endif
+                                                </div>
                                             </div>
-                                            @endif
-                                            @if($amendment->illustrations_2)
-                                            <div class="illustration p-2 bg-white rounded mb-2">
-                                                <strong class="text-muted">Illustration 2:</strong>
-                                                <p class="mb-0">{{ $amendment->illustrations_2 }}</p>
-                                            </div>
-                                            @endif
-                                            @if($amendment->illustrations_3)
-                                            <div class="illustration p-2 bg-white rounded mb-2">
-                                                <strong class="text-muted">Illustration 3:</strong>
-                                                <p class="mb-0">{{ $amendment->illustrations_3 }}</p>
-                                            </div>
-                                            @endif
                                         </div>
                                         @endif
 
                                         @if($amendment->explanation_1 || $amendment->explanation_2 || $amendment->explanation_3)
-                                        <h6 class="text-primary mb-2">Explanations</h6>
-                                        <div class="explanations">
-                                            @if($amendment->explanation_1)
-                                            <div class="explanation p-2 bg-white rounded mb-2">
-                                                <strong class="text-muted">Explanation 1:</strong>
-                                                <p class="mb-0">{{ $amendment->explanation_1 }}</p>
+                                        <div class="row mt-3">
+                                            <div class="col-md-12">
+                                                <h6 class="text-primary mb-2">
+                                                    <i class="bi bi-question-circle me-1"></i>Explanations
+                                                </h6>
+                                                <div class="explanations">
+                                                    @if($amendment->explanation_1)
+                                                    <div class="explanation p-3 bg-white rounded mb-2 border-start border-success border-3">
+                                                        <strong class="text-success">Explanation 1:</strong>
+                                                        <p class="mb-0 mt-1">{{ $amendment->explanation_1 }}</p>
+                                                    </div>
+                                                    @endif
+                                                    @if($amendment->explanation_2)
+                                                    <div class="explanation p-3 bg-white rounded mb-2 border-start border-success border-3">
+                                                        <strong class="text-success">Explanation 2:</strong>
+                                                        <p class="mb-0 mt-1">{{ $amendment->explanation_2 }}</p>
+                                                    </div>
+                                                    @endif
+                                                    @if($amendment->explanation_3)
+                                                    <div class="explanation p-3 bg-white rounded mb-2 border-start border-success border-3">
+                                                        <strong class="text-success">Explanation 3:</strong>
+                                                        <p class="mb-0 mt-1">{{ $amendment->explanation_3 }}</p>
+                                                    </div>
+                                                    @endif
+                                                </div>
                                             </div>
-                                            @endif
-                                            @if($amendment->explanation_2)
-                                            <div class="explanation p-2 bg-white rounded mb-2">
-                                                <strong class="text-muted">Explanation 2:</strong>
-                                                <p class="mb-0">{{ $amendment->explanation_2 }}</p>
-                                            </div>
-                                            @endif
-                                            @if($amendment->explanation_3)
-                                            <div class="explanation p-2 bg-white rounded mb-2">
-                                                <strong class="text-muted">Explanation 3:</strong>
-                                                <p class="mb-0">{{ $amendment->explanation_3 }}</p>
-                                            </div>
-                                            @endif
                                         </div>
                                         @endif
                                     </div>
@@ -272,9 +367,9 @@
                     </div>
                 </div>
             </div>
-            @endif
         </div>
     </div>
+    @endif
 </div>
 
 @push('scripts')
@@ -318,9 +413,9 @@ function saveNote(sectionId) {
         noteDisplay.classList.remove('d-none');
         document.getElementById('note-form').classList.add('d-none');
 
-        // Update header buttons
-        const header = document.querySelector('.card-header');
-        if (!header.querySelector('.btn-group') && note) {
+        // Update header buttons for the notes card
+        const notesHeader = document.querySelector('.card-header.bg-success');
+        if (!notesHeader.querySelector('.btn-group') && note) {
             const btnGroup = document.createElement('div');
             btnGroup.className = 'btn-group';
             btnGroup.innerHTML = `
@@ -331,7 +426,7 @@ function saveNote(sectionId) {
                     <i class="bi bi-trash"></i>
                 </button>
             `;
-            header.appendChild(btnGroup);
+            notesHeader.appendChild(btnGroup);
         }
 
         showNotification('Note saved successfully', 'success');
@@ -457,6 +552,36 @@ function showNotification(message, type = 'success') {
     }, 3000);
 }
 
+function shareSection() {
+    const sectionTitle = document.querySelector('h4').textContent;
+    const url = window.location.href;
+
+    if (navigator.share) {
+        // Use Web Share API if available (mobile devices)
+        navigator.share({
+            title: sectionTitle,
+            text: `Check out this Penal Code section: ${sectionTitle}`,
+            url: url
+        }).then(() => {
+            showNotification('Section shared successfully!', 'success');
+        }).catch(err => {
+            fallbackShare(url, sectionTitle);
+        });
+    } else {
+        fallbackShare(url, sectionTitle);
+    }
+}
+
+function fallbackShare(url, title) {
+    // Fallback: copy to clipboard
+    navigator.clipboard.writeText(url).then(() => {
+        showNotification('Section URL copied to clipboard!', 'info');
+    }).catch(err => {
+        // Final fallback: show URL in alert
+        prompt('Copy this URL to share:', url);
+    });
+}
+
 function confirmDeleteNote(sectionId) {
     if (confirm('Are you sure you want to delete this note?')) {
         deleteNote(sectionId);
@@ -478,8 +603,8 @@ function deleteNote(sectionId) {
         document.querySelector(`#note-${sectionId}`).value = '';
         document.querySelector('#note-form').classList.remove('d-none');
 
-        // Hide the edit/delete buttons
-        const btnGroup = document.querySelector('.card-header .btn-group');
+        // Hide the edit/delete buttons from the notes card header
+        const btnGroup = document.querySelector('.card-header.bg-success .btn-group');
         if (btnGroup) {
             btnGroup.remove();
         }
@@ -498,35 +623,188 @@ function deleteNote(sectionId) {
 .content-box {
     border: 1px solid rgba(0, 0, 0, 0.125);
     background-color: #fff;
+    line-height: 1.6;
 }
 
 .card {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
+    border: none;
 }
 
 .card:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+.accordion-button {
+    background-color: #f8f9fa;
+    color: #495057;
+    font-weight: 500;
+    border: none;
+    padding: 1rem 1.25rem;
 }
 
 .accordion-button:not(.collapsed) {
-    background-color: var(--bs-primary);
-    color: white;
+    background-color: var(--bs-warning);
+    color: #000;
+    box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.125);
 }
 
 .accordion-button:focus {
-    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.25);
+    border-color: transparent;
 }
 
 .badge {
-    font-weight: 500;
+    font-weight: 600;
+    font-size: 0.75em;
+}
+
+.note-editor {
+    position: relative;
+}
+
+.illustration, .explanation {
+    transition: all 0.3s ease;
+}
+
+.illustration:hover, .explanation:hover {
+    transform: translateX(5px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 992px) {
+    .col-lg-4 {
+        margin-top: 1rem;
+    }
+
+    .card-body {
+        padding: 1rem;
+    }
+
+    .accordion-button {
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+    }
 }
 
 @media (max-width: 768px) {
-    .user-actions {
-        flex-direction: column;
-        gap: 1rem;
+    .container {
+        padding-left: 10px;
+        padding-right: 10px;
     }
+
+    .card-header h5 {
+        font-size: 1.1rem;
+    }
+
+    .btn-group .btn {
+        padding: 0.25rem 0.5rem;
+    }
+
+    .accordion-button {
+        padding: 0.75rem;
+        font-size: 0.85rem;
+    }
+
+    .badge {
+        font-size: 0.7rem;
+        padding: 0.25em 0.5em;
+    }
+
+    .illustration, .explanation {
+        padding: 1rem !important;
+        margin-bottom: 1rem;
+    }
+
+    .content-box {
+        padding: 1rem !important;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .d-flex.gap-2 {
+        flex-direction: column !important;
+    }
+
+    .flex-sm-row {
+        flex-direction: column !important;
+    }
+
+    .card-header {
+        padding: 0.75rem;
+    }
+
+    .card-body {
+        padding: 0.75rem;
+    }
+
+    .row.text-center .col-6 {
+        margin-bottom: 1rem;
+    }
+
+    .border-end {
+        border-right: none !important;
+        border-bottom: 1px solid #dee2e6 !important;
+        padding-bottom: 1rem;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .btn, .card-header .btn-group {
+        display: none !important;
+    }
+
+    .card {
+        box-shadow: none !important;
+        border: 1px solid #ddd !important;
+    }
+
+    .accordion-button {
+        display: none;
+    }
+
+    .accordion-collapse {
+        display: block !important;
+    }
+
+    .bg-light, .bg-primary, .bg-warning, .bg-success, .bg-info, .bg-secondary {
+        background-color: #f8f9fa !important;
+        color: #000 !important;
+    }
+}
+
+/* Enhanced Visual Feedback */
+.btn {
+    transition: all 0.2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.card-header {
+    background: linear-gradient(135deg, var(--bs-primary), var(--bs-primary-dark)) !important;
+}
+
+.card-header.bg-success {
+    background: linear-gradient(135deg, var(--bs-success), #0f5132) !important;
+}
+
+.card-header.bg-info {
+    background: linear-gradient(135deg, var(--bs-info), #055160) !important;
+}
+
+.card-header.bg-secondary {
+    background: linear-gradient(135deg, var(--bs-secondary), #2c2d30) !important;
+}
+
+.card-header.bg-warning {
+    background: linear-gradient(135deg, var(--bs-warning), #664d03) !important;
 }
 </style>
 @endpush

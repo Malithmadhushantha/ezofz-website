@@ -113,6 +113,48 @@
             </div>
         </div>
 
+        <!-- Success/Error Messages -->
+        @if(session('success'))
+            <div class="row mb-4" data-aos="fade-up" data-aos-delay="150">
+                <div class="col-12">
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="bi bi-check-circle-fill me-2"></i>
+                        {{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="row mb-4" data-aos="fade-up" data-aos-delay="150">
+                <div class="col-12">
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        {{ session('error') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>
+            </div>
+        @endif
+
+        @if($errors->any())
+            <div class="row mb-4" data-aos="fade-up" data-aos-delay="150">
+                <div class="col-12">
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        <strong>Please fix the following errors:</strong>
+                        <ul class="mb-0 mt-2">
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>
+            </div>
+        @endif
+
         <!-- Tab Content -->
         <div class="tab-content" id="profileTabContent">
             <!-- Profile Information Tab -->
@@ -569,6 +611,30 @@
     box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 }
 
+/* Alert Styles */
+.alert {
+    background: rgba(15, 23, 42, 0.9);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    border-radius: 12px;
+    color: #e2e8f0;
+}
+
+.alert-success {
+    background: rgba(16, 185, 129, 0.1);
+    border-color: rgba(16, 185, 129, 0.3);
+    color: #6ee7b7;
+}
+
+.alert-danger {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.3);
+    color: #fca5a5;
+}
+
+.alert .btn-close {
+    filter: invert(1);
+}
+
 /* Form Cards */
 .profile-form-card {
     background: rgba(15, 23, 42, 0.9);
@@ -825,10 +891,25 @@ document.addEventListener('DOMContentLoaded', function() {
     const avatarInput = document.querySelector('input[name="avatar"]');
     const avatarContainer = document.querySelector('.avatar-container');
 
-    if (avatarInput) {
+    if (avatarInput && avatarContainer) {
         avatarInput.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
+                // Validate file type
+                const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
+                if (!allowedTypes.includes(file.type)) {
+                    alert('Please select a valid image file (JPEG, PNG, JPG, or GIF).');
+                    this.value = '';
+                    return;
+                }
+
+                // Validate file size (2MB max)
+                if (file.size > 2 * 1024 * 1024) {
+                    alert('File size must be less than 2MB.');
+                    this.value = '';
+                    return;
+                }
+
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     const existingImg = avatarContainer.querySelector('.profile-avatar');
@@ -836,6 +917,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                     if (existingImg) {
                         existingImg.src = e.target.result;
+                        existingImg.style.display = 'block';
                     } else if (placeholder) {
                         placeholder.outerHTML = `<img src="${e.target.result}" alt="Profile" class="profile-avatar">`;
                     }
@@ -843,12 +925,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 reader.readAsDataURL(file);
             }
         });
-    }
 
-    // Avatar container click to trigger file input
-    avatarContainer.addEventListener('click', function() {
-        avatarInput.click();
-    });
+        // Avatar container click to trigger file input
+        avatarContainer.addEventListener('click', function() {
+            avatarInput.click();
+        });
+    }
 
     // Form validation
     const forms = document.querySelectorAll('form');
@@ -871,7 +953,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function deleteAvatar() {
     if (confirm('Are you sure you want to remove your profile picture?')) {
-        document.getElementById('deleteAvatarForm').submit();
+        const form = document.getElementById('deleteAvatarForm');
+        const deleteBtn = event.target;
+
+        // Show loading state
+        deleteBtn.innerHTML = '<i class="bi bi-spinner-border spinner-border-sm me-2"></i>Removing...';
+        deleteBtn.disabled = true;
+
+        form.submit();
     }
 }
 

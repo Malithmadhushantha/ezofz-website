@@ -6,7 +6,6 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PoliceDirectoryController;
 use App\Http\Controllers\TestimonialController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Auth;
 
 // Public routes
@@ -145,7 +144,7 @@ Route::middleware('auth')->group(function () {
 
 // Admin routes with middleware
 // Admin dashboard using 'admin' middleware alias
-Route::middleware([App\Http\Middleware\AdminMiddleware::class])->prefix('admin')->group(function () {
+Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/documents', [AdminController::class, 'documents'])->name('admin.documents');
     Route::post('/documents', [DocumentController::class, 'store'])->name('documents.store');

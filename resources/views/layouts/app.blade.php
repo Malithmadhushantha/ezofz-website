@@ -2288,7 +2288,7 @@
                             </div>
                             <div class="dropdown-menu" id="databases-dropdown">
                                 <div class="dropdown-content">
-                                    <a href="{{ route('penal-code.public') }}" class="dropdown-item">
+                                    <a href="{{ Auth::check() ? route('penal-code.index') : route('penal-code.public') }}" class="dropdown-item">
                                         <div class="item-icon">
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
@@ -2300,10 +2300,10 @@
                                         </div>
                                         <div class="item-content">
                                             <span class="item-title">Penal Code Database</span>
-                                            <span class="item-desc">Legal references and sections</span>
+                                            <span class="item-desc">{{ Auth::check() ? 'Enhanced features & notes' : 'Legal references and sections' }}</span>
                                         </div>
                                     </a>
-                                    <a href="{{ route('criminal-procedure-code.public') }}" class="dropdown-item">
+                                    <a href="{{ Auth::check() ? route('criminal-procedure-code.index') : route('criminal-procedure-code.public') }}" class="dropdown-item">
                                         <div class="item-icon">
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
@@ -2314,7 +2314,7 @@
                                         </div>
                                         <div class="item-content">
                                             <span class="item-title">Criminal Procedure Code</span>
-                                            <span class="item-desc">Court procedures and processes</span>
+                                            <span class="item-desc">{{ Auth::check() ? 'Enhanced features & notes' : 'Court procedures and processes' }}</span>
                                         </div>
                                     </a>
                                     <a href="{{ route('police.directory') }}" class="dropdown-item">
@@ -2634,10 +2634,10 @@
                                 </div>
                             </div>
                             <div class="mobile-nav-group-content" id="mobile-databases">
-                                <a href="{{ route('penal-code.public') }}" class="mobile-nav-subitem">
+                                <a href="{{ Auth::check() ? route('penal-code.index') : route('penal-code.public') }}" class="mobile-nav-subitem">
                                     <span>Penal Code Database</span>
                                 </a>
-                                <a href="{{ route('criminal-procedure-code.public') }}" class="mobile-nav-subitem">
+                                <a href="{{ Auth::check() ? route('criminal-procedure-code.index') : route('criminal-procedure-code.public') }}" class="mobile-nav-subitem">
                                     <span>Criminal Procedure Code</span>
                                 </a>
                                 <a href="{{ route('police.directory') }}" class="mobile-nav-subitem">
