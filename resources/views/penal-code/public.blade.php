@@ -33,30 +33,56 @@
                 </div>
                 <div class="card-body bg-light">
                     <form action="{{ route('penal-code.public') }}" method="GET" class="row g-3">
-                        <div class="col-md-6">
+                        <div class="col-md-6 col-sm-12">
                             <div class="input-group">
                                 <span class="input-group-text bg-primary text-white">
                                     <i class="bi bi-search"></i>
                                 </span>
                                 <input type="text" name="search" class="form-control"
-                                       placeholder="Search by section number, title or content..."
+                                       placeholder="Search by title or content..."
                                        value="{{ request('search') }}">
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-4 col-sm-8 col-8">
                             <div class="input-group">
                                 <span class="input-group-text bg-primary text-white">
                                     <i class="bi bi-hash"></i>
                                 </span>
                                 <input type="number" name="section_number" class="form-control"
-                                       placeholder="Filter by section number"
+                                       placeholder="Section number"
                                        value="{{ request('section_number') }}">
                             </div>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-2 col-sm-4 col-4">
                             <button type="submit" class="btn btn-primary w-100">
-                                <i class="bi bi-search me-1"></i> Search
+                                <i class="bi bi-search me-1"></i> <span class="d-none d-sm-inline">Search</span>
                             </button>
+                        </div>
+
+                        <!-- Filter for mobile (optional) -->
+                        <div class="col-12 d-md-none mt-2">
+                            <div class="accordion" id="filterAccordion">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingFilters">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#collapseFilters" aria-expanded="false" aria-controls="collapseFilters">
+                                            <i class="bi bi-funnel me-2"></i> Advanced Filters
+                                        </button>
+                                    </h2>
+                                    <div id="collapseFilters" class="accordion-collapse collapse" aria-labelledby="headingFilters">
+                                        <div class="accordion-body">
+                                            <div class="mb-3">
+                                                <label class="form-label">Sort By</label>
+                                                <select class="form-select" name="sort">
+                                                    <option value="section_asc" {{ request('sort') == 'section_asc' ? 'selected' : '' }}>Section (Ascending)</option>
+                                                    <option value="section_desc" {{ request('sort') == 'section_desc' ? 'selected' : '' }}>Section (Descending)</option>
+                                                </select>
+                                            </div>
+                                            <button type="submit" class="btn btn-outline-primary w-100">Apply Filters</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -71,33 +97,35 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
+                        <table class="table table-hover mobile-optimized">
+                            <thead class="table-sticky-header">
                                 <tr>
-                                    <th>Chapter</th>
-                                    <th>Section Number</th>
-                                    <th>Sub Section</th>
-                                    <th>Section Name</th>
-                                    <th>Actions</th>
+                                    <th class="chapter-col">Chapter</th>
+                                    <th class="section-col">Section</th>
+                                    <th class="subsection-col">Sub Sec.</th>
+                                    <th class="section-name-col">Name</th>
+                                    <th class="actions-col">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($sections as $section)
                                 <tr>
-                                    <td>
-                                        <strong>{{ $section->chapter_name }}</strong>
-                                        @if($section->sub_chapter_name)
-                                            <br>
-                                            <small class="text-muted">{{ $section->sub_chapter_name }}</small>
-                                        @endif
+                                    <td class="chapter-col">
+                                        <div class="chapter-info">
+                                            <strong>{{ $section->chapter_name }}</strong>
+                                            @if($section->sub_chapter_name)
+                                                <span class="d-none d-md-inline"><br></span>
+                                                <small class="text-muted d-block d-md-inline">{{ $section->sub_chapter_name }}</small>
+                                            @endif
+                                        </div>
                                     </td>
-                                    <td>{{ $section->section_number }}</td>
-                                    <td>{{ $section->sub_section_number }}</td>
-                                    <td>{{ $section->name_of_the_section }}</td>
-                                    <td>
+                                    <td class="section-col">{{ $section->section_number }}</td>
+                                    <td class="subsection-col">{{ $section->sub_section_number }}</td>
+                                    <td class="section-name-col">{{ $section->name_of_the_section }}</td>
+                                    <td class="actions-col">
                                         <div class="access-section">
                                             <button class="btn btn-sm btn-primary show-access-message" title="View Details">
-                                                <i class="bi bi-eye"></i> View
+                                                <i class="bi bi-eye"></i> <span class="d-none d-md-inline">View</span>
                                             </button>
                                             <div class="access-message collapse">
                                                 <div class="card mt-2 border-warning">
@@ -125,11 +153,26 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <!-- Pagination -->
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 mt-3">
+                        <div class="text-center text-md-start small">
+                            Showing {{ $sections->firstItem() ?? 0 }} to {{ $sections->lastItem() ?? 0 }} of {{ $sections->total() }} entries
+                        </div>
+                        <div class="d-flex justify-content-center w-100 w-md-auto">
+                            {{ $sections->appends(request()->query())->links() }}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Back to Top Button -->
+<button id="backToTopBtn" class="back-to-top-btn" title="Back to Top">
+    <i class="bi bi-arrow-up"></i>
+</button>
 
 @push('scripts')
 <script>
@@ -159,6 +202,26 @@ document.addEventListener('DOMContentLoaded', function() {
             allMessages.forEach(msg => msg.classList.remove('show'));
         }
     });
+
+    // Back to top button functionality
+    const backToTopBtn = document.getElementById('backToTopBtn');
+
+    // Show the button when user scrolls down 300px
+    window.addEventListener('scroll', function() {
+        if (window.pageYOffset > 300) {
+            backToTopBtn.classList.add('show');
+        } else {
+            backToTopBtn.classList.remove('show');
+        }
+    });
+
+    // Smooth scroll to top when button clicked
+    backToTopBtn.addEventListener('click', function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
 });
 </script>
 @endpush
@@ -173,6 +236,77 @@ document.addEventListener('DOMContentLoaded', function() {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+/* Responsive table styles */
+.mobile-optimized {
+    width: 100%;
+}
+
+/* Column widths */
+.chapter-col {
+    width: 20%;
+}
+.section-col {
+    width: 10%;
+}
+.subsection-col {
+    width: 10%;
+}
+.section-name-col {
+    width: 45%;
+}
+.actions-col {
+    width: 15%;
+}
+
+/* Sticky header */
+.table-sticky-header {
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 10;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+/* Mobile optimizations */
+@media (max-width: 767px) {
+    .chapter-col {
+        width: 30%;
+    }
+    .section-col {
+        width: 15%;
+    }
+    .subsection-col {
+        width: 15%;
+    }
+    .section-name-col {
+        width: 40%;
+    }
+
+    .chapter-info small {
+        font-size: 0.7rem;
+    }
+
+    .table-responsive {
+        border-radius: 0.25rem;
+        overflow-x: auto;
+    }
+
+    .table th, .table td {
+        padding: 0.5rem;
+        font-size: 0.85rem;
+    }
+
+    .pagination {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .pagination .page-link {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.85rem;
+    }
 }
 
 .access-section {
@@ -214,6 +348,37 @@ document.addEventListener('DOMContentLoaded', function() {
 
 .access-message .btn i {
     font-size: 0.9rem;
+}
+
+/* Back to top button */
+.back-to-top-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--bs-primary);
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.back-to-top-btn.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.back-to-top-btn:hover {
+    background: #0056b3;
+    transform: translateY(-3px);
 }
 </style>
 @endpush

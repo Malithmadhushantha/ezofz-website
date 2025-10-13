@@ -35,7 +35,7 @@ class PenalCodeController extends Controller
             $query->where('section_number', $request->section_number);
         }
 
-        $sections = $query->orderBy('section_number')->paginate(25); // Increased to 25 per page
+        $sections = $query->orderBy('section_number')->paginate(10);
 
         return view('penal-code.public', compact('sections'));
     }
@@ -101,7 +101,7 @@ class PenalCodeController extends Controller
             $query->where('section_number', $request->section_number);
         }
 
-        $sections = $query->orderBy('section_number')->paginate(25); // Increased to 25 per page
+        $sections = $query->orderBy('section_number')->paginate(10);
 
         // Get user's starred and liked sections
         $userId = auth()->id();
