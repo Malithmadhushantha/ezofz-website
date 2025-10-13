@@ -153,8 +153,10 @@
                             </thead>
                             <tbody>
                                 @php
-                                    // Set a higher pagination value to show all entries
-                                    $allSections = $sections->items();
+                                    // Set a higher pagination value to show all entries and sort by section_number
+                                    $allSections = collect($sections->items())->sortBy(function($section) {
+                                        return (int)$section->section_number;
+                                    });
                                 @endphp
                                 @foreach($allSections as $section)
                                 <tr id="section-row-{{ $section->id }}">
@@ -188,43 +190,61 @@
                     <div class="d-md-none">
                         <div class="accordion chapter-accordion" id="chapterAccordion">
                             @php
-                                // Group sections by chapter
-                                $groupedSections = collect($sections->items())->groupBy('chapter_name');
+                                // Get all sections and sort them numerically by section_number
+                                $allSections = collect($sections->items())->sortBy(function($section) {
+                                    return (int)$section->section_number;
+                                });
+
+                                // Group by chapter_name
+                                $groupedByChapter = $allSections->groupBy('chapter_name');
                             @endphp
 
-                            @foreach($groupedSections as $chapterName => $chapterSections)
-                                <div class="accordion-item">
+                            @foreach($groupedByChapter as $chapterName => $chapterSections)
+                                <div class="accordion-item chapter-item">
                                     <h2 class="accordion-header" id="chapter-heading-{{ Str::slug($chapterName) }}">
                                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                                 data-bs-target="#chapter-collapse-{{ Str::slug($chapterName) }}"
                                                 aria-expanded="false" aria-controls="chapter-collapse-{{ Str::slug($chapterName) }}">
-                                            <strong>{{ $chapterName }}</strong>
-                                            <span class="ms-auto badge bg-primary rounded-pill">{{ count($chapterSections) }}</span>
+                                            <div class="w-100 d-flex justify-content-between align-items-center">
+                                                <span>{{ $chapterName }}</span>
+                                                <span class="badge bg-primary rounded-pill">{{ count($chapterSections) }}</span>
+                                            </div>
                                         </button>
                                     </h2>
                                     <div id="chapter-collapse-{{ Str::slug($chapterName) }}" class="accordion-collapse collapse"
-                                         aria-labelledby="chapter-heading-{{ Str::slug($chapterName) }}" data-bs-parent="#chapterAccordion">
+                                         aria-labelledby="chapter-heading-{{ Str::slug($chapterName) }}">
                                         <div class="accordion-body p-0">
-                                            <ul class="list-group list-group-flush">
-                                                @foreach($chapterSections as $section)
-                                                    <li class="list-group-item">
-                                                        <div class="d-flex w-100 justify-content-between align-items-center">
-                                                            <div>
-                                                                <div class="d-flex align-items-center">
-                                                                    <span class="badge bg-secondary me-2">{{ $section->section_number }}</span>
-                                                                    <h6 class="mb-0">{{ Str::limit($section->name_of_the_section, 40) }}</h6>
+                                            @php
+                                                // Further group by sub_chapter_name
+                                                $groupedBySubChapter = $chapterSections->groupBy('sub_chapter_name');
+                                            @endphp
+
+                                            @foreach($groupedBySubChapter as $subChapterName => $subChapterSections)
+                                                @if(!empty($subChapterName))
+                                                    <div class="sub-chapter-header">
+                                                        <div class="sub-chapter-title">{{ $subChapterName }}</div>
+                                                    </div>
+                                                @endif
+                                                <ul class="list-group list-group-flush">
+                                                    @foreach($subChapterSections->sortBy(function($section) {
+                                                        return (int)$section->section_number;
+                                                    }) as $section)
+                                                        <li class="list-group-item">
+                                                            <div class="d-flex w-100 justify-content-between align-items-center">
+                                                                <div>
+                                                                    <div class="d-flex align-items-center">
+                                                                        <span class="badge bg-secondary me-2">{{ $section->section_number }}</span>
+                                                                        <h6 class="mb-0">{{ Str::limit($section->name_of_the_section, 40) }}</h6>
+                                                                    </div>
                                                                 </div>
-                                                                @if($section->sub_chapter_name)
-                                                                    <small class="text-muted">{{ $section->sub_chapter_name }}</small>
-                                                                @endif
+                                                                <a href="{{ route('penal-code.show', $section) }}" class="btn btn-sm btn-primary">
+                                                                    <i class="bi bi-eye"></i>
+                                                                </a>
                                                             </div>
-                                                            <a href="{{ route('penal-code.show', $section) }}" class="btn btn-sm btn-primary">
-                                                                <i class="bi bi-eye"></i>
-                                                            </a>
-                                                        </div>
-                                                    </li>
-                                                @endforeach
-                                            </ul>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            @endforeach
                                         </div>
                                     </div>
                                 </div>
@@ -270,39 +290,96 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Remember opened chapter accordions in session storage
-    const accordionButtons = document.querySelectorAll('.chapter-accordion .accordion-button');
+    // Completely custom accordion implementation to avoid conflicts
+    const chapterAccordion = document.getElementById('chapterAccordion');
 
-    // Check if we have any saved open accordions
-    const openAccordions = JSON.parse(sessionStorage.getItem('openPenalCodeChapters')) || [];
+    // Wait for Bootstrap to be fully loaded before implementing our custom behavior
+    setTimeout(() => {
+        // First, get all accordion elements
+        const accordionButtons = document.querySelectorAll('.chapter-accordion .accordion-button');
+        const accordionItems = document.querySelectorAll('.chapter-accordion .accordion-collapse');
 
-    // Open previously opened accordions
-    openAccordions.forEach(id => {
-        const element = document.getElementById(id);
-        if (element) {
-            element.classList.add('show');
-            const button = document.querySelector(`[data-bs-target="#${id}"]`);
-            if (button) button.classList.remove('collapsed');
-        }
-    });
+        // Remove all Bootstrap's built-in accordion functionality
+        accordionButtons.forEach(button => {
+            // Clone and replace to remove any event listeners
+            const newButton = button.cloneNode(true);
+            button.parentNode.replaceChild(newButton, button);
+        });
 
-    // Add listeners to save open state
-    accordionButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const targetId = this.getAttribute('data-bs-target').substring(1);
-            const isCollapsed = this.classList.contains('collapsed');
+        // Re-select all buttons after replacement
+        const newAccordionButtons = document.querySelectorAll('.chapter-accordion .accordion-button');
 
-            // Update storage when accordion state changes
-            setTimeout(() => {
+        // Remove Bootstrap data attributes
+        newAccordionButtons.forEach(button => {
+            // Store the target ID before removing the attribute
+            const targetSelector = button.getAttribute('data-bs-target');
+            const targetId = targetSelector ? targetSelector.substring(1) : null;
+
+            // Store as a custom attribute
+            if (targetId) {
+                button.setAttribute('data-target-id', targetId);
+            }
+
+            // Remove Bootstrap attributes
+            button.removeAttribute('data-bs-toggle');
+        });
+
+        // Remove parent container references to allow independent operation
+        accordionItems.forEach(item => {
+            item.removeAttribute('data-bs-parent');
+        });
+
+        // Check if we have any saved open accordions
+        const openAccordions = JSON.parse(sessionStorage.getItem('openPenalCodeChapters')) || [];
+
+        // Apply saved states
+        openAccordions.forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.classList.add('show');
+                const button = document.querySelector(`[data-target-id="${id}"]`) ||
+                               document.querySelector(`[data-bs-target="#${id}"]`);
+                if (button) button.classList.remove('collapsed');
+            }
+        });
+
+        // Add our own click handlers
+        newAccordionButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                // Get target ID from our custom attribute or the original bs attribute
+                const targetId = this.getAttribute('data-target-id') ||
+                                this.getAttribute('data-bs-target')?.substring(1);
+
+                if (!targetId) return;
+
+                const targetElement = document.getElementById(targetId);
+                if (!targetElement) return;
+
+                const isCurrentlyCollapsed = this.classList.contains('collapsed');
+
+                // Toggle the accordion manually
+                if (isCurrentlyCollapsed) {
+                    // Expand
+                    this.classList.remove('collapsed');
+                    this.setAttribute('aria-expanded', 'true');
+                    targetElement.classList.add('show');
+                } else {
+                    // Collapse
+                    this.classList.add('collapsed');
+                    this.setAttribute('aria-expanded', 'false');
+                    targetElement.classList.remove('show');
+                }
+
+                // Update storage
                 const currentOpen = JSON.parse(sessionStorage.getItem('openPenalCodeChapters')) || [];
 
-                if (!isCollapsed) {
-                    // Add to open list
+                if (!isCurrentlyCollapsed) {
+                    // Add to open list (it was collapsed, now it's open)
                     if (!currentOpen.includes(targetId)) {
                         currentOpen.push(targetId);
                     }
                 } else {
-                    // Remove from open list
+                    // Remove from open list (it was open, now it's collapsed)
                     const index = currentOpen.indexOf(targetId);
                     if (index > -1) {
                         currentOpen.splice(index, 1);
@@ -310,9 +387,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
 
                 sessionStorage.setItem('openPenalCodeChapters', JSON.stringify(currentOpen));
-            }, 100);
+
+                // Stop event propagation to prevent default Bootstrap behavior
+                e.preventDefault();
+                e.stopPropagation();
+            });
         });
-    });
+    }, 300); // Short delay to ensure Bootstrap is fully initialized
 });
 </script>
 @endpush
@@ -518,7 +599,6 @@ document.addEventListener('DOMContentLoaded', function() {
         padding: 0.75rem 1rem;
         display: flex;
         align-items: center;
-        justify-content: space-between;
         width: 100%;
         text-align: left;
     }
@@ -542,7 +622,23 @@ document.addEventListener('DOMContentLoaded', function() {
         font-weight: normal;
     }
 
-    /* Sticky header */
+    /* Sub-chapter styles */
+    .sub-chapter-header {
+        background-color: rgba(0,0,0,0.03);
+        padding: 0.5rem 1rem;
+        border-bottom: 1px solid rgba(0,0,0,.125);
+    }
+
+    .sub-chapter-title {
+        font-weight: 500;
+        font-size: 0.9rem;
+        color: var(--primary);
+    }
+
+    .chapter-item {
+        margin-bottom: 0.75rem;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }    /* Sticky header */
 .table-sticky-header {
     position: sticky;
     top: 0;

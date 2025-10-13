@@ -7,6 +7,7 @@ use App\Models\UserNote;
 use App\Models\StarredSection;
 use App\Models\LikedSection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PenalCodeController extends Controller
 {
@@ -88,12 +89,6 @@ class PenalCodeController extends Controller
                         break;
                 }
             });
-            $search = $request->get('search');
-            $query->where(function($q) use ($search) {
-                $q->where('section_number', 'like', "%{$search}%")
-                  ->orWhere('name_of_the_section', 'like', "%{$search}%")
-                  ->orWhere('section_content', 'like', "%{$search}%");
-            });
         }
 
         // Filter by section number if provided
@@ -103,8 +98,7 @@ class PenalCodeController extends Controller
 
         $sections = $query->orderBy('section_number')->paginate(25); // Increased to 25 per page
 
-        // Get user's starred and liked sections
-        $userId = auth()->id();
+        $userId = optional(Auth::user())->id;
         $starredSections = StarredSection::where('user_id', $userId)->pluck('section_id')->toArray();
         $likedSections = LikedSection::where('user_id', $userId)->pluck('section_id')->toArray();
         $userNotes = UserNote::where('user_id', $userId)->pluck('note', 'section_id')->toArray();
@@ -114,7 +108,7 @@ class PenalCodeController extends Controller
 
     public function show(PenalCodeSection $section)
     {
-        $userId = auth()->id();
+        $userId = optional(Auth::user())->id;
 
         // Get user-specific data
         $isStarred = StarredSection::where('user_id', $userId)
@@ -141,7 +135,7 @@ class PenalCodeController extends Controller
 
             UserNote::updateOrCreate(
                 [
-                    'user_id' => auth()->id(),
+                    'user_id' => optional(Auth::user())->id,
                     'section_id' => $section->id,
                     'type' => 'penal-code'
                 ],
@@ -151,7 +145,7 @@ class PenalCodeController extends Controller
             return response()->json(['message' => 'Note saved successfully']);
         } catch (\Exception $e) {
             \Log::error('PenalCodeController saveNote error: ' . $e->getMessage(), [
-                'user_id' => auth()->id(),
+                'user_id' => optional(Auth::user())->id,
                 'section_id' => $section->id,
                 'note' => $request->note,
                 'exception' => $e
@@ -162,7 +156,7 @@ class PenalCodeController extends Controller
 
     public function toggleStar(PenalCodeSection $section)
     {
-        $userId = auth()->id();
+        $userId = optional(Auth::user())->id;
 
         $starred = StarredSection::where('user_id', $userId)
             ->where('section_id', $section->id)
@@ -189,7 +183,7 @@ class PenalCodeController extends Controller
 
     public function toggleLike(PenalCodeSection $section)
     {
-        $userId = auth()->id();
+        $userId = optional(Auth::user())->id;
 
         $liked = LikedSection::where('user_id', $userId)
             ->where('section_id', $section->id)
@@ -216,7 +210,7 @@ class PenalCodeController extends Controller
 
     public function deleteNote(PenalCodeSection $section)
     {
-        $note = UserNote::where('user_id', auth()->id())
+        $note = UserNote::where('user_id', optional(Auth::user())->id)
             ->where('section_id', $section->id)
             ->first();
 
