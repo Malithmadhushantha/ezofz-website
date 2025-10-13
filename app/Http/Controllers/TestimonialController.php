@@ -69,46 +69,67 @@ class TestimonialController extends Controller
 
     public function updateStatus(Request $request, Testimonial $testimonial)
     {
-        $request->validate([
-            'status' => 'required|in:pending,approved,rejected'
-        ]);
+        try {
+            $request->validate([
+                'status' => 'required|in:pending,approved,rejected'
+            ]);
 
-        $testimonial->update(['status' => $request->status]);
+            $testimonial->update(['status' => $request->status]);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Testimonial status updated successfully.'
-        ]);
+            return response()->json([
+                'success' => true,
+                'message' => 'Testimonial status updated successfully.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error updating testimonial status: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     public function toggleFeatured(Testimonial $testimonial)
     {
-        // If featuring this testimonial, check if we already have 5 featured
-        if (!$testimonial->is_featured) {
-            $featuredCount = Testimonial::featured()->count();
-            if ($featuredCount >= 5) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Maximum of 5 testimonials can be featured at once.'
-                ]);
+        try {
+            // If featuring this testimonial, check if we already have 5 featured
+            if (!$testimonial->is_featured) {
+                $featuredCount = Testimonial::featured()->count();
+                if ($featuredCount >= 5) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Maximum of 5 testimonials can be featured at once.'
+                    ]);
+                }
             }
+
+            $testimonial->update(['is_featured' => !$testimonial->is_featured]);
+
+            return response()->json([
+                'success' => true,
+                'message' => $testimonial->is_featured ? 'Testimonial featured successfully.' : 'Testimonial unfeatured successfully.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error updating featured status: ' . $e->getMessage()
+            ], 500);
         }
-
-        $testimonial->update(['is_featured' => !$testimonial->is_featured]);
-
-        return response()->json([
-            'success' => true,
-            'message' => $testimonial->is_featured ? 'Testimonial featured successfully.' : 'Testimonial unfeatured successfully.'
-        ]);
     }
 
     public function destroy(Testimonial $testimonial)
     {
-        $testimonial->delete();
+        try {
+            $testimonial->delete();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Testimonial deleted successfully.'
-        ]);
+            return response()->json([
+                'success' => true,
+                'message' => 'Testimonial deleted successfully.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error deleting testimonial: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

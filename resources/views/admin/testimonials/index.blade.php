@@ -410,6 +410,9 @@
 
 @push('scripts')
 <script>
+    // Debug: Check if CSRF token is available
+    console.log('CSRF Token:', '{{ csrf_token() }}');
+
     // Enhanced testimonial data storage
     const testimonialData = {
         @foreach($testimonials as $testimonial)
@@ -491,26 +494,35 @@
             showLoadingState(true);
 
             fetch(`/admin/testimonials/${testimonialId}/status`, {
-                method: 'POST',
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
                 },
                 body: JSON.stringify({status: status})
             })
-            .then(response => response.json())
+            .then(response => {
+                console.log('Response status:', response.status);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
             .then(data => {
                 showLoadingState(false);
+                console.log('Response data:', data);
                 if(data.success) {
-                    showToast('success', `Testimonial ${actionText} successfully!`);
+                    showToast('success', data.message || `Testimonial ${actionText} successfully!`);
                     setTimeout(() => location.reload(), 1500);
                 } else {
-                    showToast('error', 'Error updating testimonial status');
+                    showToast('error', data.message || 'Error updating testimonial status');
                 }
             })
             .catch(error => {
+                console.error('Error:', error);
                 showLoadingState(false);
-                showToast('error', 'Network error occurred');
+                showToast('error', `Error: ${error.message}`);
             });
         }
     }
@@ -523,26 +535,35 @@
         if(confirm(`Are you sure you want to ${action}?`)) {
             showLoadingState(true);
 
-            fetch(`/admin/testimonials/${testimonialId}/toggle-featured`, {
-                method: 'POST',
+            fetch(`/admin/testimonials/${testimonialId}/featured`, {
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
                 }
             })
-            .then(response => response.json())
+            .then(response => {
+                console.log('Featured response status:', response.status);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
             .then(data => {
                 showLoadingState(false);
+                console.log('Featured response data:', data);
                 if(data.success) {
-                    showToast('success', 'Featured status updated successfully!');
+                    showToast('success', data.message || 'Featured status updated successfully!');
                     setTimeout(() => location.reload(), 1500);
                 } else {
-                    showToast('error', 'Error updating featured status');
+                    showToast('error', data.message || 'Error updating featured status');
                 }
             })
             .catch(error => {
+                console.error('Featured Error:', error);
                 showLoadingState(false);
-                showToast('error', 'Network error occurred');
+                showToast('error', `Error: ${error.message}`);
             });
         }
     }
@@ -556,22 +577,31 @@
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
                 }
             })
-            .then(response => response.json())
+            .then(response => {
+                console.log('Delete response status:', response.status);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
             .then(data => {
                 showLoadingState(false);
+                console.log('Delete response data:', data);
                 if(data.success) {
-                    showToast('success', 'Testimonial deleted successfully!');
+                    showToast('success', data.message || 'Testimonial deleted successfully!');
                     document.querySelector(`[data-id="${testimonialId}"]`).remove();
                 } else {
-                    showToast('error', 'Error deleting testimonial');
+                    showToast('error', data.message || 'Error deleting testimonial');
                 }
             })
             .catch(error => {
+                console.error('Delete Error:', error);
                 showLoadingState(false);
-                showToast('error', 'Network error occurred');
+                showToast('error', `Error: ${error.message}`);
             });
         }
     }
@@ -616,6 +646,8 @@
 
     // Toast notification system
     function showToast(type, message) {
+        console.log('Showing toast:', type, message);
+
         // Create toast container if it doesn't exist
         let toastContainer = document.getElementById('toast-container');
         if (!toastContainer) {
@@ -628,24 +660,34 @@
 
         // Create toast element
         const toastId = 'toast-' + Date.now();
+        const bgClass = type === 'success' ? 'success' : (type === 'error' ? 'danger' : 'info');
+        const iconClass = type === 'success' ? 'check-circle-fill' : (type === 'error' ? 'exclamation-triangle-fill' : 'info-circle-fill');
+
         const toastHtml = `
-            <div id="${toastId}" class="toast align-items-center text-white bg-${type === 'success' ? 'success' : (type === 'error' ? 'danger' : 'info')} border-0" role="alert">
+            <div id="${toastId}" class="toast align-items-center text-white bg-${bgClass} border-0" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="d-flex">
                     <div class="toast-body">
-                        <i class="bi bi-${type === 'success' ? 'check-circle-fill' : (type === 'error' ? 'exclamation-triangle-fill' : 'info-circle-fill')} me-2"></i>
+                        <i class="bi bi-${iconClass} me-2"></i>
                         ${message}
                     </div>
-                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
                 </div>
             </div>
         `;
 
         toastContainer.insertAdjacentHTML('beforeend', toastHtml);
-        const toast = new bootstrap.Toast(document.getElementById(toastId));
+
+        // Initialize and show toast
+        const toastElement = document.getElementById(toastId);
+        const toast = new bootstrap.Toast(toastElement, {
+            autohide: true,
+            delay: 5000
+        });
+
         toast.show();
 
         // Remove toast element after it's hidden
-        document.getElementById(toastId).addEventListener('hidden.bs.toast', function() {
+        toastElement.addEventListener('hidden.bs.toast', function() {
             this.remove();
         });
     }
