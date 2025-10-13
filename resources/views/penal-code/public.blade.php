@@ -96,7 +96,8 @@
                     <h5 class="mb-0"><i class="bi bi-journal-text me-2"></i>Penal Code Sections</h5>
                 </div>
                 <div class="card-body">
-                    <div class="table-responsive">
+                    <!-- Desktop view (table) -->
+                    <div class="table-responsive d-none d-md-block">
                         <table class="table table-hover mobile-optimized">
                             <thead class="table-sticky-header">
                                 <tr>
@@ -108,7 +109,13 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($sections as $section)
+                                @php
+                                    // Sort sections by section_number numerically
+                                    $allSections = collect($sections->items())->sortBy(function($section) {
+                                        return (int)$section->section_number;
+                                    });
+                                @endphp
+                                @foreach($allSections as $section)
                                 <tr>
                                     <td class="chapter-col">
                                         <div class="chapter-info">
@@ -154,6 +161,91 @@
                         </table>
                     </div>
 
+                    <!-- Mobile view (accordion) -->
+                    <div class="d-md-none">
+                        <div class="accordion chapter-accordion" id="publicChapterAccordion">
+                            @php
+                                // Group by chapter_name
+                                $groupedByChapter = $allSections->groupBy('chapter_name');
+                            @endphp
+
+                            @foreach($groupedByChapter as $chapterName => $chapterSections)
+                                <div class="accordion-item chapter-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button"
+                                                data-bs-toggle="collapse"
+                                                data-bs-target="#chapter-{{ Str::slug($chapterName) }}"
+                                                aria-expanded="false">
+                                            <div>
+                                                <strong class="d-block">{{ $chapterName }}</strong>
+                                                <small class="text-muted">{{ $chapterSections->count() }} sections</small>
+                                            </div>
+                                        </button>
+                                    </h2>
+                                    <div id="chapter-{{ Str::slug($chapterName) }}"
+                                         class="accordion-collapse collapse"
+                                         data-bs-parent="#publicChapterAccordion">
+                                        <div class="accordion-body p-0">
+                                            @php
+                                                // Group sections by sub_chapter_name within this chapter
+                                                $groupedBySubChapter = $chapterSections->groupBy('sub_chapter_name');
+                                            @endphp
+
+                                            @foreach($groupedBySubChapter as $subChapterName => $subChapterSections)
+                                                @if($subChapterName)
+                                                    <div class="sub-chapter-header">
+                                                        <span class="sub-chapter-title">{{ $subChapterName }}</span>
+                                                    </div>
+                                                @endif
+
+                                                <ul class="list-group list-group-flush">
+                                                    @foreach($subChapterSections->sortBy(function($section) {
+                                                        return (int)$section->section_number;
+                                                    }) as $section)
+                                                        <li class="list-group-item">
+                                                            <div class="d-flex justify-content-between align-items-center">
+                                                                <div>
+                                                                    <div class="d-flex align-items-center mb-1">
+                                                                        <span class="badge bg-light text-dark me-2">{{ $section->section_number }}</span>
+                                                                        <span class="fw-medium">{{ $section->name_of_the_section }}</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="access-section">
+                                                                    <button class="btn btn-sm btn-primary show-access-message" title="View Details">
+                                                                        <i class="bi bi-eye"></i>
+                                                                    </button>
+                                                                    <div class="access-message collapse">
+                                                                        <div class="card mt-2 border-warning">
+                                                                            <div class="card-body p-3">
+                                                                                <div class="d-flex align-items-center text-warning mb-2">
+                                                                                    <i class="bi bi-lock-fill me-2"></i>
+                                                                                    <strong>Access Required</strong>
+                                                                                </div>
+                                                                                <p class="mb-2 small">Registration required to view content.</p>
+                                                                                <div class="btn-group btn-group-sm">
+                                                                                    <a href="{{ route('login') }}" class="btn btn-outline-primary">
+                                                                                        <i class="bi bi-box-arrow-in-right"></i> Login
+                                                                                    </a>
+                                                                                    <a href="{{ route('register') }}" class="btn btn-primary">
+                                                                                        <i class="bi bi-person-plus"></i> Register
+                                                                                    </a>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+
                     <!-- Pagination -->
                     <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 mt-3">
                         <div class="text-center text-md-start small">
@@ -193,6 +285,9 @@ document.addEventListener('DOMContentLoaded', function() {
             // Toggle this message
             const message = this.closest('.access-section').querySelector('.access-message');
             message.classList.toggle('show');
+
+            // Prevent event bubbling to avoid triggering accordion
+            e.stopPropagation();
         });
     });
 
@@ -222,6 +317,111 @@ document.addEventListener('DOMContentLoaded', function() {
             behavior: 'smooth'
         });
     });
+
+    // Completely custom accordion implementation to avoid conflicts
+    const chapterAccordion = document.getElementById('publicChapterAccordion');
+
+    // Wait for Bootstrap to be fully loaded before implementing our custom behavior
+    setTimeout(() => {
+        // First, get all accordion elements
+        const accordionButtons = document.querySelectorAll('#publicChapterAccordion .accordion-button');
+        const accordionItems = document.querySelectorAll('#publicChapterAccordion .accordion-collapse');
+
+        // Remove all Bootstrap's built-in accordion functionality
+        accordionButtons.forEach(button => {
+            // Clone and replace to remove any event listeners
+            const newButton = button.cloneNode(true);
+            button.parentNode.replaceChild(newButton, button);
+        });
+
+        // Re-select all buttons after replacement
+        const newAccordionButtons = document.querySelectorAll('#publicChapterAccordion .accordion-button');
+
+        // Remove Bootstrap data attributes
+        newAccordionButtons.forEach(button => {
+            // Store the target ID before removing the attribute
+            const targetSelector = button.getAttribute('data-bs-target');
+            const targetId = targetSelector ? targetSelector.substring(1) : null;
+
+            // Store as a custom attribute
+            if (targetId) {
+                button.setAttribute('data-target-id', targetId);
+            }
+
+            // Remove Bootstrap attributes
+            button.removeAttribute('data-bs-toggle');
+        });
+
+        // Remove parent container references to allow independent operation
+        accordionItems.forEach(item => {
+            item.removeAttribute('data-bs-parent');
+        });
+
+        // Check if we have any saved open accordions
+        const openAccordions = JSON.parse(sessionStorage.getItem('openPublicPenalCodeChapters')) || [];
+
+        // Apply saved states
+        openAccordions.forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.classList.add('show');
+                const button = document.querySelector(`[data-target-id="${id}"]`) ||
+                               document.querySelector(`[data-bs-target="#${id}"]`);
+                if (button) button.classList.remove('collapsed');
+            }
+        });
+
+        // Add our own click handlers
+        newAccordionButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                // Get target ID from our custom attribute or the original bs attribute
+                const targetId = this.getAttribute('data-target-id') ||
+                                this.getAttribute('data-bs-target')?.substring(1);
+
+                if (!targetId) return;
+
+                const targetElement = document.getElementById(targetId);
+                if (!targetElement) return;
+
+                const isCurrentlyCollapsed = this.classList.contains('collapsed');
+
+                // Toggle the accordion manually
+                if (isCurrentlyCollapsed) {
+                    // Expand
+                    this.classList.remove('collapsed');
+                    this.setAttribute('aria-expanded', 'true');
+                    targetElement.classList.add('show');
+                } else {
+                    // Collapse
+                    this.classList.add('collapsed');
+                    this.setAttribute('aria-expanded', 'false');
+                    targetElement.classList.remove('show');
+                }
+
+                // Update storage
+                const currentOpen = JSON.parse(sessionStorage.getItem('openPublicPenalCodeChapters')) || [];
+
+                if (!isCurrentlyCollapsed) {
+                    // Add to open list (it was collapsed, now it's open)
+                    if (!currentOpen.includes(targetId)) {
+                        currentOpen.push(targetId);
+                    }
+                } else {
+                    // Remove from open list (it was open, now it's collapsed)
+                    const index = currentOpen.indexOf(targetId);
+                    if (index > -1) {
+                        currentOpen.splice(index, 1);
+                    }
+                }
+
+                sessionStorage.setItem('openPublicPenalCodeChapters', JSON.stringify(currentOpen));
+
+                // Stop event propagation to prevent default Bootstrap behavior
+                e.preventDefault();
+                e.stopPropagation();
+            });
+        });
+    }, 300); // Short delay to ensure Bootstrap is fully initialized
 });
 </script>
 @endpush
@@ -322,6 +522,13 @@ document.addEventListener('DOMContentLoaded', function() {
     margin-top: 5px;
 }
 
+/* For mobile accordion view */
+@media (max-width: 767px) {
+    .list-group-item .access-message {
+        right: -20px;
+    }
+}
+
 .access-message .card {
     margin: 0;
     background: #fff;
@@ -379,6 +586,57 @@ document.addEventListener('DOMContentLoaded', function() {
 .back-to-top-btn:hover {
     background: #0056b3;
     transform: translateY(-3px);
+}
+
+/* Chapter accordion styles for mobile view */
+.chapter-accordion .accordion-button {
+    background-color: #f8f9fa;
+    color: #212529;
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    text-align: left;
+}
+
+.chapter-accordion .accordion-button:not(.collapsed) {
+    background-color: #e6f0ff;
+    color: #0066cc;
+}
+
+.chapter-accordion .list-group-item {
+    padding: 0.75rem 1rem;
+    border-left: none;
+    border-right: none;
+}
+
+.chapter-accordion .list-group-item:first-child {
+    border-top: none;
+}
+
+.chapter-accordion .badge {
+    font-weight: normal;
+}
+
+/* Sub-chapter styles */
+.sub-chapter-header {
+    background-color: rgba(0,0,0,0.03);
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid rgba(0,0,0,.125);
+}
+
+.sub-chapter-title {
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: #0066cc;
+}
+
+.chapter-item {
+    margin-bottom: 0.75rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    border-radius: 0.25rem;
+    overflow: hidden;
+    border: 1px solid rgba(0,0,0,.125);
 }
 </style>
 @endpush
