@@ -1322,7 +1322,17 @@
 <div class="container ad-section">
     <div class="ad-placeholder" data-aos="fade-up">
         <i class="bi bi-megaphone fs-1 text-muted mb-3"></i>
-        <p class="text-muted mb-0">Advertisement Space</p>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6579653610544842" crossorigin="anonymous"></script>
+        <!-- Display Ad 01 -->
+        <ins class="adsbygoogle"
+            style="display:block"
+            data-ad-client="ca-pub-6579653610544842"
+            data-ad-slot="7573254407"
+            data-ad-format="auto"
+            data-full-width-responsive="true"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
     </div>
 </div>
 @endsection
