@@ -111,7 +111,7 @@
                             <tbody>
                                 @php
                                     // Sort sections by section_number numerically
-                                    $allSections = collect($sections->items())->sortBy(function($section) {
+                                    $allSections = $sections->sortBy(function($section) {
                                         return (int)$section->section_number;
                                     });
                                 @endphp
@@ -246,13 +246,10 @@
                         </div>
                     </div>
 
-                    <!-- Pagination -->
-                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 mt-3">
-                        <div class="text-center text-md-start small">
-                            Showing {{ $sections->firstItem() ?? 0 }} to {{ $sections->lastItem() ?? 0 }} of {{ $sections->total() }} entries
-                        </div>
-                        <div class="d-flex justify-content-center w-100 w-md-auto">
-                            {{ $sections->appends(request()->query())->links() }}
+                    <!-- Total count display -->
+                    <div class="d-flex justify-content-center mt-3">
+                        <div class="text-center small">
+                            Showing {{ $allSections->count() }} total entries
                         </div>
                     </div>
                 </div>

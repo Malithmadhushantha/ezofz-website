@@ -153,8 +153,8 @@
                             </thead>
                             <tbody>
                                 @php
-                                    // Set a higher pagination value to show all entries and sort by section_number
-                                    $allSections = collect($sections->items())->sortBy(function($section) {
+                                    // Sort sections by section_number numerically
+                                    $allSections = $sections->sortBy(function($section) {
                                         return (int)$section->section_number;
                                     });
                                 @endphp
@@ -182,7 +182,9 @@
                             </tbody>
                         </table>
                         <div class="mt-3">
-                            {{ $sections->appends(request()->query())->links() }}
+                            <div class="text-center small">
+                                Showing {{ $allSections->count() }} total entries
+                            </div>
                         </div>
                     </div>
 
@@ -190,12 +192,7 @@
                     <div class="d-md-none">
                         <div class="accordion chapter-accordion" id="chapterAccordion">
                             @php
-                                // Get all sections and sort them numerically by section_number
-                                $allSections = collect($sections->items())->sortBy(function($section) {
-                                    return (int)$section->section_number;
-                                });
-
-                                // Group by chapter_name
+                                // Group by chapter_name (using the already sorted $allSections from above)
                                 $groupedByChapter = $allSections->groupBy('chapter_name');
                             @endphp
 
@@ -251,7 +248,9 @@
                             @endforeach
                         </div>
                         <div class="mt-3">
-                            {{ $sections->appends(request()->query())->links() }}
+                            <div class="text-center small">
+                                Showing {{ $allSections->count() }} total entries
+                            </div>
                         </div>
                     </div>
                 </div>
