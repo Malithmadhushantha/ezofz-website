@@ -20,8 +20,12 @@
 <div class="container my-4">
     <div class="row">
         <!-- Title and Description -->
-        <div class="col-12 mb-4">
+        <div class="col-12 mb-4 justify-center-center text-center mt-4">
             <h1 class="text-primary mb-3">Sri Lanka Penal Code Database</h1>
+            <h2 class="text-success">ශ්‍රී ලංකා දණ්ඩ නීති දත්ත සංග්‍රහය - 19 වැනි අධිකාරය</h2>
+            <p class="text-danger">2016 මුද්‍රණය (සංශෝධිත) - මෙම වෙබ් පිටුවේ දණ්ඩ නීති සංග්‍රහය සකස් කර ඇත්තේ මුද්‍රිත දණ්ඩ නීති සංග්‍රහය (Penal Code - Printed Version) ආධාරයෙන් වන අතර, එහි ඇතැම් වගන්ති අලුත් සංශෝධන සහ වෙනස්කම් ඇතුළත් නොවී තිබිය හැක.
+            අදාළ වගන්ති හා තොරතුරු විශ්වාසනීය බවට උත්සාහ ගත්තද, මෙහි ඇති වගන්ති සම්බන්ධයෙන් වන හා දෝෂ හෝ අසම්පූර්ණතාවන් සඳහා ezofz.lk වෙබ් අඩවිය වගකීමක් දරන්නේ නැත. වඩාත් නිවැරදි හා යාවත්කාලීන තොරතුරු ලබා ගැනීම සඳහා, නිල මුද්‍රිත දණ්ඩ නීති සංග්‍රහය පරික්ෂා කිරීම සුදුසුය.
+             වගන්ති වල අන්තර්ගතය කියවීම සඳහා මෙම වෙබ්අඩවිය සඳහා පරිශීලකයකු ලෙස පැමිණෙන්න.</p>
             <p class="lead">Access comprehensive information about Sri Lankan Penal Code sections, amendments, and legal references.</p>
         </div>
 
