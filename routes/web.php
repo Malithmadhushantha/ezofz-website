@@ -104,6 +104,7 @@ Route::get('/auth/google/callback', [App\Http\Controllers\Auth\GoogleAuthControl
     // Admin Penal Code routes
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/penal-code', [App\Http\Controllers\Admin\PenalCodeController::class, 'index'])->name('penal-code.index');
+    Route::get('/penal-code/overview', [App\Http\Controllers\Admin\PenalCodeController::class, 'overview'])->name('penal-code.overview');
     Route::get('/penal-code/create', [App\Http\Controllers\Admin\PenalCodeController::class, 'create'])->name('penal-code.create');
     Route::post('/penal-code', [App\Http\Controllers\Admin\PenalCodeController::class, 'store'])->name('penal-code.store');
     Route::get('/penal-code/{section}/edit', [App\Http\Controllers\Admin\PenalCodeController::class, 'edit'])->name('penal-code.edit');

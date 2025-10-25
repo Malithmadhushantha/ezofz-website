@@ -9,11 +9,31 @@ use Illuminate\Http\Request;
 
 class PenalCodeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $sections = PenalCodeSection::orderBy('chapter_name')
-            ->orderBy('section_number')
-            ->paginate(10);
+        $query = PenalCodeSection::with(['amendments']);
+
+        // Search functionality
+        if ($request->has('search') && !empty($request->search)) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('section_number', 'like', "%{$search}%")
+                  ->orWhere('name_of_the_section', 'like', "%{$search}%")
+                  ->orWhere('chapter_name', 'like', "%{$search}%")
+                  ->orWhere('sub_chapter_name', 'like', "%{$search}%");
+            });
+        }
+
+        // Get all sections and sort them properly
+        $sections = $query->get()->sortBy(function($section) {
+            // Convert section number to proper numerical sorting
+            $parts = explode('.', $section->section_number);
+            $sortKey = '';
+            foreach ($parts as $part) {
+                $sortKey .= str_pad((int)$part, 10, '0', STR_PAD_LEFT) . '.';
+            }
+            return $sortKey;
+        });
 
         return view('admin.penal-code.index', compact('sections'));
     }
@@ -110,5 +130,30 @@ class PenalCodeController extends Controller
         $section->delete();
         return redirect()->route('admin.penal-code.index')
             ->with('success', 'Section deleted successfully');
+    }
+
+    public function overview()
+    {
+        // Get all sections grouped by chapter for overview
+        $sections = PenalCodeSection::orderBy('chapter_name')
+            ->orderBy('sub_chapter_name')
+            ->get()
+            ->sortBy(function($section) {
+                // Convert section number to proper numerical sorting
+                $parts = explode('.', $section->section_number);
+                $sortKey = '';
+                foreach ($parts as $part) {
+                    $sortKey .= str_pad((int)$part, 10, '0', STR_PAD_LEFT) . '.';
+                }
+                return $sortKey;
+            })
+            ->groupBy('chapter_name');
+
+        // Get statistics
+        $totalSections = PenalCodeSection::count();
+        $totalChapters = PenalCodeSection::distinct('chapter_name')->count();
+        $sectionsWithAmendments = PenalCodeSection::has('amendments')->count();
+
+        return view('admin.penal-code.overview', compact('sections', 'totalSections', 'totalChapters', 'sectionsWithAmendments'));
     }
 }
