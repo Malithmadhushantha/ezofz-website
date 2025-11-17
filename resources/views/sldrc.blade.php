@@ -497,34 +497,64 @@
 .screenshots-gallery {
     padding: 100px 0;
     background: #f8fafc;
+    overflow: hidden;
 }
 
-.screenshot-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 30px;
+.screenshot-carousel-wrapper {
     margin-top: 60px;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}
+
+.screenshot-carousel {
+    display: flex;
+    gap: 30px;
+    animation: scrollLeft 30s linear infinite;
+    width: fit-content;\n    will-change: transform;
 }
 
 .screenshot-item {
     text-align: center;
     transition: all 0.3s ease;
+    flex-shrink: 0;
+    width: 250px;
 }
 
 .screenshot-item:hover {
     transform: translateY(-10px);
+    animation-play-state: paused;
+}
+
+.screenshot-carousel:hover {
+    animation-play-state: paused;
+}
+
+@keyframes scrollLeft {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
 }
 
 .screenshot-phone {
-    width: 200px;
-    height: 400px;
+    width: 220px;
+    height: 440px;
     margin: 0 auto 20px;
     background: #1f2937;
     border-radius: 25px;
     padding: 15px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
     position: relative;
     overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.screenshot-item:hover .screenshot-phone {
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+    transform: scale(1.05);
 }
 
 .screenshot-phone img {
@@ -850,48 +880,91 @@
             <p class="lead text-muted">Designed with Material Design 3 principles for a professional, government-grade user experience</p>
         </div>
 
-        <div class="screenshot-container">
-            <div class="screenshot-item">
-                <div class="screenshot-phone">
-                    <img src="{{ asset('images/sldrc_app/dashboard.jpg') }}" alt="SLDRC App Dashboard" class="img-fluid">
+        <div class="screenshot-carousel-wrapper">
+            <div class="screenshot-carousel">
+                <!-- First set of screenshots -->
+                <div class="screenshot-item">
+                    <div class="screenshot-phone">
+                        <img src="{{ asset('images/sldrc_app/dashboard.jpg') }}" alt="SLDRC App Dashboard" class="img-fluid">
+                    </div>
+                    <h4 class="screenshot-title">Smart Dashboard</h4>
+                    <p class="screenshot-desc">Quick overview of all your vehicles, recent trips, and key statistics in one place</p>
                 </div>
-                <h4 class="screenshot-title">Smart Dashboard</h4>
-                <p class="screenshot-desc">Quick overview of all your vehicles, recent trips, and key statistics in one place</p>
-            </div>
 
-            <div class="screenshot-item">
-                <div class="screenshot-phone">
-                    <img src="{{ asset('images/sldrc_app/trip_recording.jpg') }}" alt="SLDRC App Trip Recording" class="img-fluid">
+                <div class="screenshot-item">
+                    <div class="screenshot-phone">
+                        <img src="{{ asset('images/sldrc_app/trip_recording.jpg') }}" alt="SLDRC App Trip Recording" class="img-fluid">
+                    </div>
+                    <h4 class="screenshot-title">Trip Recording</h4>
+                    <p class="screenshot-desc">Easy trip recording with automatic calculations and detailed logging capabilities</p>
                 </div>
-                <h4 class="screenshot-title">Trip Recording</h4>
-                <p class="screenshot-desc">Easy trip recording with automatic calculations and detailed logging capabilities</p>
-            </div>
 
-            <div class="screenshot-item">
-                <div class="screenshot-phone">
-                    <img src="{{ asset('images/sldrc_app/vehicle_management.jpg') }}" alt="SLDRC App Vehicle Management" class="img-fluid">
+                <div class="screenshot-item">
+                    <div class="screenshot-phone">
+                        <img src="{{ asset('images/sldrc_app/vehicle_management.jpg') }}" alt="SLDRC App Vehicle Management" class="img-fluid">
+                    </div>
+                    <h4 class="screenshot-title">Vehicle Management</h4>
+                    <p class="screenshot-desc">Complete vehicle profiles with registration details, specifications, and current status</p>
                 </div>
-                <h4 class="screenshot-title">Vehicle Management</h4>
-                <p class="screenshot-desc">Complete vehicle profiles with registration details, specifications, and current status</p>
-            </div>
 
-            <div class="screenshot-item">
-                <div class="screenshot-phone">
-                    <img src="{{ asset('images/sldrc_app/data_history.jpg') }}" alt="SLDRC App Data History" class="img-fluid">
+                <div class="screenshot-item">
+                    <div class="screenshot-phone">
+                        <img src="{{ asset('images/sldrc_app/data_history.jpg') }}" alt="SLDRC App Data History" class="img-fluid">
+                    </div>
+                    <h4 class="screenshot-title">Data History</h4>
+                    <p class="screenshot-desc">Access a comprehensive history of all your vehicle data, trips, and maintenance records for easy reference and analysis</p>
                 </div>
-                <h4 class="screenshot-title">Data History</h4>
-                <p class="screenshot-desc">Access a comprehensive history of all your vehicle data, trips, and maintenance records for easy reference and analysis</p>
-            </div>
 
-            <div class="screenshot-item">
-                <div class="screenshot-phone">
-                    <img src="{{ asset('images/sldrc_app/detailed_reports.jpg') }}" alt="SLDRC App Detailed Reports" class="img-fluid">
+                <div class="screenshot-item">
+                    <div class="screenshot-phone">
+                        <img src="{{ asset('images/sldrc_app/detailed_reports.jpg') }}" alt="SLDRC App Detailed Reports" class="img-fluid">
+                    </div>
+                    <h4 class="screenshot-title">Detailed Reports</h4>
+                    <p class="screenshot-desc">Comprehensive analytics and reporting for informed decision making</p>
                 </div>
-                <h4 class="screenshot-title">Detailed Reports</h4>
-                <p class="screenshot-desc">Comprehensive analytics and reporting for informed decision making</p>
+
+                <!-- Duplicate set for seamless looping -->
+                <div class="screenshot-item">
+                    <div class="screenshot-phone">
+                        <img src="{{ asset('images/sldrc_app/dashboard.jpg') }}" alt="SLDRC App Dashboard" class="img-fluid">
+                    </div>
+                    <h4 class="screenshot-title">Smart Dashboard</h4>
+                    <p class="screenshot-desc">Quick overview of all your vehicles, recent trips, and key statistics in one place</p>
+                </div>
+
+                <div class="screenshot-item">
+                    <div class="screenshot-phone">
+                        <img src="{{ asset('images/sldrc_app/trip_recording.jpg') }}" alt="SLDRC App Trip Recording" class="img-fluid">
+                    </div>
+                    <h4 class="screenshot-title">Trip Recording</h4>
+                    <p class="screenshot-desc">Easy trip recording with automatic calculations and detailed logging capabilities</p>
+                </div>
+
+                <div class="screenshot-item">
+                    <div class="screenshot-phone">
+                        <img src="{{ asset('images/sldrc_app/vehicle_management.jpg') }}" alt="SLDRC App Vehicle Management" class="img-fluid">
+                    </div>
+                    <h4 class="screenshot-title">Vehicle Management</h4>
+                    <p class="screenshot-desc">Complete vehicle profiles with registration details, specifications, and current status</p>
+                </div>
+
+                <div class="screenshot-item">
+                    <div class="screenshot-phone">
+                        <img src="{{ asset('images/sldrc_app/data_history.jpg') }}" alt="SLDRC App Data History" class="img-fluid">
+                    </div>
+                    <h4 class="screenshot-title">Data History</h4>
+                    <p class="screenshot-desc">Access a comprehensive history of all your vehicle data, trips, and maintenance records for easy reference and analysis</p>
+                </div>
+
+                <div class="screenshot-item">
+                    <div class="screenshot-phone">
+                        <img src="{{ asset('images/sldrc_app/detailed_reports.jpg') }}" alt="SLDRC App Detailed Reports" class="img-fluid">
+                    </div>
+                    <h4 class="screenshot-title">Detailed Reports</h4>
+                    <p class="screenshot-desc">Comprehensive analytics and reporting for informed decision making</p>
+                </div>
             </div>
         </div>
-    </div>
 </section>
 
     <!-- Benefits Section -->
@@ -1649,14 +1722,26 @@
         font-size: 0.9rem;
     }
 
-    .screenshot-container {
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    .screenshot-carousel {
+        animation-duration: 20s;
         gap: 20px;
+    }
+
+    .screenshot-item {
+        width: 200px;
     }
 
     .screenshot-phone {
         width: 180px;
         height: 360px;
+    }
+
+    .screenshot-carousel-wrapper {
+        margin-top: 40px;
+    }
+
+    .screenshot-item:hover {
+        transform: translateY(-5px) !important;
     }
 
     .company-badge {
