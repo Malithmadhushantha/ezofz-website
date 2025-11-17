@@ -17,6 +17,9 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about', [HomeController::class, 'about'])->name('about');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 Route::get('/privacy-policy', [HomeController::class, 'privacy'])->name('privacy');
+Route::get('/sldrc-app', function () {
+    return view('sldrc');
+})->name('sldrc.app');
 
 // Police Directory routes
 Route::get('/police-directory', [PoliceDirectoryController::class, 'index'])->name('police.directory');

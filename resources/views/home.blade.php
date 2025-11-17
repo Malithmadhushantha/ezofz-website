@@ -935,6 +935,108 @@
     </div>
 </section>
 
+<!-- SLDRC App Showcase Section -->
+<section class="sldrc-app-section" style="padding: 100px 0; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); position: relative; overflow: hidden;">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6" data-aos="fade-right">
+                <div class="app-info">
+                    <div class="app-badge" style="display: inline-block; background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 8px 20px; border-radius: 50px; font-size: 0.9rem; font-weight: 600; margin-bottom: 2rem;">
+                        <i class="bi bi-phone me-2"></i>Mobile Application
+                    </div>
+                    <h2 class="section-title text-start mb-4">SLDRC App - Digital Vehicle Management</h2>
+                    <p class="lead mb-4" style="color: #64748b; font-size: 1.2rem; line-height: 1.7;">
+                        Transform your vehicle record-keeping with our comprehensive digital solution designed specifically for Sri Lankan drivers.
+                        Manage trips, track fuel consumption, monitor service schedules, and maintain complete vehicle records - all in one professional mobile application.
+                    </p>
+
+                    <div class="app-features mb-4">
+                        <div class="row g-3">
+                            <div class="col-sm-6">
+                                <div class="feature-point d-flex align-items-center">
+                                    <div class="feature-icon-sm" style="width: 40px; height: 40px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px;">
+                                        <i class="bi bi-check2 text-white"></i>
+                                    </div>
+                                    <span style="color: #374151; font-weight: 500;">Trip Management</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="feature-point d-flex align-items-center">
+                                    <div class="feature-icon-sm" style="width: 40px; height: 40px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px;">
+                                        <i class="bi bi-check2 text-white"></i>
+                                    </div>
+                                    <span style="color: #374151; font-weight: 500;">Fuel Tracking</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="feature-point d-flex align-items-center">
+                                    <div class="feature-icon-sm" style="width: 40px; height: 40px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px;">
+                                        <i class="bi bi-check2 text-white"></i>
+                                    </div>
+                                    <span style="color: #374151; font-weight: 500;">Service Management</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="feature-point d-flex align-items-center">
+                                    <div class="feature-icon-sm" style="width: 40px; height: 40px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px;">
+                                        <i class="bi bi-check2 text-white"></i>
+                                    </div>
+                                    <span style="color: #374151; font-weight: 500;">Bilingual Support</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="app-actions">
+                        <a href="{{ route('sldrc.app') }}" class="btn btn-primary btn-lg me-3 mb-2" style="background: linear-gradient(135deg, #667eea, #764ba2); border: none; padding: 12px 30px; font-weight: 600;">
+                            <i class="bi bi-eye me-2"></i>View Details
+                        </a>
+                        <a href="#" class="btn btn-outline-primary btn-lg mb-2" style="border-color: #667eea; color: #667eea; padding: 12px 30px; font-weight: 600;">
+                            <i class="bi bi-download me-2"></i>Download App
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6" data-aos="fade-left">
+                <div class="app-showcase text-center mt-5 mt-lg-0">
+                    <div class="phone-mockup-home" style="position: relative; max-width: 300px; margin: 0 auto;">
+                        <div style="width: 300px; height: 600px; background: linear-gradient(145deg, #1f2937, #374151); border-radius: 35px; padding: 20px; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3); position: relative;">
+                            <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 25px; overflow: hidden; position: relative;">
+                                <!-- Phone screen content -->
+                                <div style="padding: 20px; color: white; text-align: center; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                                    <div style="background: rgba(255, 255, 255, 0.1); border-radius: 15px; padding: 20px; margin-bottom: 20px; backdrop-filter: blur(10px);">
+                                        <i class="bi bi-car-front" style="font-size: 3rem; color: #fbbf24;"></i>
+                                        <h4 style="margin: 15px 0 10px; color: white; font-weight: 600;">SLDRC Dashboard</h4>
+                                        <p style="margin: 0; font-size: 0.9rem; opacity: 0.9;">Vehicle Management System</p>
+                                    </div>
+
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; margin-bottom: 20px;">
+                                        <div style="background: rgba(255, 255, 255, 0.15); border-radius: 10px; padding: 15px; text-align: center;">
+                                            <i class="bi bi-speedometer2" style="font-size: 1.5rem; color: #fbbf24; display: block; margin-bottom: 8px;"></i>
+                                            <div style="font-size: 0.8rem; font-weight: 600;">45.2 km</div>
+                                            <div style="font-size: 0.7rem; opacity: 0.8;">Today</div>
+                                        </div>
+                                        <div style="background: rgba(255, 255, 255, 0.15); border-radius: 10px; padding: 15px; text-align: center;">
+                                            <i class="bi bi-fuel-pump" style="font-size: 1.5rem; color: #fbbf24; display: block; margin-bottom: 8px;"></i>
+                                            <div style="font-size: 0.8rem; font-weight: 600;">12.5 km/L</div>
+                                            <div style="font-size: 0.7rem; opacity: 0.8;">Efficiency</div>
+                                        </div>
+                                    </div>
+
+                                    <div style="background: #10b981; border-radius: 12px; padding: 12px 24px; color: white; font-weight: 600; font-size: 0.9rem;">
+                                        <i class="bi bi-play-fill me-2"></i>Start New Trip
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- Features Section -->
 <section class="features-section">
     <div class="container">

@@ -1149,6 +1149,33 @@
         padding-left: 66px;
     }
 
+    /* Navigation consistency fix */
+    .modern-navbar {
+        background: rgba(255, 255, 255, 0.95) !important;
+        backdrop-filter: blur(20px) !important;
+        -webkit-backdrop-filter: blur(20px) !important;
+    }
+
+    /* Ensure proper page content positioning */
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    main {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+    }
+
+    /* Special handling for SLDRC app page */
+    .app-banner + * {
+        margin-top: 0;
+    }
+
+    .modern-navbar.scrolled {
+        background: rgba(255, 255, 255, 0.98) !important;
+    }
+
     /* Modern Navigation Responsive Design */
     @media (max-width: 1200px) {
         .nav-actions {
@@ -2198,7 +2225,7 @@
     </style>
     @stack('styles')
 </head>
-<body>
+<body class="@yield('body-class')">
     <!-- Custom Cursor -->
 
     <div class="cursor-dot"></div>
@@ -2387,6 +2414,21 @@
                                             <span class="item-desc">SL ID verification tool</span>
                                         </div>
                                     </a>
+                                    <hr class="dropdown-divider">
+                                    <a href="{{ route('sldrc.app') }}" class="dropdown-item">
+                                        <div class="item-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                                                <line x1="8" y1="21" x2="16" y2="21"/>
+                                                <line x1="12" y1="17" x2="12" y2="21"/>
+                                                <path d="M7 8h10M7 12h10"/>
+                                            </svg>
+                                        </div>
+                                        <div class="item-content">
+                                            <span class="item-title">SLDRC App</span>
+                                            <span class="item-desc">Vehicle management app</span>
+                                        </div>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -2450,6 +2492,8 @@
                                 </div>
                             </div>
                         </div>
+
+
 
                         <!-- About -->
                         <div class="nav-item {{ request()->routeIs('about') ? 'active' : '' }}">
@@ -2671,6 +2715,9 @@
                                 <a href="{{ route('tools.sl-idcard-details') }}" class="mobile-nav-subitem">
                                     <span>ID Card Details</span>
                                 </a>
+                                <a href="{{ route('sldrc.app') }}" class="mobile-nav-subitem">
+                                    <span>SLDRC App</span>
+                                </a>
                             </div>
                         </div>
 
@@ -2702,6 +2749,8 @@
                                 </a>
                             </div>
                         </div>
+
+
 
                         <!-- Mobile About -->
                         <a href="{{ route('about') }}" class="mobile-nav-item {{ request()->routeIs('about') ? 'active' : '' }}">
