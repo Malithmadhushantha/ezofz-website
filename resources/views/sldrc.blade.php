@@ -1,4 +1,6 @@
-@extends('layouts.app')\n\n@section('body-class', 'sldrc-page')
+@extends('layouts.app')
+
+@section('body-class', 'sldrc-page')
 
 @section('title', 'SLDRC App - Digital Vehicle Management for Sri Lankan Drivers | Ezofz Technology')
 @section('meta_description', 'Transform your vehicle record-keeping with SLDRC App. Digital trip management, fuel tracking, maintenance scheduling for Sri Lankan drivers. Download now on Google Play. Developed by Ezofz Technology Solutions.')
@@ -50,8 +52,8 @@
                             <span>Watch Demo</span>
                         </a>
                     </div>
-                    <!-- Add spacing below buttons -->
-                    <div style="margin-bottom: 80px;"></div>
+                    <!-- Add proper spacing below buttons -->
+                    <div class="banner-spacing"></div>
                 </div>
             </div>
             <div class="col-lg-6">
@@ -169,7 +171,14 @@
     align-items: center;
     margin-top: 0;
     padding-top: 0;
-}.banner-overlay {
+}
+
+.banner-spacing {
+    margin-bottom: 60px;
+    height: 20px;
+}
+
+.banner-overlay {
     position: absolute;
     top: 0;
     left: 0;
@@ -270,8 +279,9 @@
     align-items: center;
     gap: 12px;
     font-weight: 600;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+    transform: translateY(0);
 }
 
 .btn-download:hover {
@@ -595,6 +605,17 @@
         .features {
             padding: 100px 0;
             background: white;
+            position: relative;
+        }
+
+        .features::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.3), transparent);
         }
 
         .section-title {
@@ -1674,29 +1695,40 @@
 /* Additional responsive styles */
 @media (max-width: 768px) {
     .banner-title {
-        font-size: 2.5rem;
+        font-size: 2.8rem;
+        margin-bottom: 20px;
     }
 
     .banner-subtitle {
-        font-size: 1.4rem;
+        font-size: 1.5rem;
+        margin-bottom: 30px;
     }
 
     .banner-stats {
         justify-content: center;
         gap: 20px;
         flex-wrap: wrap;
+        margin-bottom: 35px;
     }
 
     .banner-buttons {
         justify-content: center;
         flex-direction: column;
         align-items: center;
+        gap: 15px;
     }
 
     .btn-download, .btn-learn-more {
         width: 100%;
-        max-width: 300px;
+        max-width: 320px;
         justify-content: center;
+        padding: 16px 20px;
+    }
+
+    .banner-description {
+        font-size: 1.1rem;
+        text-align: center;
+        margin-bottom: 35px;
     }
 
     .phone-mockup {
@@ -1760,7 +1792,12 @@
     }
 
     .app-banner .container {
-        padding-top: 90px; /* Account for mobile navigation */
+        padding-top: 80px; /* Account for mobile navigation */
+    }
+
+    .banner-spacing {
+        margin-bottom: 40px;
+        height: 10px;
     }
 
     .banner-title {
@@ -1909,13 +1946,18 @@ body.sldrc-page .modern-navbar {
 
     /* Prevent size increases and maintain fixed dimensions */
     height: 70px !important;
-    padding: 12px 20px !important;
+    padding: 8px 0 !important;
+    width: 100% !important;
     max-width: 100vw !important;
-    overflow: hidden !important;
+    left: 0 !important;
+    right: 0 !important;
+    overflow: visible !important;
 
     /* Ensure proper z-index hierarchy */
     z-index: 9999 !important;
     position: fixed !important;
+    top: 0 !important;
+    box-sizing: border-box !important;
 }
 
 body.sldrc-page .modern-navbar.scrolled {
@@ -1926,14 +1968,16 @@ body.sldrc-page .modern-navbar.scrolled {
 
 /* Fix navigation container to prevent overflow */
 body.sldrc-page .nav-container {
-    max-width: 1200px !important;
-    margin: 0 auto !important;
-    padding: 0 2rem !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 1rem !important;
     height: 70px !important;
-    overflow: hidden !important;
+    overflow: visible !important;
     display: flex !important;
     align-items: center !important;
     justify-content: space-between !important;
+    box-sizing: border-box !important;
 }
 
 /* Prevent auth buttons from going off-screen */
@@ -1949,17 +1993,43 @@ body.sldrc-page .nav-actions {
 body.sldrc-page .auth-buttons {
     display: flex !important;
     align-items: center !important;
-    gap: 8px !important;
+    gap: 6px !important;
     flex-wrap: nowrap !important;
     min-width: auto !important;
     overflow: visible !important;
+    margin-right: 0 !important;
 }
 
 body.sldrc-page .btn-auth {
-    padding: 8px 16px !important;
-    font-size: 0.85rem !important;
+    padding: 6px 12px !important;
+    font-size: 0.8rem !important;
     white-space: nowrap !important;
     flex-shrink: 0 !important;
+    border-radius: 6px !important;
+}
+
+/* Fix navigation menu positioning */
+body.sldrc-page .nav-menu {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex: 1 !important;
+    max-width: none !important;
+    overflow: visible !important;
+}
+
+body.sldrc-page .nav-items {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+    flex-wrap: nowrap !important;
+    overflow: visible !important;
+}
+
+body.sldrc-page .nav-link {
+    padding: 8px 12px !important;
+    font-size: 0.85rem !important;
+    white-space: nowrap !important;
 }
 
 /* Override main content margins for SLDRC page */
@@ -1968,12 +2038,222 @@ body.sldrc-page main {
     padding-top: 0 !important;
 }
 
-/* Ensure banner is at very top but doesn't interfere with navigation */
+/* Fix body positioning */
+body.sldrc-page {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+    overflow-x: hidden !important;
+}
+
+/* ========== MOBILE NAVIGATION FIXES ========== */
+/* Prevent duplicate elements in mobile navigation */
+body.sldrc-page .mobile-nav-overlay .mobile-nav-header .mobile-brand {
+    /* Ensure logo appears only once */
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+}
+
+body.sldrc-page .mobile-nav-overlay .mobile-nav-header .mobile-brand img {
+    /* Prevent logo duplication */
+    display: block !important;
+    width: auto !important;
+    height: 32px !important;
+}
+
+body.sldrc-page .mobile-auth-section {
+    /* Ensure auth buttons appear only once */
+    padding: 20px 24px 24px !important;
+    border-top: 1px solid rgba(37, 99, 235, 0.1) !important;
+    background: rgba(37, 99, 235, 0.02) !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    margin-top: auto !important;
+    flex-shrink: 0 !important;
+}
+
+body.sldrc-page .mobile-auth-btn {
+    /* Prevent button duplication */
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 12px 20px !important;
+    border-radius: 8px !important;
+    text-decoration: none !important;
+    transition: all 0.3s ease !important;
+}
+
+body.sldrc-page .mobile-auth-btn.login {
+    color: var(--primary-blue) !important;
+    border: 2px solid var(--primary-blue) !important;
+    background: transparent !important;
+}
+
+body.sldrc-page .mobile-auth-btn.register {
+    color: white !important;
+    background: linear-gradient(135deg, var(--primary-blue), var(--accent-color)) !important;
+    border: 2px solid transparent !important;
+}
+
+/* Ensure mobile navigation content doesn't duplicate */
+body.sldrc-page .mobile-nav-content {
+    background: rgba(255, 255, 255, 0.98) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+}
+
+/* Ensure mobile navigation items have correct colors */
+body.sldrc-page .mobile-nav-item {
+    color: var(--text-dark) !important;
+    border-bottom: 1px solid rgba(37, 99, 235, 0.05) !important;
+}
+
+body.sldrc-page .mobile-nav-item svg {
+    color: var(--primary-blue) !important;
+}
+
+body.sldrc-page .mobile-nav-item:hover,
+body.sldrc-page .mobile-nav-item.active {
+    background: rgba(37, 99, 235, 0.05) !important;
+    color: var(--primary-blue) !important;
+}
+
+/* Mobile navigation header styling */
+body.sldrc-page .mobile-nav-header {
+    background: rgba(37, 99, 235, 0.02) !important;
+    border-bottom: 1px solid rgba(37, 99, 235, 0.1) !important;
+}
+
+body.sldrc-page .mobile-brand span {
+    color: var(--text-dark) !important;
+    font-weight: 600 !important;
+}
+
+/* Fix mobile menu positioning and z-index */
+body.sldrc-page .mobile-nav-overlay {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    z-index: 99999 !important; /* Higher than navbar */
+    background: rgba(0, 0, 0, 0.8) !important;
+    backdrop-filter: blur(8px) !important;
+}
+
+/* Prevent SLDRC page styles from affecting mobile toggle */
+body.sldrc-page .mobile-toggle {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 40px !important;
+    height: 40px !important;
+    cursor: pointer !important;
+    z-index: 10000 !important;
+}
+
+body.sldrc-page .hamburger {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 4px !important;
+}
+
+body.sldrc-page .hamburger span {
+    display: block !important;
+    width: 20px !important;
+    height: 2px !important;
+    background: var(--primary-blue) !important;
+    transition: all 0.3s ease !important;
+}
+
+/* Mobile navigation group styling */
+body.sldrc-page .mobile-nav-group-header {
+    color: var(--text-dark) !important;
+    border-bottom: 1px solid rgba(37, 99, 235, 0.05) !important;
+}
+
+body.sldrc-page .mobile-nav-group-header svg {
+    color: var(--primary-blue) !important;
+}
+
+body.sldrc-page .mobile-nav-subitem {
+    color: var(--text-light) !important;
+    background: rgba(37, 99, 235, 0.02) !important;
+}
+
+body.sldrc-page .mobile-nav-subitem:hover {
+    background: rgba(37, 99, 235, 0.05) !important;
+    color: var(--primary-blue) !important;
+}
+
+/* Mobile responsiveness improvements */
+@media (max-width: 768px) {
+    body.sldrc-page .modern-navbar {
+        padding: 8px 16px !important;
+    }
+
+    body.sldrc-page .nav-container {
+        padding: 0 !important;
+    }
+
+    body.sldrc-page .mobile-nav-menu {
+        padding: 20px !important;
+        max-height: calc(100vh - 80px) !important;
+        overflow-y: auto !important;
+    }
+
+    /* Hide desktop navigation elements on mobile to prevent duplication */
+    body.sldrc-page .nav-menu {
+        display: none !important;
+    }
+
+    body.sldrc-page .nav-actions {
+        display: none !important;
+    }
+
+    body.sldrc-page .auth-buttons {
+        display: none !important;
+    }
+
+    /* Ensure mobile toggle is visible */
+    body.sldrc-page .mobile-toggle {
+        display: flex !important;
+    }
+}
+
+@media (min-width: 769px) {
+    /* Hide mobile navigation on desktop */
+    body.sldrc-page .mobile-nav-overlay {
+        display: none !important;
+    }
+
+    body.sldrc-page .mobile-toggle {
+        display: none !important;
+    }
+}
+
+/* Ensure proper section spacing */
+body.sldrc-page .features,
+body.sldrc-page .benefits,
+body.sldrc-page .tech-stack {
+    padding: 80px 0 !important;
+}
+
+/* Fix screenshot carousel positioning */
+body.sldrc-page .screenshots-gallery {
+    padding: 80px 0 !important;
+    overflow: hidden !important;
+}
+
+/* Ensure banner is properly positioned without interfering with navigation */
 body.sldrc-page .app-banner {
-    margin-top: -70px !important; /* Pull up to account for navigation */
+    margin-top: 0 !important;
     position: relative;
     z-index: 1 !important; /* Lower than navigation */
-    padding-top: 70px !important; /* Add padding to account for navigation */
+    padding-top: 90px !important; /* Add padding to account for navigation */
+    min-height: calc(100vh - 20px) !important;
+    display: flex !important;
+    align-items: center !important;
 }
 
 /* Ensure no top spacing on the page */
@@ -2016,44 +2296,59 @@ body.sldrc-page {
 
 @media (max-width: 768px) {
     body.sldrc-page .modern-navbar {
-        padding: 12px 16px !important;
-        height: 60px !important;
+        padding: 8px 0 !important;
+        height: 65px !important;
     }
 
     body.sldrc-page .nav-container {
-        height: 60px !important;
-        padding: 0 1rem !important;
-    }
-
-    body.sldrc-page .app-banner {
-        margin-top: -60px !important;
-        padding-top: 60px !important;
-    }
-}
-
-@media (max-width: 576px) {
-    body.sldrc-page .modern-navbar {
-        padding: 10px 12px !important;
-        height: 56px !important;
-    }
-
-    body.sldrc-page .nav-container {
-        height: 56px !important;
+        height: 65px !important;
         padding: 0 0.75rem !important;
+        width: 100% !important;
     }
 
     body.sldrc-page .app-banner {
-        margin-top: -56px !important;
-        padding-top: 56px !important;
+        padding-top: 85px !important;
+        margin-top: 0 !important;
+    }
+
+    body.sldrc-page .nav-menu {
+        display: none !important;
+    }
+
+    body.sldrc-page .mobile-toggle {
+        display: flex !important;
+    }
+}@media (max-width: 576px) {
+    body.sldrc-page .modern-navbar {
+        padding: 8px 0 !important;
+        height: 60px !important;
+    }
+
+    body.sldrc-page .nav-container {
+        height: 60px !important;
+        padding: 0 0.5rem !important;
+        width: 100% !important;
+    }
+
+    body.sldrc-page .app-banner {
+        padding-top: 80px !important;
+        margin-top: 0 !important;
     }
 
     body.sldrc-page .btn-auth {
-        padding: 6px 12px !important;
+        padding: 4px 8px !important;
+        font-size: 0.75rem !important;
+    }
+
+    body.sldrc-page .nav-link {
+        padding: 6px 8px !important;
         font-size: 0.8rem !important;
     }
-}
 
-/* Force the banner to be properly positioned */
+    body.sldrc-page .brand-text {
+        font-size: 1.2rem !important;
+    }
+}\n\n/* Force the banner to be properly positioned */
 body.sldrc-page .app-banner {
     display: block !important;
     order: -1;
