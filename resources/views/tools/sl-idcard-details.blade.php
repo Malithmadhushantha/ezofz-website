@@ -712,12 +712,12 @@
                             <input type="text"
                                    class="form-control"
                                    id="idNumber"
-                                   placeholder="Enter ID number (e.g., 983211429V or 199832101429)"
+                                   placeholder="Enter ID number (e.g., 923456789V or 199234567890)"
                                    maxlength="12"
                                    autocomplete="off">
                             <small class="text-light mt-2 d-block">
                                 <i class="bi bi-info-circle me-1"></i>
-                                Supports both old format (983211429V) and new format (199832101429)
+                                Supports both old format (923456789V) and new format (199234567890)
                             </small>
                         </div>
                         <div class="col-12 text-center">
@@ -876,7 +876,7 @@
                         <div class="col-12">
                             <label for="convertId" class="form-label">
                                 <i class="bi bi-arrow-repeat me-2"></i>
-                                <span id="inputLabel">Old Format ID Number (e.g., 983211429V)</span>
+                                <span id="inputLabel">Old Format ID Number (e.g., 923456789V)</span>
                             </label>
                             <input type="text"
                                    class="form-control"
@@ -1467,12 +1467,12 @@ function selectFormat(format, element) {
     const convertIdInput = document.getElementById('convertId');
 
     if (format === 'old-to-new') {
-        inputLabel.textContent = 'Old Format ID Number (e.g., 983211429V)';
-        convertIdInput.placeholder = 'Enter old format ID (e.g., 983211429V)';
+        inputLabel.textContent = 'Old Format ID Number (e.g., 923456789V)';
+        convertIdInput.placeholder = 'Enter old format ID (e.g., 923456789V)';
         convertIdInput.maxLength = 10;
     } else {
-        inputLabel.textContent = 'New Format ID Number (e.g., 199832101429)';
-        convertIdInput.placeholder = 'Enter new format ID (e.g., 199832101429)';
+        inputLabel.textContent = 'New Format ID Number (e.g., 199234567890)';
+        convertIdInput.placeholder = 'Enter new format ID (e.g., 199234567890)';
         convertIdInput.maxLength = 12;
     }
 
@@ -1988,9 +1988,9 @@ function generateSampleCSV() {
     // Add sample data
     for (let i = 1; i <= 10; i++) {
         if (currentBulkFormat === 'bulk-old-to-new') {
-            content += `98321142${i}V,19983210142${i},Success\n`;
+            content += `92345678${i}V,19923456789${i},Success\n`;
         } else {
-            content += `19983210142${i},98321142${i}V,Success\n`;
+            content += `19923456789${i},92345678${i}V,Success\n`;
         }
     }
 

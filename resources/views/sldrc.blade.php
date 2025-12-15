@@ -170,6 +170,13 @@
                         <span class="btn-store">Google Play</span>
                     </div>
                 </a>
+                <a href="{{ asset('downloads/sldrc_app.apk') }}" download="SLDRC_App.apk" class="download-btn direct-download">
+                    <i class="bi bi-download"></i>
+                    <div class="btn-text">
+                        <span class="btn-label">Direct Download</span>
+                        <span class="btn-store">APK File</span>
+                    </div>
+                </a>
                 <a href="#" class="download-btn app-store disabled">
                     <i class="bi bi-apple"></i>
                     <div class="btn-text">

@@ -527,6 +527,173 @@
         animation: pulse-glow 2s ease-in-out infinite;
     }
 
+    /* Library Section Styles */
+    .library-section {
+        background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+        position: relative;
+    }
+
+    .library-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background:
+            radial-gradient(circle at 20% 30%, rgba(102, 126, 234, 0.03) 0%, transparent 50%),
+            radial-gradient(circle at 80% 70%, rgba(118, 75, 162, 0.03) 0%, transparent 50%);
+        pointer-events: none;
+    }
+
+    .library-card {
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 2.5rem;
+        height: 100%;
+        border: 1px solid rgba(102, 126, 234, 0.1);
+        transition: all 0.4s ease;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    .library-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.05), transparent);
+        transition: left 0.6s ease;
+    }
+
+    .library-card:hover {
+        transform: translateY(-10px);
+        border-color: rgba(102, 126, 234, 0.3);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+    }
+
+    .library-card:hover::before {
+        left: 100%;
+    }
+
+    .library-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        font-size: 2.5rem;
+        color: white;
+        transition: all 0.3s ease;
+    }
+
+    .library-card:hover .library-icon {
+        transform: scale(1.1) rotate(5deg);
+    }
+
+    .penal-code-icon {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .cpc-icon {
+        background: linear-gradient(135deg, #f093fb, #f5576c);
+        box-shadow: 0 8px 20px rgba(240, 147, 251, 0.3);
+    }
+
+    .police-icon {
+        background: linear-gradient(135deg, #4facfe, #00f2fe);
+        box-shadow: 0 8px 20px rgba(79, 172, 254, 0.3);
+    }
+
+    .library-card h3 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #2d3748;
+        margin-bottom: 1rem;
+        text-align: center;
+    }
+
+    .library-card p {
+        color: #718096;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+        text-align: center;
+        font-size: 0.95rem;
+    }
+
+    .library-features {
+        list-style: none;
+        padding: 0;
+        margin: 1.5rem 0;
+    }
+
+    .library-features li {
+        color: #4a5568;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        font-size: 0.9rem;
+    }
+
+    .library-features i {
+        color: #48bb78;
+        margin-right: 0.75rem;
+        font-size: 1rem;
+    }
+
+    .library-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        background: linear-gradient(135deg, var(--tech-blue), var(--tech-purple));
+        color: white;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        width: 100%;
+        margin-top: auto;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .library-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .library-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        color: white;
+    }
+
+    .library-btn:hover::before {
+        left: 100%;
+    }
+
+    .library-btn i {
+        transition: transform 0.3s ease;
+    }
+
+    .library-btn:hover i {
+        transform: translateX(5px);
+    }
+
     /* Important Links Section Styles */
     .important-links-section {
         padding: 100px 0;
@@ -698,6 +865,24 @@
 
     /* Responsive Design */
     @media (max-width: 768px) {
+        .library-card {
+            padding: 2rem;
+        }
+
+        .library-icon {
+            width: 70px;
+            height: 70px;
+            font-size: 2rem;
+        }
+
+        .library-card h3 {
+            font-size: 1.3rem;
+        }
+
+        .library-features li {
+            font-size: 0.85rem;
+        }
+
         .hero-section {
             padding: 80px 0;
             min-height: auto;
@@ -809,6 +994,173 @@
 @endpush
 
 @section('content')
+<!-- Structured Data for SEO -->
+<script type="application/ld+json">
+{
+  "@@context": "https://schema.org",
+  "@@type": "WebSite",
+  "name": "EZofz.lk",
+  "alternateName": "EZofz - Office Tools for Sri Lankan Officers",
+  "url": "{{ url('/') }}",
+  "description": "Advanced office tools and services for Sri Lankan public and private sector officers including Sinhala unicode typing, name converters, document downloads, and legal reference libraries.",
+  "potentialAction": {
+    "@@type": "SearchAction",
+    "target": {
+      "@@type": "EntryPoint",
+      "urlTemplate": "{{ url('/') }}?search={search_term_string}"
+    },
+    "query-input": "required name=search_term_string"
+  },
+  "publisher": {
+    "@@type": "Organization",
+    "name": "EZofz Technology Solutions",
+    "logo": {
+      "@@type": "ImageObject",
+      "url": "{{ asset('images/logo.png') }}"
+    }
+  },
+  "inLanguage": ["en-LK", "si-LK"],
+  "about": [
+    {
+      "@@type": "Thing",
+      "name": "Legal Reference Tools",
+      "description": "Digital library of Sri Lankan legal codes including Penal Code and Criminal Procedure Code"
+    },
+    {
+      "@@type": "Thing",
+      "name": "Office Productivity Tools",
+      "description": "Sinhala unicode typing, name converters, and ID card verification tools"
+    },
+    {
+      "@@type": "Thing",
+      "name": "Police Resources",
+      "description": "Police directory and document downloads for law enforcement"
+    }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@@context": "https://schema.org",
+  "@@type": "ItemList",
+  "name": "Office Tools and Services",
+  "description": "Comprehensive list of tools and services available on EZofz.lk",
+  "itemListElement": [
+    {
+      "@@type": "ListItem",
+      "position": 1,
+      "item": {
+        "@@type": "SoftwareApplication",
+        "name": "Sinhala Unicode Typing Tool",
+        "url": "{{ route('tools.unicode-typing') }}",
+        "description": "Convert between Sinhala unicode and FM fonts",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "Web Browser",
+        "offers": {
+          "@@type": "Offer",
+          "price": "0",
+          "priceCurrency": "LKR"
+        }
+      }
+    },
+    {
+      "@@type": "ListItem",
+      "position": 2,
+      "item": {
+        "@@type": "SoftwareApplication",
+        "name": "Name Converter Tool",
+        "url": "{{ route('tools.name-converter') }}",
+        "description": "Convert full names to initials with surname",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "Web Browser",
+        "offers": {
+          "@@type": "Offer",
+          "price": "0",
+          "priceCurrency": "LKR"
+        }
+      }
+    },
+    {
+      "@@type": "ListItem",
+      "position": 3,
+      "item": {
+        "@@type": "WebPage",
+        "name": "Penal Code Library",
+        "url": "{{ route('penal-code.public') }}",
+        "description": "Complete Sri Lankan Penal Code with searchable sections and amendments"
+      }
+    },
+    {
+      "@@type": "ListItem",
+      "position": 4,
+      "item": {
+        "@@type": "WebPage",
+        "name": "Criminal Procedure Code",
+        "url": "{{ route('criminal-procedure-code.public') }}",
+        "description": "Sri Lankan Criminal Procedure Code reference library"
+      }
+    },
+    {
+      "@@type": "ListItem",
+      "position": 5,
+      "item": {
+        "@@type": "WebPage",
+        "name": "Police Directory",
+        "url": "{{ route('police.directory') }}",
+        "description": "Complete directory of police stations in Sri Lanka"
+      }
+    },
+    {
+      "@@type": "ListItem",
+      "position": 6,
+      "item": {
+        "@@type": "WebPage",
+        "name": "Law Documents Downloads",
+        "url": "{{ route('documents.law') }}",
+        "description": "Legal forms and documents for download"
+      }
+    },
+    {
+      "@@type": "ListItem",
+      "position": 7,
+      "item": {
+        "@@type": "WebPage",
+        "name": "Police Documents Downloads",
+        "url": "{{ route('documents.police') }}",
+        "description": "Official police forms and documents"
+      }
+    }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@@context": "https://schema.org",
+  "@@type": "Organization",
+  "name": "EZofz Technology Solutions",
+  "url": "{{ url('/') }}",
+  "logo": "{{ asset('images/logo.png') }}",
+  "sameAs": [
+    "https://www.facebook.com/ezofz",
+    "https://twitter.com/ezofz"
+  ],
+  "contactPoint": {
+    "@@type": "ContactPoint",
+    "telephone": "+94-70-779-3037",
+    "contactType": "Customer Service",
+    "areaServed": "LK",
+    "availableLanguage": ["English", "Sinhala"]
+  },
+  "address": {
+    "@@type": "PostalAddress",
+    "addressCountry": "LK",
+    "addressRegion": "Sri Lanka"
+  }
+}
+</script>
+
 <!-- Hero Section -->
 <section class="hero-section">
     <div class="container position-relative">
@@ -991,8 +1343,8 @@
                         <a href="{{ route('sldrc.app') }}" class="btn btn-primary btn-lg me-3 mb-2" style="background: linear-gradient(135deg, #667eea, #764ba2); border: none; padding: 12px 30px; font-weight: 600;">
                             <i class="bi bi-eye me-2"></i>View Details
                         </a>
-                        <a href="#" class="btn btn-outline-primary btn-lg mb-2" style="border-color: #667eea; color: #667eea; padding: 12px 30px; font-weight: 600;">
-                            <i class="bi bi-download me-2"></i>Download App
+                        <a href="{{ asset('downloads/sldrc_app.apk') }}" download="SLDRC_App.apk" class="btn btn-outline-primary btn-lg mb-2" style="border-color: #667eea; color: #667eea; padding: 12px 30px; font-weight: 600;">
+                            <i class="bi bi-download me-2"></i>Download APK
                         </a>
                     </div>
                 </div>
@@ -1109,6 +1461,81 @@
                     <i class="bi bi-speedometer2 me-2"></i>Go to Dashboard
                 </a>
             @endguest
+        </div>
+    </div>
+</section>
+
+<!-- Library Resources Section -->
+<section id="library" class="library-section" style="padding: 100px 0; background: #ffffff; position: relative; overflow: hidden;">
+    <div class="container">
+        <div class="section-header text-center mb-5" data-aos="fade-up">
+            <h2 class="section-title">📚 Digital Law Library</h2>
+            <p class="section-subtitle">Comprehensive legal resources and reference materials for Sri Lankan officers</p>
+        </div>
+
+        <div class="row g-4">
+            <!-- Penal Code Library -->
+            <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="library-card">
+                    <div class="library-icon penal-code-icon">
+                        <i class="bi bi-journal-text"></i>
+                    </div>
+                    <h3>Penal Code Library</h3>
+                    <p>Complete collection of Sri Lankan Penal Code sections with amendments, notes, and search functionality.</p>
+                    <ul class="library-features">
+                        <li><i class="bi bi-check-circle-fill"></i> All sections searchable</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Amendment history</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Personal notes (for registered users)</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Bookmark sections</li>
+                    </ul>
+                    <a href="{{ route('penal-code.public') }}" class="library-btn">
+                        <span>Browse Penal Code</span>
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Criminal Procedure Code -->
+            <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="library-card">
+                    <div class="library-icon cpc-icon">
+                        <i class="bi bi-book"></i>
+                    </div>
+                    <h3>Criminal Procedure Code</h3>
+                    <p>Sri Lankan Criminal Procedure Code with detailed procedures, court processes, and legal guidelines.</p>
+                    <ul class="library-features">
+                        <li><i class="bi bi-check-circle-fill"></i> Complete procedures</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Court process guides</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Quick reference</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Advanced search</li>
+                    </ul>
+                    <a href="{{ route('criminal-procedure-code.public') }}" class="library-btn">
+                        <span>Browse CPC</span>
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Police Directory -->
+            <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="300">
+                <div class="library-card">
+                    <div class="library-icon police-icon">
+                        <i class="bi bi-shield-check"></i>
+                    </div>
+                    <h3>Police Directory</h3>
+                    <p>Complete directory of police stations across Sri Lanka with contact information and locations.</p>
+                    <ul class="library-features">
+                        <li><i class="bi bi-check-circle-fill"></i> All provinces covered</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Contact details</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Station addresses</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Quick search</li>
+                    </ul>
+                    <a href="{{ route('police.directory') }}" class="library-btn">
+                        <span>View Directory</span>
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </section>

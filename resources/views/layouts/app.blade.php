@@ -2295,17 +2295,20 @@
                             </a>
                         </div>
 
-                        <!-- Databases Dropdown -->
+                        <!-- Library Dropdown -->
                         <div class="nav-item dropdown">
-                            <div class="nav-link dropdown-trigger" data-dropdown="databases">
-                                <div class="nav-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <ellipse cx="12" cy="5" rx="9" ry="3"/>
-                                        <path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/>
-                                        <path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/>
+                            <div class="nav-link dropdown-trigger" data-dropdown="library">
+                                <div class="nav-icon" aria-hidden="true">
+                                    <!-- Restored "Library / Book" icon (accessible, uses currentColor) -->
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" role="img" aria-label="Library">
+                                        <path d="M3 6.5A2.5 2.5 0 0 1 5.5 4H20" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M3 6.5v11A2.5 2.5 0 0 0 5.5 20H20" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M3 6.5c0-1.38 1.12-2.5 2.5-2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M12 4v16" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+                                        <path d="M20 4v16" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
                                     </svg>
                                 </div>
-                                <span class="nav-text">Databases</span>
+                                <span class="nav-text">Library</span>
                                 <div class="nav-arrow">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <polyline points="6,9 12,15 18,9"/>
@@ -2313,7 +2316,7 @@
                                 </div>
                                 <div class="nav-indicator"></div>
                             </div>
-                            <div class="dropdown-menu" id="databases-dropdown">
+                            <div class="dropdown-menu" id="library-dropdown">
                                 <div class="dropdown-content">
                                     <a href="{{ Auth::check() ? route('penal-code.index') : route('penal-code.public') }}" class="dropdown-item">
                                         <div class="item-icon">
@@ -2326,7 +2329,7 @@
                                             </svg>
                                         </div>
                                         <div class="item-content">
-                                            <span class="item-title">Penal Code Database</span>
+                                            <span class="item-title">Penal Code Library</span>
                                             <span class="item-desc">{{ Auth::check() ? 'Enhanced features & notes' : 'Legal references and sections' }}</span>
                                         </div>
                                     </a>
@@ -2864,6 +2867,15 @@
                             <li><a href="{{ route('about') }}" class="text-light text-decoration-none">About Us</a></li>
                             <li><a href="{{ route('contact') }}" class="text-light text-decoration-none">Contact</a></li>
                             <li><a href="{{ route('privacy') }}" class="text-light text-decoration-none">Privacy Policy</a></li>
+                            <li><a href="{{ route('sitemap') }}" class="text-light text-decoration-none">Sitemap</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-2 col-md-6 mb-4">
+                        <h6 class="text-white mb-3">Library</h6>
+                        <ul class="list-unstyled">
+                            <li><a href="{{ route('penal-code.public') }}" class="text-light text-decoration-none">Penal Code</a></li>
+                            <li><a href="{{ route('criminal-procedure-code.public') }}" class="text-light text-decoration-none">Criminal Procedure Code</a></li>
+                            <li><a href="{{ route('police.directory') }}" class="text-light text-decoration-none">Police Directory</a></li>
                         </ul>
                     </div>
                     <div class="col-lg-2 col-md-6 mb-4">
@@ -2872,14 +2884,15 @@
                             <li><a href="{{ route('tools.unicode-typing') }}" class="text-light text-decoration-none">Unicode Typing</a></li>
                             <li><a href="{{ route('tools.name-converter') }}" class="text-light text-decoration-none">Name Converter</a></li>
                             <li><a href="{{ route('tools.sl-idcard-details') }}" class="text-light text-decoration-none">ID Card Details</a></li>
+                            <li><a href="{{ route('sldrc.app') }}" class="text-light text-decoration-none">SLDRC App</a></li>
                         </ul>
                     </div>
                     <div class="col-lg-2 col-md-6 mb-4">
                         <h6 class="text-white mb-3">Downloads</h6>
                         <ul class="list-unstyled">
-                            <li><a href="#" class="text-light text-decoration-none">Law Documents</a></li>
-                            <li><a href="#" class="text-light text-decoration-none">Police Documents</a></li>
-                            <li><a href="#" class="text-light text-decoration-none">Forms</a></li>
+                            <li><a href="{{ route('documents.law') }}" class="text-light text-decoration-none">Law Documents</a></li>
+                            <li><a href="{{ route('documents.police') }}" class="text-light text-decoration-none">Police Documents</a></li>
+                            <li><a href="{{ route('documents.index') }}" class="text-light text-decoration-none">All Documents</a></li>
                         </ul>
                     </div>
                     <div class="col-lg-2 col-md-6 mb-4">
@@ -2895,7 +2908,7 @@
                 <div class="row align-items-center">
                     <div class="col-md-6">
                         <p class="mb-0 text-light">&copy; 2025 EZofz.lk. All rights reserved.</p>
-                        <p class="mb-0 text-light">Developed by <a href="#" class="text-light text-decoration-none">Malith Madhushantha</a></p>
+                        <p class="mb-0 text-light">Developed by <a href="#" class="text-light text-decoration-none">Ezofz Technology Solutions</a></p>
                     </div>
                     <div class="col-md-6 text-md-end">
                         <p class="mb-0 text-light">Made with <i class="bi bi-heart-fill text-danger"></i> in Sri Lanka</p>

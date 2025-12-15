@@ -4,13 +4,26 @@ Allow: /
 Allow: /tools/
 Allow: /documents/
 Allow: /penal-code/
-Allow: /criminal-procedure-code
+Allow: /criminal-procedure-code/
+Allow: /police-directory
 Allow: /about
 Allow: /contact
 Allow: /testimonials
+Allow: /sldrc-app
+Allow: /privacy-policy
 Allow: /images/
 Allow: /css/
 Allow: /js/
+
+# Explicitly allow important pages for crawling
+Allow: /tools/unicode-typing
+Allow: /tools/name-converter
+Allow: /tools/sl-idcard-details
+Allow: /penal-code/public
+Allow: /criminal-procedure-code
+Allow: /documents/law
+Allow: /documents/police
+Allow: /documents/index
 
 # Disallow private areas
 Disallow: /admin/
@@ -23,27 +36,25 @@ Disallow: /_debugbar/
 Disallow: /telescope/
 Disallow: /horizon/
 Disallow: /storage/logs/
-
-# Crawl delay (optional - helps prevent overloading server)
-Crawl-delay: 1
 Disallow: /password/
-Disallow: /api/
 Disallow: /test-zip
 Disallow: /storage/
 Disallow: /vendor/
 Disallow: /.env
 Disallow: /config/
 
-# Allow important tools for indexing
-Allow: /tools/unicode-typing
-Allow: /tools/name-converter
-Allow: /tools/sl-idcard-details
+# Crawl delay (helps prevent overloading server)
+Crawl-delay: 1
 
 # Google specific
 User-agent: Googlebot
 Allow: /
 Allow: /tools/
 Allow: /documents/
+Allow: /penal-code/
+Allow: /criminal-procedure-code/
+Allow: /police-directory
+Allow: /sldrc-app
 Crawl-delay: 1
 
 # Bing specific
