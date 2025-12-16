@@ -2329,7 +2329,7 @@
                                             </svg>
                                         </div>
                                         <div class="item-content">
-                                            <span class="item-title">Penal Code Library</span>
+                                            <span class="item-title">Penal Code Sinhala </span>
                                             <span class="item-desc">{{ Auth::check() ? 'Enhanced features & notes' : 'Legal references and sections' }}</span>
                                         </div>
                                     </a>
@@ -2664,25 +2664,28 @@
                             <span>Home</span>
                         </a>
 
-                        <!-- Mobile Databases -->
+                        <!-- Mobile Library -->
                         <div class="mobile-nav-group">
-                            <div class="mobile-nav-group-header" data-mobile-group="databases">
+                            <div class="mobile-nav-group-header" data-mobile-group="library">
                                 <div class="mobile-nav-icon">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <ellipse cx="12" cy="5" rx="9" ry="3"/>
-                                        <path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/>
+                                        <path d="M3 6.5A2.5 2.5 0 0 1 5.5 4H20" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M3 6.5v11A2.5 2.5 0 0 0 5.5 20H20" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M3 6.5c0-1.38 1.12-2.5 2.5-2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M12 4v16" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+                                        <path d="M20 4v16" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
                                     </svg>
                                 </div>
-                                <span>Databases</span>
+                                <span>Library</span>
                                 <div class="mobile-arrow">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <polyline points="9,18 15,12 9,6"/>
                                     </svg>
                                 </div>
                             </div>
-                            <div class="mobile-nav-group-content" id="mobile-databases">
+                            <div class="mobile-nav-group-content" id="mobile-library">
                                 <a href="{{ Auth::check() ? route('penal-code.index') : route('penal-code.public') }}" class="mobile-nav-subitem">
-                                    <span>Penal Code Database</span>
+                                    <span>Penal Code Sinhala</span>
                                 </a>
                                 <a href="{{ Auth::check() ? route('criminal-procedure-code.index') : route('criminal-procedure-code.public') }}" class="mobile-nav-subitem">
                                     <span>Criminal Procedure Code</span>
@@ -2692,6 +2695,7 @@
                                 </a>
                             </div>
                         </div>
+
 
                         <!-- Mobile Tools -->
                         <div class="mobile-nav-group">
